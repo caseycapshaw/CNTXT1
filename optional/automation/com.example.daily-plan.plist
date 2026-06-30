@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  launchd job: run daily-plan.sh at 08:00 every day.
+  Install: copy to ~/Library/LaunchAgents/, replace {{USER}} with your macOS
+  username (and rename the Label if you like), then:
+    launchctl load ~/Library/LaunchAgents/com.example.daily-plan.plist
+  Unload with `launchctl unload …` before editing, then load again.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.example.daily-plan</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/{{USER}}/.claude/hooks/daily-plan.sh</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>8</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/{{USER}}/.claude/cache/daily-plan.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/{{USER}}/.claude/cache/daily-plan.log</string>
+</dict>
+</plist>
