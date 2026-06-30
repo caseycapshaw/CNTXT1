@@ -1,0 +1,205 @@
+#!/usr/bin/env bash
+# daily-summary.sh — end-of-day companion to daily-plan.sh.
+#
+# Invoked by launchd at 18:00 (com.example.daily-summary). Two jobs in one pass:
+#   1. Runs a full KB lint (per meta/AGENTS.md health checks).
+#   2. Appends a succinct, human-readable "What we did today" summary to the
+#      day's note (daily/<DATE>.md).
+#
+# Design for reliability + efficiency:
+#   * LOCAL-ONLY inputs — today's meta/log.md entries, files changed today, and
+#     the day's note body. No MCP fleet is spawned and the summary content needs
+#     no network. The API call itself may be VPN-gated, so we use the same
+#     preflight+retry loop as daily-plan.sh.
+#   * The LLM only PRODUCES text (to stdout) — it never edits the note. Bash does
+#     the file surgery, splicing the block between sentinels. Re-runs REPLACE the
+#     block (never duplicate) and hand-written notes above it are never touched.
+#     Fully idempotent; safe to run any number of times.
+#   * If generation fails after retries, the note is left UNTOUCHED (a missing
+#     summary is benign; a corrupted note is not).
+#
+# All output is captured by the launchd plist into ~/.claude/cache/daily-summary.log.
+
+export HOME="${HOME:-/Users/CHANGE_ME}"
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+# ===== CONFIG — edit this =====
+VAULT="$HOME/my-kb"          # absolute path to your KB
+NAME="your name"             # how the summary addresses you
+# ==============================
+
+vault="$VAULT"
+daily_dir="$vault/daily"
+today="$(date +%F)"
+note="$daily_dir/$today.md"
+
+START="<!-- daily-summary:start -->"
+END="<!-- daily-summary:end -->"
+
+echo "=== daily-summary run $(date) ==="
+mkdir -p "$daily_dir" "$HOME/.claude/cache"
+
+# ---------------------------------------------------------------------------
+# 1) Gather LOCAL signals for "what we did today" (no network).
+# ---------------------------------------------------------------------------
+# Today's KB log entries are the spine of "what we did". Ignore the automation's
+# own lines (daily plan / daily summary) so the summary never narrates itself.
+today_log="$(grep -E "^- $today" "$vault/meta/log.md" 2>/dev/null \
+  | grep -viE 'auto-generated daily plan|daily plan STUB|6pm auto:' )"
+[ -z "$today_log" ] && today_log="(no KB log entries dated $today)"
+
+# Files touched today (excludes daily/, log, and tooling dirs — those are noise).
+changed="$(find "$vault" -type f -name '*.md' -newermt "$today 00:00:00" \
+  ! -path '*/.git/*' ! -path '*/.obsidian/*' ! -path "$daily_dir/*" \
+  ! -path '*/meta/log.md' 2>/dev/null | sed "s|$vault/||" | sort)"
+[ -z "$changed" ] && changed="(no concept/raw files modified today)"
+
+# The day's note body with any prior summary block stripped so we don't feed
+# the summary back into itself.
+if [ -f "$note" ]; then
+  note_body="$(awk -v s="$START" -v e="$END" '
+    $0==s{skip=1} skip{if($0==e)skip=0; next} {print}' "$note")"
+else
+  note_body="(no daily note exists for $today)"
+fi
+
+# ---------------------------------------------------------------------------
+# 2) Mechanical lint — run the deterministic checker (meta/bin/lint.sh). Its
+#    result is AUTHORITATIVE for inbox / wikilinks / index / frontmatter (it
+#    strips code spans + excludes templates — no false positives to adjudicate).
+#    The LLM only adds the judgment layer below.
+# ---------------------------------------------------------------------------
+lint_out="$(bash "$vault/meta/bin/lint.sh" 2>&1)"; lint_rc=$?
+
+# Action counts (excluding daily/) — context for the summary + the "is any
+# #action now stale / should be closed" judgment the script can't make.
+open_actions="$(grep -rE '^\s*- \[ \].*#action' "$vault" --include='*.md' 2>/dev/null | grep -vc '/daily/')"
+done_actions="$(grep -rE '^\s*- \[x\].*#action' "$vault" --include='*.md' 2>/dev/null | grep -vc '/daily/')"
+
+read -r -d '' prescan <<PRESCAN
+MECHANICAL LINT — meta/bin/lint.sh (exit $lint_rc; 0 = green):
+$lint_out
+
+ACTION COUNTS (excluding daily/): open=$open_actions  done=$done_actions
+PRESCAN
+
+# ---------------------------------------------------------------------------
+# 3) Build the prompt.
+# ---------------------------------------------------------------------------
+read -r -d '' prompt <<EOF
+You are writing the END-OF-DAY summary for ${NAME}'s Obsidian knowledge base at
+$vault. Read $vault/meta/AGENTS.md if you need the conventions. TODAY is $today.
+
+You have TWO jobs. Do the lint first (it may surface something worth a bullet),
+then write the summary. Use ONLY the signals below plus, if you must verify a
+lint finding, a quick Read/Grep — keep tool use minimal. Do NOT invent anything.
+
+=== TODAY'S KB LOG ENTRIES (the record of work done today) ===
+$today_log
+
+=== FILES MODIFIED TODAY ===
+$changed
+
+=== TODAY'S DAILY NOTE (schedule + hand-written notes) ===
+$note_body
+
+=== LINT ===
+$prescan
+
+JOB 1 — LINT. The MECHANICAL checks (root inbox, wikilink resolution, index
+completeness, frontmatter presence) ALREADY RAN deterministically above — that
+result is authoritative, do NOT re-derive it. Your job is only the JUDGMENT layer
+the script can't do: a dated item now overdue/stale, an open question today's work
+resolved, or an `#action` that should be checked off. Verdict: "green" if the
+script exited 0 AND you see no judgment issue, else "issues" with a sub-bullet per
+real problem (include any non-zero script finding verbatim). Real problems: an overdue
+or stale dated item, or a concept/raw file missing from index.md.
+
+JOB 2 — SUMMARY. Synthesize a tight, human-readable recap of what got done today
+from the log entries, changed files, and the note's own notes. Past tense.
+3–6 bullets max, one line each, grouped by theme if natural; link [[concepts]]
+where it reads naturally. If the day was genuinely light, say so in 1–2 bullets
+rather than padding. This is a glanceable end-of-day recap, not an essay.
+
+OUTPUT FORMAT — output EXACTLY this and NOTHING ELSE (no preamble, no code fence).
+Start with the first sentinel line and end with the last sentinel line:
+
+$START
+## ✅ What we did today
+- <bullet>
+- <bullet>
+
+**Lint:** <green — one short clause> | <or: issues — then a sub-bullet per real problem>
+$END
+EOF
+
+# ---------------------------------------------------------------------------
+# 4) Generate. Capture STDOUT as the block (no Write tool → no permission/clobber
+#    risk). No MCP servers (empty strict config). VPN preflight + retry.
+# ---------------------------------------------------------------------------
+cd "$vault" || exit 1
+empty_mcp="$HOME/.claude/hooks/daily-summary.mcp.json"
+printf '{"mcpServers":{}}\n' > "$empty_mcp"
+
+base_url="${ANTHROPIC_BASE_URL:-$(jq -r '.env.ANTHROPIC_BASE_URL // empty' "$HOME/.claude/settings.json" 2>/dev/null)}"
+attempts="${DAILY_SUMMARY_ATTEMPTS:-4}"
+delay="${DAILY_SUMMARY_DELAY:-90}"
+
+block=""
+for n in $(seq 1 "$attempts"); do
+  if [ -n "$base_url" ] && ! curl -s --max-time 10 -o /dev/null "$base_url"; then
+    echo "preflight: $base_url unreachable (attempt $n/$attempts)"
+  else
+    out="$(claude -p "$prompt" \
+      --add-dir "$vault" \
+      --permission-mode acceptEdits \
+      --mcp-config "$empty_mcp" --strict-mcp-config \
+      --allowedTools "Read" "Glob" "Grep" 2>&1)"
+    rc=$?
+    echo "claude exit: $rc (attempt $n/$attempts)"
+    if printf '%s' "$out" | grep -qF "$START" && printf '%s' "$out" | grep -qF "$END"; then
+      block="$(printf '%s\n' "$out" | awk -v s="$START" -v e="$END" \
+        'index($0,s){grab=1} grab{print} index($0,e){exit}')"
+      [ -n "$block" ] && break
+    fi
+    echo "no well-formed block in output (attempt $n/$attempts)"
+  fi
+  [ "$n" -lt "$attempts" ] && { echo "retrying in ${delay}s…"; sleep "$delay"; }
+done
+
+if [ -z "$block" ]; then
+  echo "Generation failed after $attempts attempts — leaving $note untouched."
+  printf -- '- %s — 6pm auto: daily summary SKIPPED (API unreachable / no block after %s attempts); note left intact.\n' \
+    "$today" "$attempts" >> "$vault/meta/log.md"
+  exit 0
+fi
+
+# ---------------------------------------------------------------------------
+# 5) Splice the block into the note, idempotently. Remove any prior block
+#    (START..END inclusive) + trailing blanks, then append the fresh block.
+# ---------------------------------------------------------------------------
+if [ ! -f "$note" ]; then
+  # No 8am note (e.g. a missed run). Create a minimal one to host the summary.
+  { echo "# $today — Daily plan"; echo; } > "$note"
+  echo "No daily note existed; created a minimal one."
+fi
+
+tmp="$(mktemp)"
+awk -v s="$START" -v e="$END" '
+  $0==s{skip=1} skip{if($0==e)skip=0; next} {buf[n++]=$0}
+  END{ while(n>0 && buf[n-1] ~ /^[[:space:]]*$/) n--; for(i=0;i<n;i++) print buf[i] }
+' "$note" > "$tmp"
+{ printf '\n'; printf '%s\n' "$block"; } >> "$tmp"
+mv "$tmp" "$note"
+
+# ---------------------------------------------------------------------------
+# 6) Log the run (verdict parsed from the block).
+# ---------------------------------------------------------------------------
+verdict="$(printf '%s\n' "$block" | grep -m1 -E '^\*\*Lint:\*\*' | sed -E 's/^\*\*Lint:\*\* *//; s/[[:space:]—-]+$//')"
+case "$(printf '%s' "$verdict" | tr 'A-Z' 'a-z')" in
+  *green*) : ;;
+  ""|issues*|*issue*) verdict="issues — see daily/$today.md" ;;
+esac
+printf -- '- %s — 6pm auto: "What we did today" summary written to `daily/%s.md`; KB lint: %s\n' \
+  "$today" "$today" "$verdict" >> "$vault/meta/log.md"
+echo "Spliced summary into $note. Lint: $verdict"
