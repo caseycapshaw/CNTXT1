@@ -203,3 +203,28 @@ esac
 printf -- '- %s — 6pm auto: "What we did today" summary written to `daily/%s.md`; KB lint: %s\n' \
   "$today" "$today" "$verdict" >> "$vault/meta/log.md"
 echo "Spliced summary into $note. Lint: $verdict"
+
+# ---------------------------------------------------------------------------
+# 7) Nightly git snapshot — commit + push the day's KB state. Git is the
+#    rollback layer against hallucination propagation; a snapshot only exists
+#    if it's committed. Best-effort: a failed push never fails the job.
+#    (No-ops harmlessly if the vault isn't a git repo or has no remote.)
+# ---------------------------------------------------------------------------
+if git -C "$vault" rev-parse --git-dir >/dev/null 2>&1; then
+  if [ -n "$(git -C "$vault" status --porcelain)" ]; then
+    git -C "$vault" add -A
+    git -C "$vault" commit -m "Daily snapshot $today" -m "Automated end-of-day commit by daily-summary.sh." \
+      && echo "Committed daily snapshot."
+    git -C "$vault" push origin HEAD 2>&1 && echo "Pushed snapshot." \
+      || echo "Push failed (offline / no remote?) — snapshot committed locally; will push with a later snapshot."
+  else
+    echo "Working tree clean — no snapshot commit needed."
+    # Still push if earlier commits never made it out (e.g. offline last night).
+    if [ -n "$(git -C "$vault" log --branches --not --remotes 2>/dev/null)" ]; then
+      git -C "$vault" push origin HEAD 2>&1 && echo "Pushed previously unpushed commits." \
+        || echo "Push failed (offline / no remote?) — will retry with a later snapshot."
+    fi
+  fi
+else
+  echo "Vault is not a git repo — skipping snapshot."
+fi

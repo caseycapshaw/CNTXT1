@@ -45,6 +45,31 @@ fi
 cal="$(cat "$cache" 2>/dev/null | tail -n +2)"   # drop the date marker line
 [ -z "$cal" ] && cal="(calendar unavailable)"
 
+# 3b) Gmail digest (best-effort; read-only). Requires the `gws` CLI authenticated
+#     (`gws auth status`). Pulls headers+snippets of the last 2 days of inbox mail
+#     so the note can carry a "From the inbox" digest. Degrades to no section if
+#     gws is absent or errors — the core plan never depends on it.
+digest=""
+if command -v gws >/dev/null 2>&1; then
+  ids="$(gws gmail users messages list \
+    --params '{"userId":"me","q":"in:inbox newer_than:2d","maxResults":20}' 2>/dev/null \
+    | jq -r '.messages[]?.id' 2>/dev/null)"
+  while IFS= read -r id; do
+    [ -z "$id" ] && continue
+    line="$(gws gmail users messages get \
+      --params "{\"userId\":\"me\",\"id\":\"$id\",\"format\":\"metadata\",\"metadataHeaders\":[\"From\",\"Subject\",\"Date\"]}" 2>/dev/null \
+      | jq -r '[
+          ([.payload.headers[]? | select(.name=="Date")    | .value] | first // "?"),
+          ([.payload.headers[]? | select(.name=="From")    | .value] | first // "?"),
+          ([.payload.headers[]? | select(.name=="Subject") | .value] | first // "(no subject)"),
+          (.snippet // "" | .[0:140])
+        ] | join(" | ")' 2>/dev/null)"
+    [ -n "$line" ] && digest="${digest}${line}"$'\n'
+  done <<< "$ids"
+  echo "gmail digest: $(printf '%s' "$digest" | grep -c . ) messages fetched"
+fi
+[ -z "$digest" ] && digest="(no emails fetched)"
+
 read -r -d '' prompt <<EOF
 You are writing ${NAME}'s morning planning note in the Obsidian knowledge base at
 $VAULT. Follow the conventions in $VAULT/meta/AGENTS.md (read it if unsure) and use
@@ -55,6 +80,12 @@ TODAY is $today. Today's calendar (already fetched for you):
 $cal
 ---
 
+Recent inbox email, last 2 days (already fetched for you; format:
+Date | From | Subject | snippet):
+---
+$digest
+---
+
 Do the following, then WRITE the result to exactly this path: $note
 
 1. For context only, you MAY scan open priority / time-sensitive actions to inform
@@ -62,10 +93,17 @@ Do the following, then WRITE the result to exactly this path: $note
    But DO NOT copy any "#action" checkboxes into the note: the Focus section is a
    LIVE QUERY (step 3), and copying would duplicate tasks in the Actions dashboard.
 2. Skim $VAULT/index.md for the current concepts/work to anchor the day.
-3. Write the note with EXACTLY these sections:
+3. Write the note with EXACTLY these sections (skip "From the inbox" entirely if
+   the email list above is "(no emails fetched)" or contains nothing noteworthy):
    # $today — Daily plan
    ## Schedule
    (today's events as a clean time-ordered list, from the calendar above)
+   ## From the inbox
+   (digest the email list above: one line per NOTEWORTHY item, grouped under bold
+   mini-headers only when a group has entries — **Money & bills**, **Kids & school**,
+   **Appointments & logistics**, **Other notable**. Skip marketing, newsletters,
+   notifications-of-no-consequence. NEVER invent an email; if nothing is noteworthy,
+   omit this whole section. Do not mark anything as an action — just surface it.)
    ## Focus / open actions
    (paste this fenced block VERBATIM as the entire section — nothing else):
    \`\`\`tasks
@@ -79,10 +117,9 @@ Do the following, then WRITE the result to exactly this path: $note
    ## Priorities anchor
    (2-4 bullets on what today moves forward, with [[wikilinks]])
 
-   # OPTIONAL DIGEST — to add a "From the channels & board" live digest from Slack/
-   # Jira (or other MCP servers), insert a section here and pass the scoped MCP
-   # config + tool allowlist in the claude call below. See this folder's README.md
-   # ("Extending it"). Omitted by default to keep the core portable.
+   # OPTIONAL DIGEST — to add further live digests (Slack/Jira via scoped MCP
+   # servers, etc.), insert a section here and pass the scoped MCP config + tool
+   # allowlist in the claude call below. See this folder's README.md ("Extending it").
 
    ## Notes
    (leave a short empty space for the day's running notes)

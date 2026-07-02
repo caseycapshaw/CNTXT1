@@ -1,84 +1,73 @@
 #!/usr/bin/env bash
-# calendar-fetch.sh — fetch TODAY's macOS Calendar events into a cache file.
+# calendar-fetch.sh — fetch TODAY's Google Calendar events (via `gws`) into a cache file.
 #
-# Slow (~15s; AppleScript Calendar filtering). Run OFF the hot path — from launchd
-# or by hand — NEVER inside the SessionStart hook. The hook only READS the cache.
+# Uses the `gws` CLI (https://github.com/googleworkspace/cli) against the
+# signed-in account's primary Google Calendar — NOT the local macOS Calendar app.
+# Run OFF the hot path — from launchd or by hand — NEVER inside the SessionStart
+# hook. The hook only READS the cache.
 #
 # Cache file: ~/.claude/cache/calendar-today.txt
 #   line 1 : ISO date (date +%F) — staleness marker the hook compares against today
 #   line 2+: "HH:MM  Summary [  — location]"  (time-sorted; all-day events first)
 #            or the single line "No events today."
 #
-# Fail-safe: on any osascript error it still writes the date line + an error marker,
+# Fail-safe: on any gws/auth error it still writes the date line + an error marker,
 # so the hook degrades gracefully instead of showing stale/yesterday data.
 #
-# Portable as-is — no per-user config needed. First run prompts for Calendar access.
+# Scope note: only the signed-in account's "primary" calendar is queried — auto
+# calendars like "Holidays in United States" and any secondary/work calendars
+# are intentionally excluded. Edit calendarId below to add others.
+#
+# Requires: `gws` installed and authenticated (`gws auth login`). See
+# `gws auth status`.
 
 set -uo pipefail
+
+# Homebrew isn't on launchd's PATH by default.
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 cache_dir="$HOME/.claude/cache"
 cache="$cache_dir/calendar-today.txt"
 today="$(date +%F)"
 mkdir -p "$cache_dir"
 
-# Edit skipCals below to drop noisy/auto calendars (speeds the query up).
-raw="$(osascript <<'EOF' 2>/dev/null
-set d0 to current date
-set hours of d0 to 0
-set minutes of d0 to 0
-set seconds of d0 to 0
-set d1 to d0 + (1 * days)
-set out to ""
-set skipCals to {"Holidays in United States", "US Holidays", "Birthdays", "Siri Suggestions"}
-tell application "Calendar"
-  repeat with c in calendars
-    if (name of c) is in skipCals then
-      -- skip noisy/auto calendars
-    else
-    set evs to (every event of c whose start date ≥ d0 and start date < d1)
-    repeat with e in evs
-      set sd to start date of e
-      set theSummary to summary of e
-      set loc to ""
-      try
-        if location of e is not missing value then set loc to location of e
-      end try
-      set isAllDay to false
-      try
-        set isAllDay to allday event of e
-      end try
-      if isAllDay then
-        set sortkey to "0000"
-        set tstr to "all-day"
-      else
-        set hpad to text -2 thru -1 of ("0" & (hours of sd))
-        set mpad to text -2 thru -1 of ("0" & (minutes of sd))
-        set sortkey to hpad & mpad
-        set tstr to hpad & ":" & mpad
-      end if
-      set disp to tstr & "  " & theSummary
-      if loc is not "" then set disp to disp & "  — " & loc
-      set out to out & sortkey & tab & disp & linefeed
-    end repeat
-    end if
-  end repeat
-end tell
-return out
-EOF
-)"
-status=$?
-
-# osascript failed (e.g. TCC/Automation denied) — record it, keep the date line.
-if [ "$status" -ne 0 ]; then
-  { echo "$today"; echo "(calendar fetch error — osascript exit $status)"; } > "$cache"
+if ! command -v gws >/dev/null 2>&1; then
+  { echo "$today"; echo "(calendar fetch error — gws not installed)"; } > "$cache"
   exit 0
 fi
 
-if [ -n "$raw" ]; then
-  body="$(printf '%s' "$raw" | sort -u | cut -f2-)"
-else
-  body="No events today."
+# Local-time RFC3339 bounds for [today 00:00, tomorrow 00:00).
+tz="$(date +%z)"                       # e.g. -0600
+tz_colon="${tz:0:3}:${tz:3:2}"         # e.g. -06:00
+tmin="${today}T00:00:00${tz_colon}"
+tmax="$(date -v+1d +%F)T00:00:00${tz_colon}"
+
+params="$(jq -nc --arg tmin "$tmin" --arg tmax "$tmax" \
+  '{calendarId: "primary", timeMin: $tmin, timeMax: $tmax, singleEvents: true, orderBy: "startTime"}')"
+
+raw="$(gws calendar events list --params "$params" 2>/dev/null)"
+status=$?
+
+# gws failed (e.g. token expired, network down) — record it, keep the date line.
+if [ "$status" -ne 0 ] || [ -z "$raw" ] || ! printf '%s' "$raw" | jq -e '.items' >/dev/null 2>&1; then
+  { echo "$today"; echo "(calendar fetch error — gws exit $status)"; } > "$cache"
+  exit 0
 fi
+
+body="$(printf '%s' "$raw" | jq -r '
+  .items[]?
+  | select(.status != "cancelled")
+  | (.summary // "(no title)") as $summary
+  | (.location // "") as $loc
+  | if .start.dateTime then
+      (.start.dateTime[11:16]) as $t
+      | ($t | gsub(":";"")) + "\t" + $t + "  " + $summary + (if $loc != "" then "  — " + $loc else "" end)
+    else
+      "0000" + "\t" + "all-day" + "  " + $summary + (if $loc != "" then "  — " + $loc else "" end)
+    end
+' | sort -u | cut -f2-)"
+
+[ -z "$body" ] && body="No events today."
 
 {
   echo "$today"

@@ -119,9 +119,11 @@ why the health check matters).
 Once the basic habit sticks, `optional/automation/` adds the machinery that makes
 the base feel alive: a **SessionStart hook** that inlines your map + inbox + today's
 calendar into every Claude Code session, an **8am daily-plan generator** that writes
-a `daily/YYYY-MM-DD.md` note (schedule + live `#action` query + priorities), and a
-**6pm end-of-day job** that runs the KB health check and appends a "What we did today"
-recap — so the lint runs automatically every evening.
+a `daily/YYYY-MM-DD.md` note (schedule + a "From the inbox" Gmail digest + live
+`#action` query + priorities — calendar and Gmail via the [`gws`](https://github.com/googleworkspace/cli)
+CLI, read-only), and a **6pm end-of-day job** that runs the KB health check, appends
+a "What we did today" recap, and commits a nightly git snapshot — so the lint and
+the backup run automatically every evening.
 Not required to start — see `optional/automation/README.md` when you're ready.
 
 ---
