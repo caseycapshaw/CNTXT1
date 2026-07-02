@@ -98,6 +98,9 @@ Do the following, then WRITE the result to exactly this path: $note
    # $today — Daily plan
    ## Schedule
    (today's events as a clean time-ordered list, from the calendar above)
+   ## Notes
+   (leave a short empty space for the day's running notes — this is the FIRST
+   thing filled in by hand through the day, so it goes right after Schedule)
    ## From the inbox
    (digest the email list above: one line per NOTEWORTHY item, grouped under bold
    mini-headers only when a group has entries — **Money & bills**, **Kids & school**,
@@ -120,9 +123,6 @@ Do the following, then WRITE the result to exactly this path: $note
    # OPTIONAL DIGEST — to add further live digests (Slack/Jira via scoped MCP
    # servers, etc.), insert a section here and pass the scoped MCP config + tool
    # allowlist in the claude call below. See this folder's README.md ("Extending it").
-
-   ## Notes
-   (leave a short empty space for the day's running notes)
 
 Keep it tight — a working plan, not an essay. Do NOT write any "- [ ] … #action"
 checkboxes anywhere (they would duplicate tasks). Use only what the calendar and KB
