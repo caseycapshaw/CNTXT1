@@ -1,6 +1,6 @@
 ---
 type: concept
-updated: {{DATE}}
+updated: 2026-07-02
 status: current
 tags: [concept, method]
 ---
@@ -20,7 +20,7 @@ See [[AGENTS]] for how this KB operates the method day to day.
 ## Origin / lineage
 - **Andrej Karpathy** (OpenAI co-founder, ex-Tesla AI director) posted the idea **2026-04-02**; it went viral. Two days later he published the **`llm-wiki.md` gist** — explicitly *"an idea file, designed to be copy-pasted to your own LLM agent"* (Claude Code, Codex, etc.), **not a product or code**. The agent builds the specifics with you.
 - He framed it as the next turn of Vannevar Bush's 1945 **Memex** — whose unsolved problem was always *"who does the maintenance."* The LLM is finally a plausible maintainer.
-- **Cole Medin** adapted it to **code** (`coleam00/claude-memory-compiler`): the raw material is your own coding sessions, auto-captured via hooks and compiled into a self-evolving per-codebase memory. This starter takes its structure from Medin's framing (the compiler analogy + `concepts/`/`connections/`/`index.md`/`log.md` layout) but uses **manual capture, not hooks**.
+- **Cole Medin** adapted it to **code** (`coleam00/claude-memory-compiler`): the raw material is your own coding sessions, auto-captured via hooks and compiled into a self-evolving per-codebase memory. This starter takes its structure from Medin's framing (the compiler analogy + `concepts/`/`index.md`/`log.md` layout — his separate `connections/` folder was dropped 2026-07-02 as redundant with wikilinks + Related sections) but uses **manual capture, not hooks**.
 
 ## The compiler analogy (the mental model)
 The reframe is: **knowledge is source code; the LLM is a compiler.**
@@ -38,7 +38,7 @@ The reframe is: **knowledge is source code; the LLM is a compiler.**
 
 ## Architecture — three layers
 1. **Raw sources** — *"the LLM reads from them but never modifies them."* Immutable, append-only, dated. (Here: `raw/`.)
-2. **The wiki** — LLM-generated markdown: summaries, concept/entity pages, the index, the log. **"You read it; the LLM writes it."** (Here: `concepts/` + `connections/` + `index.md` + `meta/log.md`.)
+2. **The wiki** — LLM-generated markdown: summaries, concept/entity pages, the index, the log. **"You read it; the LLM writes it."** (Here: `concepts/` + `index.md` + `meta/log.md`.)
 3. **The schema** — a config doc (`CLAUDE.md` / `AGENTS.md`) that defines structure, conventions, and workflows. This is *"what makes the LLM a disciplined wiki maintainer rather than a generic chatbot."* (Here: [[AGENTS]].)
 
 ## The workflow loop

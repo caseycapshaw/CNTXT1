@@ -15,7 +15,7 @@ bad()  { printf 'FAIL  %s\n' "$1"; fail=1; }
 
 # ---- 1. Root inbox clean -------------------------------------------------
 anchors="README.md index.md Actions.md CLAUDE.md"
-structural="concepts connections meta raw daily People Jobs attachments"
+structural="concepts meta raw daily People Jobs attachments"
 # Template-only artifacts (present in kb-starter; absent in a live vault — harmless either way).
 template_extras="optional setup.md"
 inbox=""
@@ -27,7 +27,7 @@ if [ -z "$inbox" ]; then ok "root inbox clean"; else bad "root inbox has un-tria
 
 # ---- content files (exclude template files) ------------------------------
 files=()
-for f in concepts/*.md connections/*.md Jobs/*.md People/*.md index.md; do
+for f in concepts/*.md Jobs/*.md People/*.md index.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*) continue ;; esac
   files+=("$f")
@@ -35,7 +35,7 @@ done
 
 # ---- valid wikilink-name set (canonical names + aliases + outside anchors) ----
 valid="$(mktemp)"
-for f in concepts/*.md connections/*.md; do
+for f in concepts/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*) continue ;; esac
   basename "$f" .md >> "$valid"
@@ -68,13 +68,13 @@ if [ ! -s "$broken" ]; then ok "all wikilinks resolve"; else bad "broken wikilin
 
 # ---- 3. Index completeness ----------------------------------------------
 missing=""
-for f in concepts/*.md connections/*.md; do
+for f in concepts/*.md; do
   [ -e "$f" ] || continue   # skip the literal glob when a dir is empty (else slug becomes '*')
   case "$f" in *TEMPLATE*) continue ;; esac
   slug="$(basename "$f" .md)"
   grep -qF "[[$slug]]" index.md || missing="$missing $slug"
 done
-if [ -z "$missing" ]; then ok "index lists every concept + connection"; else bad "not linked from index.md:"; for m in $missing; do note "$m"; done; fi
+if [ -z "$missing" ]; then ok "index lists every concept"; else bad "not linked from index.md:"; for m in $missing; do note "$m"; done; fi
 
 # ---- 4. Frontmatter present ---------------------------------------------
 fm_fail=""

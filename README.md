@@ -1,7 +1,7 @@
 # {{NAME}}'s Knowledge Base — Project Hub
 
 A **memory-first** knowledge base for {{DOMAIN}}. Durable facts compiled into
-`concepts/`, relationships in `connections/`, sources in `raw/`, mapped by
+`concepts/` (relationships inline via `[[wikilinks]]`), sources in `raw/`, mapped by
 `index.md`. Built on the Karpathy "knowledge-base-as-compiler" method.
 
 > ### 📌 Start here
@@ -45,7 +45,7 @@ see anything else loose at the root, it's waiting to be filed** (ask Claude to
 
 | Doc | Use it for |
 | :-- | :-- |
-| [AGENTS.md](meta/AGENTS.md) · [index.md](index.md) | The knowledge base, structured with the Karpathy compiler method. Read AGENTS.md (how it works) then index.md (the map). Concepts in `concepts/`, backlinks in `connections/`, sources in `raw/`. |
+| [AGENTS.md](meta/AGENTS.md) · [index.md](index.md) | The knowledge base, structured with the Karpathy compiler method. Read AGENTS.md (how it works) then index.md (the map). Concepts in `concepts/`, sources in `raw/`. |
 | [Actions.md](Actions.md) | The single live to-do view — every open `#action` across the KB (needs the Obsidian **Tasks** plugin). |
 
 ---
