@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # lint.sh — deterministic KB health check (the mechanical half of the lint).
 # Checks: (1) root inbox clean, (2) all wikilinks resolve, (3) index complete,
-# (4) concepts/People/Jobs carry frontmatter. Exit 0 = pass, 1 = problems.
+# (4) concepts/Initiatives/People/Jobs carry frontmatter. Exit 0 = pass, 1 = problems.
 # The LLM lint keeps only the judgment checks (stale facts, resolved questions).
 #
 # Link scan ignores: TEMPLATE files, and any [[link]] inside an inline `code`
@@ -15,9 +15,9 @@ bad()  { printf 'FAIL  %s\n' "$1"; fail=1; }
 
 # ---- 1. Root inbox clean -------------------------------------------------
 anchors="README.md index.md Actions.md CLAUDE.md"
-structural="concepts meta raw daily People Jobs attachments"
+structural="concepts Initiatives meta raw daily People Jobs attachments"
 # Template-only artifacts (present in kb-starter; absent in a live vault — harmless either way).
-template_extras="optional setup.md"
+template_extras="setup.md"
 inbox=""
 for e in *; do
   case " $anchors $structural $template_extras " in *" $e "*) continue ;; esac
@@ -27,7 +27,7 @@ if [ -z "$inbox" ]; then ok "root inbox clean"; else bad "root inbox has un-tria
 
 # ---- content files (exclude template files) ------------------------------
 files=()
-for f in concepts/*.md Jobs/*.md People/*.md index.md; do
+for f in concepts/*.md Initiatives/*.md Jobs/*.md People/*.md index.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*) continue ;; esac
   files+=("$f")
@@ -35,7 +35,7 @@ done
 
 # ---- valid wikilink-name set (canonical names + aliases + outside anchors) ----
 valid="$(mktemp)"
-for f in concepts/*.md; do
+for f in concepts/*.md Initiatives/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*) continue ;; esac
   basename "$f" .md >> "$valid"
@@ -68,22 +68,22 @@ if [ ! -s "$broken" ]; then ok "all wikilinks resolve"; else bad "broken wikilin
 
 # ---- 3. Index completeness ----------------------------------------------
 missing=""
-for f in concepts/*.md; do
+for f in concepts/*.md Initiatives/*.md; do
   [ -e "$f" ] || continue   # skip the literal glob when a dir is empty (else slug becomes '*')
   case "$f" in *TEMPLATE*) continue ;; esac
   slug="$(basename "$f" .md)"
   grep -qF "[[$slug]]" index.md || missing="$missing $slug"
 done
-if [ -z "$missing" ]; then ok "index lists every concept"; else bad "not linked from index.md:"; for m in $missing; do note "$m"; done; fi
+if [ -z "$missing" ]; then ok "index lists every concept + initiative"; else bad "not linked from index.md:"; for m in $missing; do note "$m"; done; fi
 
 # ---- 4. Frontmatter present ---------------------------------------------
 fm_fail=""
-for f in concepts/*.md People/*.md Jobs/*.md; do
+for f in concepts/*.md Initiatives/*.md People/*.md Jobs/*.md; do
   [ -e "$f" ] || continue   # skip literal glob for empty dirs
   case "$f" in *TEMPLATE*) continue ;; esac
   [ "$(head -1 "$f")" = "---" ] || fm_fail="$fm_fail $f"
 done
-if [ -z "$fm_fail" ]; then ok "concepts/People/Jobs all carry frontmatter"; else bad "missing frontmatter:"; for m in $fm_fail; do note "$m"; done; fi
+if [ -z "$fm_fail" ]; then ok "concepts/Initiatives/People/Jobs all carry frontmatter"; else bad "missing frontmatter:"; for m in $fm_fail; do note "$m"; done; fi
 
 rm -f "$valid" "$broken"
 echo

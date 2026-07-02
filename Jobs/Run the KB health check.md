@@ -16,13 +16,13 @@ tags: [job]
 
 ## When to run this
 - Weekly as a manual habit.
-- Automatically at 6pm if you've installed the `optional/automation/daily-summary.sh` job.
+- Automatically at 6pm if you've installed the `meta/optional/automation/daily-summary.sh` job.
 - Any time you suspect the KB has drifted (broken links, stale actions, inbox pile-up).
 
 ## Steps
-1. **Inbox check.** List the vault root. Flag anything that isn't: `README.md`, `index.md`, `Actions.md`, `CLAUDE.md`, or a registered structural folder (`concepts/`, `meta/`, `raw/`, `daily/`, `People/`, `Jobs/`, `attachments/`). Each un-filed item is a lint failure.
+1. **Inbox check.** List the vault root. Flag anything that isn't: `README.md`, `index.md`, `Actions.md`, `CLAUDE.md`, or a registered structural folder (`concepts/`, `Initiatives/`, `meta/`, `raw/`, `daily/`, `People/`, `Jobs/`, `attachments/`). Each un-filed item is a lint failure.
 2. **Wikilink check.** Grep all `[[wikilinks]]` across the vault. For each target, confirm a `.md` file with that basename exists. Report any that don't — filtering known false positives (e.g. convention-example links in `AGENTS.md` and `CLAUDE.md`).
-3. **Index completeness.** Scan `concepts/`. Every file there should appear in `index.md`. Report any that don't.
+3. **Index completeness.** Scan `concepts/` and `Initiatives/`. Every file there should appear in `index.md`. Report any that don't.
 4. **Raw provenance.** Every fact in a concept article should trace to a `raw/` capture. Spot-check if asked; flag any concept with no raw citation.
 5. **Actions audit.** Grep `#action` checkboxes across all non-daily notes. Every open `- [ ]` should be real and still open; every completed `- [x]` should be checked, not deleted.
 6. **People links.** Grep `[[Person Name]]` wikilinks across all notes. Each should resolve to a `People/<Person Name>.md` file.

@@ -16,8 +16,10 @@ script for *Claude*. The fastest path is to let Claude run it.
 2. Open it in **Claude Code** (`cd` into the folder, run `claude`).
 3. Say: **`follow setup.md`**
 
-Claude will interview you, fill in the templated files, and run one full
-capture→compile loop with you so you see the method work once. Takes ~10 minutes.
+Claude will interview you, fill in the templated files, run one full
+capture→compile loop so you see the method work once, walk you through setting
+up **Obsidian** (vault + Tasks plugin), and offer each **optional automation**
+individually — you choose what runs on your machine. Takes ~15 minutes.
 
 > Prefer to do it by hand? Skip to **[Manual setup](#manual-setup)** at the bottom.
 
@@ -69,7 +71,62 @@ Don't leave them with empty folders. Do one full pass so the method is demonstra
 
 Show the user the before/after so they connect the steps to the files.
 
-### Phase 4 — Clean up & hand off
+### Phase 4 — Set up Obsidian (the reading layer)
+
+The KB works from any editor, but Obsidian is the intended "IDE" — it renders
+`[[wikilinks]]`, backlinks, the graph, and (with one plugin) the live Actions
+dashboard. You can't click for the user, so narrate each step and **verify by
+asking what they see**:
+
+1. **Install check.** Ask if Obsidian is installed. If not: [obsidian.md](https://obsidian.md)
+   (free), or `brew install --cask obsidian` on macOS with Homebrew. Wait for them.
+2. **Open the vault.** Obsidian → *Open folder as vault* → pick this KB folder.
+   If prompted about trust, they authored this vault — trusting it is fine.
+3. **Enable the Tasks plugin.** Settings → *Community plugins* → *Turn on
+   community plugins* → Browse → search **"Tasks"** (by Clare Macrae) →
+   Install → Enable.
+4. **Verify.** Have them open `Actions.md`: the query blocks should render as a
+   (possibly empty) live task list, **not** as fenced code. If they still see
+   code fences, the plugin isn't enabled — revisit step 3.
+5. Optional niceties to mention, not push: pin `index.md` and `Actions.md` as
+   tabs; try graph view once a few concepts exist.
+
+### Phase 5 — Optional automation (ask per option — never install unprompted)
+
+The `meta/optional/automation/` bundle (macOS + Claude Code) makes the KB feel
+alive day to day. **Present each option with one line on what it does and what
+it requires, and ask yes/no per option** — the user chooses; skipping all of
+them is a fine answer (the core loop needs none of this). Full install detail:
+`meta/optional/automation/README.md`.
+
+| # | Option | What it does | Requires |
+| :-- | :-- | :-- | :-- |
+| 1 | **Session loader** (SessionStart hook) | injects the map + inbox + today's context into every Claude Code session in the vault | nothing external |
+| 2 | **Google Calendar context** | today's events cached for the session loader + daily plan | `gws` CLI authenticated (see below) |
+| 3 | **8am daily plan** (launchd) | writes `daily/YYYY-MM-DD.md`: schedule + live `#action` query + priorities | headless `claude -p` working; calendar/Gmail optional |
+| 4 | **Gmail digest in the daily plan** | a grouped "From the inbox" section from the last 2 days of email (read-only) | `gws`; **privacy note: mail headers/snippets land in daily notes** — say this out loud |
+| 5 | **6pm summary + git snapshot** (launchd) | evening lint, "what we did today" recap, then a nightly commit (+push if a remote exists) | git repo; remote optional |
+
+For whichever they accept:
+
+1. **`gws` first if 2 or 4 chosen:** `brew install googleworkspace-cli` — warn
+   that the plain `gws` Homebrew formula is an **unrelated** git tool with a
+   conflicting binary name. Then `gws auth setup` (needs `gcloud`:
+   `brew install --cask google-cloud-sdk`) and `gws auth login` — the user does
+   the interactive OAuth steps in the browser; verify with `gws auth status`.
+2. **Copy + configure the accepted scripts** per the README: into
+   `~/.claude/hooks/`, set the CONFIG block (`VAULT`, `NAME`) in each.
+3. **Register the SessionStart hook** (option 1) in `~/.claude/settings.json`.
+4. **Install the launchd plists** (options 3/5): copy to `~/Library/LaunchAgents/`,
+   personalize the `Label` and paths, `launchctl load` them.
+5. **Test immediately** — don't wait for the schedule: `daily-plan.sh --force`
+   and `daily-summary.sh` by hand; show the user the generated note.
+6. **Record what was enabled** in `meta/log.md` (one line listing the options).
+
+Non-macOS: the scripts and hook port; launchd doesn't — offer cron/systemd
+equivalents but don't set them up unless asked.
+
+### Phase 6 — Clean up & hand off
 
 1. Offer to delete the **example files** now that real ones exist:
    - `raw/2026-01-01-example-capture.md` (clearly-labeled example).
@@ -96,8 +153,10 @@ your-kb/
 │   ├── Journal.md    ← wins & milestones brag doc
 │   ├── link-map.md   ← generated [[wikilink]] → path index
 │   └── bin/          ← lint.sh + build-link-map.sh (KB tooling)
+│   └── optional/     ← opt-in automation bundle (offered during setup, Phase 5)
 ├── raw/              ← your first dated capture
 ├── concepts/         ← karpathy-method + contacts + jobs + your first concept (all carry frontmatter)
+├── Initiatives/      ← one note per goal-directed workstream (+ its template)
 ├── People/           ← one note per person (single source of truth for per-person detail)
 └── Jobs/             ← agent-executable runbooks for recurring tasks (5 KB-meta ones ship)
 ```
@@ -115,7 +174,8 @@ why the health check matters).
 
 ## Optional: automation (macOS + Claude Code)
 
-Once the basic habit sticks, `optional/automation/` adds the machinery that makes
+Setup **Phase 5** offers these one by one — nothing installs without an explicit
+yes. Once the basic habit sticks, `meta/optional/automation/` adds the machinery that makes
 the base feel alive: a **SessionStart hook** that inlines your map + inbox + today's
 calendar into every Claude Code session, an **8am daily-plan generator** that writes
 a `daily/YYYY-MM-DD.md` note (schedule + a "From the inbox" Gmail digest + live
@@ -123,7 +183,7 @@ a `daily/YYYY-MM-DD.md` note (schedule + a "From the inbox" Gmail digest + live
 CLI, read-only), and a **6pm end-of-day job** that runs the KB health check, appends
 a "What we did today" recap, and commits a nightly git snapshot — so the lint and
 the backup run automatically every evening.
-Not required to start — see `optional/automation/README.md` when you're ready.
+Not required to start — see `meta/optional/automation/README.md` when you're ready.
 
 ---
 
@@ -136,5 +196,6 @@ If you'd rather not use the agent:
 3. Delete `raw/2026-01-01-example-capture.md`. Keep `concepts/karpathy-method.md`.
 4. Write your first real capture in `raw/YYYY-MM-DD-topic.md`, compile a concept into `concepts/`, add both to `index.md`, and log a line in `meta/log.md`.
 5. (Optional, for the `Actions.md` dashboard) install the Obsidian **Tasks** plugin and point Obsidian at the folder.
+6. (Optional) adopt any of the automation pieces by hand — `meta/optional/automation/README.md` is the full walkthrough.
 
 The conventions you're following are all in `meta/AGENTS.md`.

@@ -49,9 +49,9 @@ already knowing your map, your inbox, and your day.
 1. **Copy the scripts into your Claude hooks dir:**
    ```sh
    mkdir -p ~/.claude/hooks ~/.claude/cache
-   cp optional/automation/sessionstart-hook.sh ~/.claude/hooks/knowledge-context.sh
-   cp optional/automation/calendar-fetch.sh    ~/.claude/hooks/
-   cp optional/automation/daily-plan.sh        ~/.claude/hooks/
+   cp meta/optional/automation/sessionstart-hook.sh ~/.claude/hooks/knowledge-context.sh
+   cp meta/optional/automation/calendar-fetch.sh    ~/.claude/hooks/
+   cp meta/optional/automation/daily-plan.sh        ~/.claude/hooks/
    chmod +x ~/.claude/hooks/*.sh
    ```
    Then open each and set the CONFIG block (`VAULT`, `NAME`).
@@ -70,15 +70,15 @@ already knowing your map, your inbox, and your day.
 
 3. **Copy the daily-summary script:**
    ```sh
-   cp optional/automation/daily-summary.sh ~/.claude/hooks/
+   cp meta/optional/automation/daily-summary.sh ~/.claude/hooks/
    chmod +x ~/.claude/hooks/daily-summary.sh
    ```
    Open it and set the CONFIG block (`VAULT`, `NAME`) — same values as `daily-plan.sh`.
 
 4. **Schedule both daily jobs:**
    ```sh
-   cp optional/automation/com.example.daily-plan.plist    ~/Library/LaunchAgents/
-   cp optional/automation/com.example.daily-summary.plist ~/Library/LaunchAgents/
+   cp meta/optional/automation/com.example.daily-plan.plist    ~/Library/LaunchAgents/
+   cp meta/optional/automation/com.example.daily-summary.plist ~/Library/LaunchAgents/
    # Edit each plist: set Label, the script path, and the log paths to your username
    launchctl load ~/Library/LaunchAgents/com.example.daily-plan.plist
    launchctl load ~/Library/LaunchAgents/com.example.daily-summary.plist

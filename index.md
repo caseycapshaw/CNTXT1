@@ -19,8 +19,8 @@ grows; rich descriptions follow in the sections below.
 - _(add your concept groups here: role, product, ops, … one line each)_
 - **Live to-dos:** [[Actions]] · **History:** [[log]]
 
-## Initiatives (goal-directed workstreams — live in `concepts/`, `type: initiative`)
-Bigger outcomes spanning multiple actions over time. An initiative is a **kind of concept** (frontmatter, not a folder — see [[AGENTS]]); built from [`Initiative TEMPLATE.md`](concepts/Initiative%20TEMPLATE.md), run via [[Run an initiative]]. Actions stay inline in each note and aggregate to [[Actions]].
+## Initiatives (goal-directed workstreams — one note each in `Initiatives/`)
+Bigger outcomes spanning multiple actions over time. Built from [`Initiative TEMPLATE.md`](Initiatives/Initiative%20TEMPLATE.md), run via [[Run an initiative]]; `Initiatives/` is a **structural folder, not an inbox item**. Actions stay inline in each note and aggregate to [[Actions]].
 
 **Live:** _(none yet)_
 

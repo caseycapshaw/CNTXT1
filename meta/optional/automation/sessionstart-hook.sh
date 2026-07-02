@@ -63,9 +63,9 @@ while IFS= read -r entry; do
   name="$(basename "$entry")"
   case "$name" in
     README.md|index.md|Actions.md|CLAUDE.md) continue ;;   # pinned anchors
-    concepts|meta|raw|People|Jobs|attachments) continue ;;  # structural folders
+    concepts|Initiatives|meta|raw|People|Jobs|attachments) continue ;;  # structural folders
     daily) continue ;;                                      # auto-generated plan notes
-    optional|setup.md) continue ;;                          # starter-kit artifacts
+    setup.md) continue ;;                                   # starter-kit artifact
     .*) continue ;;                                         # hidden (.obsidian, .DS_Store)
   esac
   if [ -d "$entry" ]; then
