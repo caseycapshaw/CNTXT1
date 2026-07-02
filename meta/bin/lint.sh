@@ -35,7 +35,11 @@ done
 
 # ---- valid wikilink-name set (canonical names + aliases + outside anchors) ----
 valid="$(mktemp)"
-for f in concepts/*.md connections/*.md; do [ -e "$f" ] && basename "$f" .md >> "$valid"; done
+for f in concepts/*.md connections/*.md; do
+  [ -e "$f" ] || continue
+  case "$f" in *TEMPLATE*) continue ;; esac
+  basename "$f" .md >> "$valid"
+done
 for f in People/*.md Jobs/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*) continue ;; esac
@@ -66,6 +70,7 @@ if [ ! -s "$broken" ]; then ok "all wikilinks resolve"; else bad "broken wikilin
 missing=""
 for f in concepts/*.md connections/*.md; do
   [ -e "$f" ] || continue   # skip the literal glob when a dir is empty (else slug becomes '*')
+  case "$f" in *TEMPLATE*) continue ;; esac
   slug="$(basename "$f" .md)"
   grep -qF "[[$slug]]" index.md || missing="$missing $slug"
 done
