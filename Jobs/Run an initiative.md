@@ -14,14 +14,14 @@ aliases: [Start an initiative, Close an initiative, Open an initiative]
 
 > **When:** a goal is bigger than a single `#action` — multiple actions over
 > time, accreting decisions and state · **Outcome:** one initiative note in
-> `concepts/` that carries the whole workstream from open to done
-> **Design note:** an initiative is a *kind of concept* (`type: initiative`),
-> not a separate folder — transitions between concept ↔ initiative are
-> frontmatter-only, so links never break. Conventions in [[AGENTS]].
+> `Initiatives/` that carries the whole workstream from open to done
+> **Design note:** initiatives keep concept mechanics (`type: initiative`
+> frontmatter, evergreen Now & next) but live in their own top-level folder
+> for Obsidian-view prominence. Conventions in [[AGENTS]].
 
 ## Start
 
-1. Copy `concepts/Initiative TEMPLATE.md` → `concepts/<kebab-slug>.md`.
+1. Copy `Initiatives/Initiative TEMPLATE.md` → `Initiatives/<kebab-slug>.md`.
 2. Fill frontmatter (`status: active`, `started:` today) and the **Outcome**
    line — if you can't state "done" in two lines, it isn't an initiative yet.
 3. Seed **Actions** with the first concrete `- [ ] … #action` (add
@@ -60,12 +60,14 @@ aliases: [Start an initiative, Close an initiative, Open an initiative]
   task list for the initiative.
 - **Don't let Now & next become a diary** — it's rewritten state; history
   belongs in Decisions/Milestones.
-- A concept that turns out to be goal-shaped is *converted in place* — swap
-  frontmatter to `type: initiative`, add the missing sections. No file move.
+- A concept that turns out to be goal-shaped converts by `git mv` into
+  `Initiatives/` + frontmatter swap to `type: initiative` + the missing
+  sections + link-map regen (wikilinks are basename-based, so existing links
+  keep resolving).
 
 ## Done when
 
-- [ ] Initiative note exists in `concepts/` with `type: initiative` frontmatter and a two-line Outcome.
+- [ ] Initiative note exists in `Initiatives/` with `type: initiative` frontmatter and a two-line Outcome.
 - [ ] Listed in `index.md` (Quick map live line + Initiatives section).
 - [ ] At least one `#action` seeded inline.
 - [ ] Link map regenerated; `meta/log.md` entry appended.

@@ -25,7 +25,7 @@ Jobs for maintaining the knowledge base itself — always useful, ship with the 
 | :-- | :-- | :-- |
 | [[Add a person to the KB]] | a new person appears | copy People template → note → index in [[contacts]] |
 | [[Capture a meeting or conversation into the KB]] | new durable knowledge | inbox→`raw/`→compile→`index.md`→`meta/log.md` |
-| [[Run an initiative]] | an outcome needs multiple actions over time | initiative = a concept with `type: initiative` + lifecycle; start / keep current / close |
+| [[Run an initiative]] | an outcome needs multiple actions over time | one note per initiative in `Initiatives/` (`type: initiative` + lifecycle); start / keep current / close |
 | [[Run the KB health check]] | lint (on request or automated at 6pm) | inbox clean · links resolve · index complete · actions current |
 | [[Optimize the knowledge base]] | monthly / when the KB feels bloated | efficiency pass: injection budget · index-as-map · frontmatter staleness · link-map · lint |
 
