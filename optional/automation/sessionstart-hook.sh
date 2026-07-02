@@ -44,7 +44,7 @@ done
 read -r -d '' pointer <<EOF
 A personal knowledge base (Karpathy "knowledge-base-as-compiler" method) lives at $VAULT — your durable project memory.
 
-For any non-code / knowledge task, BEFORE answering: read $VAULT/meta/AGENTS.md (how the base works). The map (index.md) and the live inbox state are inlined below — use them as your starting point. Keep the base current per AGENTS.md — capture new material to raw/, compile durable facts into concepts/ + connections/, update index.md, append meta/log.md, use Obsidian [[wikilinks]] for backlinks.
+For any non-code / knowledge task, BEFORE answering: read $VAULT/meta/AGENTS.md (how the base works). The map (index.md) and the live inbox state are inlined below — use them as your starting point. Keep the base current per AGENTS.md — capture new material to raw/, compile durable facts into concepts/, update index.md, append meta/log.md, use Obsidian [[wikilinks]] for backlinks.
 
 The vault ROOT is the inbox: new notes/files land at the root, and anything there other than the pinned anchors (README.md, index.md, Actions.md, CLAUDE.md) is an un-triaged item — offer to file it into raw/ and compile.
 
@@ -63,8 +63,9 @@ while IFS= read -r entry; do
   name="$(basename "$entry")"
   case "$name" in
     README.md|index.md|Actions.md|CLAUDE.md) continue ;;   # pinned anchors
-    concepts|connections|meta|raw) continue ;;             # KB machinery
+    concepts|meta|raw|People|Jobs|attachments) continue ;;  # structural folders
     daily) continue ;;                                      # auto-generated plan notes
+    optional|setup.md) continue ;;                          # starter-kit artifacts
     .*) continue ;;                                         # hidden (.obsidian, .DS_Store)
   esac
   if [ -d "$entry" ]; then

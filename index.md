@@ -43,9 +43,6 @@ Agent-executable runbooks for recurring "jobs to be done" under [`Jobs/`](Jobs) 
 
 Five starter runbooks ship with the kit (KB-meta): [[Add a person to the KB]] · [[Capture a meeting or conversation into the KB]] · [[Run an initiative]] · [[Run the KB health check]] · [[Optimize the knowledge base]].
 
-## Connections (relationships / backlinks)
-_Backlink notes get listed here as they emerge._
-
 ## Raw (source of truth — append-only)
 - `raw/2026-01-01-example-capture.md` — **example** showing the dated-capture format (provenance header, a fact, a `[[wikilink]]`, an `#action`). Delete once you have real captures.
 
