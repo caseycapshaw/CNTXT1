@@ -5,19 +5,20 @@ automation required. This folder adds the *optional* machinery that makes the ba
 feel alive day to day. Adopt it once the basic habit has stuck; skip it entirely
 and the KB still works.
 
-Everything here is **macOS + Claude Code** specific (launchd, Apple Calendar, the
-SessionStart hook). On Linux/Windows the ideas port but the glue (launchd,
-osascript) does not.
+Everything here is **macOS + Claude Code** specific (launchd, the SessionStart
+hook). On Linux/Windows the ideas port but the glue (launchd) does not. Calendar
+access uses the `gws` CLI (Google Calendar) rather than any local app, so it
+ports to Linux/Windows as-is provided `gws` is installed there too.
 
 ## What's in the box
 
 | Piece | File | What it does |
 | :-- | :-- | :-- |
 | **Session loader** | `sessionstart-hook.sh` | A Claude Code **SessionStart hook** that inlines your `index.md` map, the live inbox state, today's calendar, and a pointer to today's plan note — every time you open Claude Code in the vault. Auto-skips inside `~/dev` and any folder with its own `CLAUDE.md`. |
-| **Calendar cache** | `calendar-fetch.sh` | Pulls today's Apple Calendar events into a cache file (~15s; run off the hot path). The hook only *reads* the cache, so startup stays instant. |
-| **Daily plan generator** | `daily-plan.sh` | Runs headless `claude -p` to write `daily/YYYY-MM-DD.md` — today's schedule + a **live Tasks query** of focus actions + a priorities anchor. Idempotent, retries on network gaps, writes a fallback stub if the API is unreachable. |
+| **Calendar cache** | `calendar-fetch.sh` | Pulls today's events from Google Calendar (via [`gws`](https://github.com/googleworkspace/cli), the primary calendar only) into a cache file. The hook only *reads* the cache, so startup stays instant. |
+| **Daily plan generator** | `daily-plan.sh` | Runs headless `claude -p` to write `daily/YYYY-MM-DD.md` — today's schedule + a **"From the inbox" Gmail digest** (via `gws`, read-only, last 2 days; auto-skipped if `gws` is absent) + a **live Tasks query** of focus actions + a priorities anchor. Idempotent, retries on network gaps, writes a fallback stub if the API is unreachable. |
 | **Morning scheduler** | `com.example.daily-plan.plist` | A launchd job that runs `daily-plan.sh` at 08:00 daily. |
-| **End-of-day summary** | `daily-summary.sh` | Runs the deterministic `meta/bin/lint.sh` for the mechanical lint, then headless `claude -p` to (1) add the **judgment-layer lint** (stale items, resolved questions, action hygiene) and (2) **append a "What we did today" recap** to the day's note — local inputs only, no network needed for content. Idempotent: re-runs replace the block, never duplicate. |
+| **End-of-day summary** | `daily-summary.sh` | Runs the deterministic `meta/bin/lint.sh` for the mechanical lint, then headless `claude -p` to (1) add the **judgment-layer lint** (stale items, resolved questions, action hygiene) and (2) **append a "What we did today" recap** to the day's note — local inputs only, no network needed for content. Finishes with a **nightly git snapshot** (commit + best-effort push) so the KB always has a rollback point. Idempotent: re-runs replace the block, never duplicate. |
 | **Evening scheduler** | `com.example.daily-summary.plist` | A launchd job that runs `daily-summary.sh` at 18:00 daily (companion to the 8am job). |
 
 The result: every morning a fresh `daily/` note appears, every evening the KB is
@@ -35,7 +36,7 @@ already knowing your map, your inbox, and your day.
 
 1. **Claude Code** installed and working from the terminal (`claude -p "hi"` returns text).
 2. **Obsidian Tasks plugin** (for the live `#action` query in the daily note and `Actions.md`).
-3. **Calendar access** (only for the calendar feature): grant your terminal app Automation → Calendar access the first time `calendar-fetch.sh` runs.
+3. **`gws`** (only for the calendar feature) installed and authenticated: `brew install googleworkspace-cli` — NOT the unrelated `gws` formula that also installs a `gws` binary (Homebrew will warn about the conflict; make sure `googleworkspace-cli` is what's installed). Then `gws auth setup` (requires `gcloud`) followed by `gws auth login`. Verify with `gws auth status`.
 
 ---
 
@@ -103,12 +104,14 @@ up — the stub + retry is what keeps a day from silently going missing.
 
 ---
 
-## Extending it (what Casey's real setup adds)
+## Extending it
 
-The shipped `daily-plan.sh` is the **clean core**: calendar + actions + priorities.
-The original adds a *"From the channels & board"* live digest by scoping the
-headless run to just the **Slack** and **Jira** MCP servers and asking the model to
-summarize activity since the last working day. To replicate:
+The shipped `daily-plan.sh` covers calendar + a Gmail inbox digest (both via
+`gws`, fetched off the hot path and injected into the prompt — the headless run
+itself needs no Bash or MCP access) + actions + priorities. To add further live
+digests (e.g. a *"From the channels & board"* section from **Slack** and **Jira**),
+scope the headless run to just those MCP servers and ask the model to summarize
+activity since the last working day:
 
 - Generate a scoped MCP config (so you don't spawn all servers at 8am):
   ```sh

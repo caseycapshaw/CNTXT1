@@ -72,5 +72,6 @@ hook that inlines the map + inbox, or a `connections/` graph. These are delibera
 what isn't."*
 
 A ready-to-adopt bundle (macOS + Claude Code) ships in `optional/automation/` — a
-SessionStart loader, an Apple Calendar cache, an 8am daily-plan generator, and the
-launchd job to schedule it. See `optional/automation/README.md`.
+SessionStart loader, a Google Calendar cache + Gmail digest (via the `gws` CLI),
+an 8am daily-plan generator, a 6pm lint/recap/git-snapshot job, and the launchd
+jobs to schedule them. See `optional/automation/README.md`.
