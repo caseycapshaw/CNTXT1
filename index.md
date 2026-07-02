@@ -13,10 +13,18 @@ session-start injection budget (the optional SessionStart hook inlines `head -c 
 of this file; keep the skeleton inside that). Group your concepts here as the base
 grows; rich descriptions follow in the sections below.
 
+- **Initiatives (live):** _(none yet — goal-directed workstreams land here)_
 - **Method:** [[karpathy-method]] · [[AGENTS]]
 - **Indexes:** [[contacts]] → `People/` · [[jobs]] → `Jobs/`
 - _(add your concept groups here: role, product, ops, … one line each)_
 - **Live to-dos:** [[Actions]] · **History:** [[log]]
+
+## Initiatives (goal-directed workstreams — live in `concepts/`, `type: initiative`)
+Bigger outcomes spanning multiple actions over time. An initiative is a **kind of concept** (frontmatter, not a folder — see [[AGENTS]]); built from [`Initiative TEMPLATE.md`](concepts/Initiative%20TEMPLATE.md), run via [[Run an initiative]]. Actions stay inline in each note and aggregate to [[Actions]].
+
+**Live:** _(none yet)_
+
+**Done:** _(closed initiatives stay listed here as records)_
 
 ## Concepts (compiled, queryable truth)
 - **[[karpathy-method]]** — the architecture this KB is built on: an LLM-maintained "wiki" (raw→compile→index→lint, no RAG at personal scale). Why it works, the scale sweet spot, and the hallucination-propagation risk. The operating rules live in [[AGENTS]].
@@ -33,7 +41,7 @@ _Add person notes here as you build the network._
 ## Jobs (one runbook per recurring task — `Jobs/`)
 Agent-executable runbooks for recurring "jobs to be done" under [`Jobs/`](Jobs) — the **single source of truth for the *steps*** of a repeatable task. Built from [`Jobs TEMPLATE.md`](Jobs/Jobs%20TEMPLATE.md). `Jobs/` is a **structural folder, not an inbox item**.
 
-Four starter runbooks ship with the kit (KB-meta): [[Add a person to the KB]] · [[Capture a meeting or conversation into the KB]] · [[Run the KB health check]] · [[Optimize the knowledge base]].
+Five starter runbooks ship with the kit (KB-meta): [[Add a person to the KB]] · [[Capture a meeting or conversation into the KB]] · [[Run an initiative]] · [[Run the KB health check]] · [[Optimize the knowledge base]].
 
 ## Connections (relationships / backlinks)
 _Backlink notes get listed here as they emerge._

@@ -27,7 +27,7 @@ schema (how the KB works) is `meta/AGENTS.md`. The map of all content is
 | Folder / file | Purpose |
 | :-- | :-- |
 | `raw/YYYY-MM-DD-topic.md` | Append-only source captures — **never delete** |
-| `concepts/` | Compiled, queryable truth (evergreen, rewritten in place) |
+| `concepts/` | Compiled, queryable truth (evergreen, rewritten in place) — includes **initiatives** (`type: initiative`, lifecycle `status:`), built from `concepts/Initiative TEMPLATE.md` |
 | `connections/` | Relationship / backlink notes |
 | `index.md` | The map — keep current after every change |
 | `meta/AGENTS.md` | KB schema and operating rules |
@@ -49,6 +49,7 @@ schema (how the KB works) is `meta/AGENTS.md`. The map of all content is
 - **Actions:** inline `- [ ] … #action` checkboxes in their home note. Add `#priority` to flag focus items. Check off in the home note — never maintain a separate list. `Actions.md` aggregates them automatically (Obsidian Tasks plugin).
 - **Raw notes:** append-only, dated (`YYYY-MM-DD-topic.md`). Never delete or rewrite.
 - **Concept articles:** evergreen — rewrite in place as understanding improves. Each carries YAML frontmatter (`type: concept` · `updated: YYYY-MM-DD` · `status: current` · `tags: [concept, <domain>]`); **bump `updated:` whenever you meaningfully rewrite one** so staleness is mechanical.
+- **Initiatives:** a goal-directed workstream (multiple actions over time) is a **concept with `type: initiative`** and lifecycle `status: active|paused|done` — same folder, no silo; concept↔initiative conversions are frontmatter-only. Live ones sit on the index Quick map's Initiatives line; actions stay inline in the initiative note. Runbook: `Jobs/Run an initiative.md`.
 - **Wikilink resolution:** `meta/link-map.md` maps every `[[target]]` (concept/connection slug, People name+alias, Job title+alias) → its file path. Use it instead of grepping; regenerate with `meta/bin/build-link-map.sh` after adding/renaming any of those.
 - **Index is a pure map:** `index.md` opens with a **Quick map** skeleton (every concept/connection/index, one line) so the structure fits the session-start injection; rich descriptions follow below. Change history lives in `meta/log.md`, **never** in `index.md`.
 - **Dates:** always `YYYY-MM-DD`.

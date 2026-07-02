@@ -99,7 +99,7 @@ your-kb/
 ├── raw/              ← your first dated capture
 ├── concepts/         ← karpathy-method + contacts + jobs + your first concept (all carry frontmatter)
 ├── People/           ← one note per person (single source of truth for per-person detail)
-├── Jobs/             ← agent-executable runbooks for recurring tasks (4 KB-meta ones ship)
+├── Jobs/             ← agent-executable runbooks for recurring tasks (5 KB-meta ones ship)
 └── connections/      ← (relationship notes, as they emerge)
 ```
 
