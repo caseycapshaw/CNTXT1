@@ -59,6 +59,16 @@ In `CLAUDE.md`, replace the placeholders from the interview:
 Then update the header lines of `index.md` and `README.md` to name the user and
 their domain (replace the `{{...}}` placeholders there too).
 
+Two placeholders live outside `CLAUDE.md`:
+- `owner: {{NAME}}` in each `Jobs/*.md` runbook → the user's name.
+- `{{PERSONAL_IDENTIFIERS}}` in `Jobs/Sync an improvement to CNTXT1.md` → a
+  `|`-separated grep pattern of the user's personal identifiers (full name,
+  family members, employer, email domain — from the interview). **State the
+  privacy rule out loud while doing this:** this vault is private; personal
+  content never leaves it; only re-templated framework improvements flow out,
+  through that runbook's grep gate (`meta/AGENTS.md` § Privacy & content
+  separation).
+
 ### Phase 3 — Run one real loop (the important part)
 
 Don't leave them with empty folders. Do one full pass so the method is demonstrated:
@@ -165,7 +175,7 @@ your-kb/
 ├── concepts/         ← karpathy-method + contacts + jobs + your first concept (all carry frontmatter)
 ├── Initiatives/      ← one note per goal-directed workstream (+ its template)
 ├── People/           ← one note per person (single source of truth for per-person detail)
-└── Jobs/             ← agent-executable runbooks for recurring tasks (5 KB-meta ones ship)
+└── Jobs/             ← agent-executable runbooks for recurring tasks (6 KB-meta ones ship)
 ```
 
 ## The daily habit

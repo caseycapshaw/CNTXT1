@@ -10,6 +10,7 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Capture a meeting or conversation into the KB]]` | `Jobs/Capture a meeting or conversation into the KB.md` |
 | `[[Close an initiative]]` | `Jobs/Run an initiative.md` |
 | `[[contacts]]` | `concepts/contacts.md` |
+| `[[Contribute to CNTXT1]]` | `Jobs/Sync an improvement to CNTXT1.md` |
 | `[[jobs]]` | `concepts/jobs.md` |
 | `[[karpathy-method]]` | `concepts/karpathy-method.md` |
 | `[[KB efficiency pass]]` | `Jobs/Optimize the knowledge base.md` |
@@ -19,4 +20,6 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Run an initiative]]` | `Jobs/Run an initiative.md` |
 | `[[Run the KB health check]]` | `Jobs/Run the KB health check.md` |
 | `[[Start an initiative]]` | `Jobs/Run an initiative.md` |
+| `[[Sync a KB improvement to the shared repo]]` | `Jobs/Sync an improvement to CNTXT1.md` |
+| `[[Sync an improvement to CNTXT1]]` | `Jobs/Sync an improvement to CNTXT1.md` |
 | `[[Tune the knowledge base]]` | `Jobs/Optimize the knowledge base.md` |

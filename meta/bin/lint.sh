@@ -17,7 +17,7 @@ bad()  { printf 'FAIL  %s\n' "$1"; fail=1; }
 anchors="README.md index.md Actions.md CLAUDE.md"
 structural="concepts Initiatives meta raw daily People Jobs attachments"
 # Template-only artifacts (present in kb-starter; absent in a live vault — harmless either way).
-template_extras="setup.md"
+template_extras="setup.md LICENSE"
 inbox=""
 for e in *; do
   case " $anchors $structural $template_extras " in *" $e "*) continue ;; esac
