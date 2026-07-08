@@ -70,8 +70,12 @@ jobs:
             Post your findings on the PR: use
             `mcp__github_inline_comment__create_inline_comment` (with
             `confirmed: true`) for line-anchored issues, and `gh pr comment`
-            for the overall verdict. Start the verdict comment with
-            "VERDICT: PASS", "VERDICT: PRIVACY BLOCK", or "VERDICT: ISSUES".
+            for the overall verdict. You MUST post a verdict comment on
+            every run — including when everything passes or when a prior
+            review's findings have been addressed — so a green check is
+            always backed by a current verdict. Start the verdict comment
+            with "VERDICT: PASS", "VERDICT: PRIVACY BLOCK", or
+            "VERDICT: ISSUES".
             For privacy findings quote the smallest identifying snippet
             possible — do not amplify personal data in your comments. Be
             concise and actionable.
