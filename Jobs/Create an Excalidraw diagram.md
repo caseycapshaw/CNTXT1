@@ -3,7 +3,7 @@ type: job
 domain: kb-meta
 trigger: need a diagram / flowchart / visual map in the vault
 frequency: ad-hoc
-tools: Excalidraw (Obsidian plugin), mermaid, node/npm, "@excalidraw/excalidraw", esbuild
+tools: Excalidraw (Obsidian plugin), python3 (stdlib only), mermaid
 owner: {{NAME}}
 status: active
 tags: [job]
@@ -12,7 +12,7 @@ aliases: [Create Excalidraw, Make an Excalidraw diagram, Excalidraw diagram]
 
 # Job — Create an Excalidraw diagram
 
-> **When:** you need a visual (flowchart, architecture, reasoning map) as a native `.excalidraw.md` in the vault · **Frequency:** ad-hoc · **Tools:** Obsidian Excalidraw plugin (v2.25+), mermaid, node, `@excalidraw/excalidraw`, esbuild
+> **When:** you need a visual (flowchart, architecture, reasoning map) as a native `.excalidraw.md` in the vault · **Frequency:** ad-hoc · **Tools:** Obsidian Excalidraw plugin (v2.25+), python3 (stdlib only), mermaid
 > **Outcome:** a file in `Excalidraw/` that opens in **Excalidraw view** as real shapes + arrows (not raw text, no duplicated text pile), labels centred in boxes, arrows that re-route when a box is dragged.
 
 ## When to run this
