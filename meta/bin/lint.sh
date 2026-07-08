@@ -15,7 +15,7 @@ bad()  { printf 'FAIL  %s\n' "$1"; fail=1; }
 
 # ---- 1. Root inbox clean -------------------------------------------------
 anchors="README.md index.md Actions.md CLAUDE.md"
-structural="concepts Initiatives meta raw daily People Jobs attachments"
+structural="concepts Initiatives meta raw daily People Jobs attachments Excalidraw"
 # Template-only artifacts (present in kb-starter; absent in a live vault — harmless either way).
 template_extras="setup.md LICENSE"
 inbox=""

@@ -176,7 +176,7 @@ your-kb/
 ├── concepts/         ← karpathy-method + contacts + jobs + your first concept (all carry frontmatter)
 ├── Initiatives/      ← one note per goal-directed workstream (+ its template)
 ├── People/           ← one note per person (single source of truth for per-person detail)
-└── Jobs/             ← agent-executable runbooks for recurring tasks (6 KB-meta ones ship)
+└── Jobs/             ← agent-executable runbooks for recurring tasks (7 KB-meta ones ship)
 ```
 
 ## The daily habit

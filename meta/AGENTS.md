@@ -23,7 +23,7 @@ _All paths in this file are relative to the vault root, not to this `meta/` fold
 
 ## Data flow
 
-0. **Inbox = the vault root.** New notes and dropped files start at the **vault root** — the inbox. Anything sitting at the root *other than the pinned anchors* (`README.md`, `index.md`, `Actions.md`, `CLAUDE.md`) is an un-triaged inbox item awaiting filing. A clean root (only the anchors + the structural folders) means the inbox is empty. **Structural folders** (not inbox items): `concepts/`, `Initiatives/`, `meta/`, `raw/`, `daily/`, `People/`, `Jobs/`, `attachments/`.
+0. **Inbox = the vault root.** New notes and dropped files start at the **vault root** — the inbox. Anything sitting at the root *other than the pinned anchors* (`README.md`, `index.md`, `Actions.md`, `CLAUDE.md`) is an un-triaged inbox item awaiting filing. A clean root (only the anchors + the structural folders) means the inbox is empty. **Structural folders** (not inbox items): `concepts/`, `Initiatives/`, `meta/`, `raw/`, `daily/`, `People/`, `Jobs/`, `attachments/`, `Excalidraw/` (optional).
 1. **Triage → `raw/`.** Move each inbox item into `raw/` as dated markdown (`YYYY-MM-DD-topic.md`), lightly edited, with a one-line source/provenance header. This is the source of truth; never delete it.
 2. **Compile → `concepts/`.** Extract durable facts into concept articles. Relationships live inline — `[[wikilinks]]` in prose plus each note's **Related** section (Obsidian's backlinks panel and graph view materialize the reverse direction); a relationship with real substance becomes its own concept.
 3. **Index → `index.md`.** Keep the index current so the agent knows where to start without semantic search / RAG.
@@ -67,7 +67,7 @@ Hard rules:
 - **`index.md` is a pure map, not a log.** It opens with a compact **Quick map** skeleton (every concept/initiative/index as a one-liner) so the whole structure fits the session-start injection budget (the optional SessionStart hook inlines `head -c 8000` of `index.md`); rich descriptions follow below. **Change history never lives in `index.md`** — it goes to `meta/log.md`. If the Quick map outgrows the budget, tighten it — don't let the skeleton spill past the cut.
 - **`meta/link-map.md` resolves wikilinks in one lookup.** A generated table mapping every `[[target]]` (concept slug, People name + `aliases:`, Job title + `aliases:`) → its file path — read it instead of grepping. **Regenerate after adding/renaming any concept, person, or job:** `meta/bin/build-link-map.sh` (idempotent).
 - **Raw notes** are append-only and dated; they preserve the original source.
-- **Root is the inbox, not a home for permanent files.** Only `README.md`, `index.md`, `Actions.md`, and `CLAUDE.md` live there permanently; everything else at the root is transient and should be triaged into `raw/` (then compiled). Permanent machinery lives in `meta/`. Structural folders (`concepts/`, `Initiatives/`, `meta/`, `raw/`, `daily/`, `People/`, `Jobs/`, `attachments/`) are **not inbox items**.
+- **Root is the inbox, not a home for permanent files.** Only `README.md`, `index.md`, `Actions.md`, and `CLAUDE.md` live there permanently; everything else at the root is transient and should be triaged into `raw/` (then compiled). Permanent machinery lives in `meta/`. Structural folders (`concepts/`, `Initiatives/`, `meta/`, `raw/`, `daily/`, `People/`, `Jobs/`, `attachments/`, `Excalidraw/` [optional]) are **not inbox items**.
 - **Open questions** live at the bottom of the relevant concept article and are mirrored in `index.md`.
 - **Actions (to-dos)** are Markdown checkboxes tagged `#action` — `- [ ] … #action` (optional `📅 YYYY-MM-DD` due date) — written **inline in the note they belong to**, next to their context. They're aggregated into one live view at `Actions.md` (a pinned root anchor; Obsidian **Tasks** plugin). Keep *actions* (things you do) distinct from *open questions* (unknowns); when a question's resolution is a task you perform, write it as an `#action`. Check items off in their home note (or the dashboard) — never maintain a duplicate manual to-do list.
 - **`#priority` flags a focus action.** Add `#priority` to an action line (`- [ ] … #action #priority`) to mark it important. It's a plain importance flag; no due date required.
@@ -80,7 +80,7 @@ Hard rules:
 - Every fact in a concept article traces back to a `raw/` capture or a conversation.
 - No `[[wikilink]]` points to a note that doesn't exist — including `[[Full Name]]` person-links (must resolve to a real `People/` note or registered alias).
 - `index.md` lists every concept and initiative file; `concepts/jobs.md` lists every runbook in `Jobs/`.
-- **Inbox is empty:** the vault root holds only `README.md` + `index.md` + `Actions.md` + `CLAUDE.md` (plus the structural folders: `concepts/`, `Initiatives/`, `meta/`, `raw/`, `daily/`, `People/`, `Jobs/`, `attachments/`). Any other root file is un-triaged — file it into `raw/` and compile.
+- **Inbox is empty:** the vault root holds only `README.md` + `index.md` + `Actions.md` + `CLAUDE.md` (plus the structural folders: `concepts/`, `Initiatives/`, `meta/`, `raw/`, `daily/`, `People/`, `Jobs/`, `attachments/`, `Excalidraw/` [optional]). Any other root file is un-triaged — file it into `raw/` and compile.
 - Flag stale items and resolved open questions.
 - **Actions current:** every `- [ ] … #action` is real and still open; completed ones are checked off (not deleted). `Actions.md` is the single aggregated view.
 - **Initiatives current:** every `type: initiative` note with `status: active|paused` appears on the index Quick map's Initiatives line; a live initiative whose `updated:` is weeks old (or whose actions are all checked) probably needs a Now & next rewrite or a close.
@@ -105,3 +105,9 @@ A ready-to-adopt bundle (macOS + Claude Code) ships in `meta/optional/automation
 SessionStart loader, a Google Calendar cache + Gmail digest (via the `gws` CLI),
 an 8am daily-plan generator, a 6pm lint/recap/git-snapshot job, and the launchd
 jobs to schedule them. See `meta/optional/automation/README.md`.
+
+**Visual diagrams** are another optional layer: `meta/bin/excalidraw.py` is a
+zero-dependency generator that emits native Obsidian-Excalidraw `.excalidraw.md`
+files (shapes + bound labels + auto-routing arrows) from a compact Python
+node/edge spec — no npm, no browser, no network. Files land in the optional
+`Excalidraw/` structural folder. See `Jobs/Create an Excalidraw diagram.md`.

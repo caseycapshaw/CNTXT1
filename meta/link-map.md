@@ -11,9 +11,13 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Close an initiative]]` | `Jobs/Run an initiative.md` |
 | `[[contacts]]` | `concepts/contacts.md` |
 | `[[Contribute to CNTXT1]]` | `Jobs/Sync an improvement to CNTXT1.md` |
+| `[[Create an Excalidraw diagram]]` | `Jobs/Create an Excalidraw diagram.md` |
+| `[[Create Excalidraw]]` | `Jobs/Create an Excalidraw diagram.md` |
+| `[[Excalidraw diagram]]` | `Jobs/Create an Excalidraw diagram.md` |
 | `[[jobs]]` | `concepts/jobs.md` |
 | `[[karpathy-method]]` | `concepts/karpathy-method.md` |
 | `[[KB efficiency pass]]` | `Jobs/Optimize the knowledge base.md` |
+| `[[Make an Excalidraw diagram]]` | `Jobs/Create an Excalidraw diagram.md` |
 | `[[Open an initiative]]` | `Jobs/Run an initiative.md` |
 | `[[Optimize the KB]]` | `Jobs/Optimize the knowledge base.md` |
 | `[[Optimize the knowledge base]]` | `Jobs/Optimize the knowledge base.md` |

@@ -29,6 +29,7 @@ Jobs for maintaining the knowledge base itself — always useful, ship with the 
 | [[Run the KB health check]] | lint (on request or automated at 6pm) | inbox clean · links resolve · index complete · actions current |
 | [[Optimize the knowledge base]] | monthly / when the KB feels bloated | efficiency pass: injection budget · index-as-map · frontmatter staleness · link-map · lint |
 | [[Sync an improvement to CNTXT1]] | a generic schema/tooling/template change is worth sharing | the ONLY outward path — manual copy + re-template + grep gate; personal content never leaves the vault (`AGENTS.md` § Privacy) |
+| [[Create an Excalidraw diagram]] | need a diagram / visual in the vault *(optional)* | zero-dep `meta/bin/excalidraw.py` (spec→file) or Mermaid by hand; text ids ≤8 chars or the mirror breaks |
 
 ## 🛠️ Dev
 _(add job runbooks for your recurring dev tasks)_
