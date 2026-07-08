@@ -66,6 +66,20 @@ is un-triaged — file it into `raw/` (then compile into `concepts/` if durable)
 
 ---
 
+## Privacy rule (non-negotiable)
+
+Everything in this vault is private: **personal content never leaves the
+vault** — never copy it into public or shared repos, external services, or
+anything destined to be published. The only sanctioned outward path is
+*generic framework improvements* (schema, templates, runbooks, scripts)
+flowing to the public **CNTXT1** starter kit via
+`Jobs/Sync an improvement to CNTXT1.md` — always re-templated to
+`{{placeholders}}`, always through its grep gate. Never add the public repo
+as a git remote of this vault. Full rules: `meta/AGENTS.md` § Privacy &
+content separation. When in doubt, it's personal — it stays here.
+
+---
+
 ## Data flow
 
 New note → root inbox → `raw/YYYY-MM-DD-topic.md` → compile facts into

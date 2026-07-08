@@ -29,6 +29,34 @@ _All paths in this file are relative to the vault root, not to this `meta/` fold
 3. **Index → `index.md`.** Keep the index current so the agent knows where to start without semantic search / RAG.
 4. **Log → `meta/log.md`.** Append a one-line entry for every meaningful update.
 
+## Privacy & content separation (non-negotiable)
+
+This vault is **private by definition**. Every note in it — people, finances,
+raw captures, daily notes, initiatives, logs — is personal content, and
+**personal content never leaves the vault**. Never copy, commit, push, or
+paste any of it into a public or shared repo, an external service, or anything
+destined to be published.
+
+The one sanctioned outward path is the **framework itself**: **CNTXT1**, the
+public shareable starter kit this vault is an instance of
+([caseycapshaw/CNTXT1](https://github.com/caseycapshaw/CNTXT1)), receives
+*generic* improvements only — schema, templates, `Jobs/` runbooks,
+`meta/bin/` scripts — each **hand-copied and re-templated** (real values
+swapped back to `{{placeholders}}`) via the runbook
+`Jobs/Sync an improvement to CNTXT1.md`, which ends with a personal-identifier
+**grep gate** before anything is committed publicly.
+
+Hard rules:
+- **Never add the public CNTXT1 repo as a git remote of this vault**, and
+  never push any branch of this vault to it — the private instance and the
+  public framework stay two independent repos with independent histories,
+  on purpose.
+- **Never automate the outward copy** (no export script, no
+  subtree/filter-repo exclude list) — the manual re-template step *is* the
+  leak protection; automation drifts stale and leaks.
+- **When in doubt whether something is generic or personal, it's personal** —
+  it stays in the vault.
+
 ## Conventions
 
 - **Backlinks:** use Obsidian-style `[[wikilinks]]` to connect notes. Reference people by `[[Full Name]]` (their `People/` note); nicknames resolve via the note's `aliases:` frontmatter field. A `[[link]]` to a note that doesn't exist yet is fine — it marks something worth writing later.
