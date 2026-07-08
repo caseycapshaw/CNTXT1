@@ -20,7 +20,7 @@ tags: [job]
 - Any time you suspect the KB has drifted (broken links, stale actions, inbox pile-up).
 
 ## Steps
-1. **Inbox check.** List the vault root. Flag anything that isn't: `README.md`, `index.md`, `Actions.md`, `CLAUDE.md`, or a registered structural folder (`concepts/`, `Initiatives/`, `meta/`, `raw/`, `daily/`, `People/`, `Jobs/`, `attachments/`). Each un-filed item is a lint failure.
+1. **Inbox check.** List the vault root. Flag anything that isn't: `README.md`, `index.md`, `Actions.md`, `CLAUDE.md`, or a registered structural folder (`concepts/`, `Initiatives/`, `meta/`, `raw/`, `daily/`, `People/`, `Jobs/`, `attachments/`, `Excalidraw/`). Each un-filed item is a lint failure.
 2. **Wikilink check.** Grep all `[[wikilinks]]` across the vault. For each target, confirm a `.md` file with that basename exists. Report any that don't — filtering known false positives (e.g. convention-example links in `AGENTS.md` and `CLAUDE.md`).
 3. **Index completeness.** Scan `concepts/` and `Initiatives/`. Every file there should appear in `index.md`. Report any that don't.
 4. **Raw provenance.** Every fact in a concept article should trace to a `raw/` capture. Spot-check if asked; flag any concept with no raw citation.
