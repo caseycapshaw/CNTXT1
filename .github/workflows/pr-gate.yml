@@ -1,0 +1,27 @@
+# Deterministic privacy & consistency gate — runs on EVERY PR, fork-safe.
+# No secrets required; PERSONAL_IDENTIFIERS (a repo secret holding the
+# maintainer's |-separated grep pattern) adds an extra sweep on same-repo
+# PRs and is simply skipped on forks, where GitHub withholds secrets.
+name: PR gate (privacy + consistency)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: KB lint (mechanical health)
+        run: ./meta/bin/lint.sh
+
+      - name: Privacy & consistency gate
+        env:
+          PERSONAL_IDENTIFIERS: ${{ secrets.PERSONAL_IDENTIFIERS }}
+        run: ./.github/scripts/pr-gate.sh

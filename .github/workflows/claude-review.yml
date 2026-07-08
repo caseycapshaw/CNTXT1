@@ -1,0 +1,73 @@
+# Claude judgment-layer review — the deterministic gate (pr-gate.yml) catches
+# mechanical violations; this catches what needs judgment: content that is
+# personal/instance-specific rather than framework-generic, and schema drift.
+#
+# Auth: needs the ANTHROPIC_API_KEY repo secret (set with
+#   gh secret set ANTHROPIC_API_KEY
+# or install the Claude GitHub App via /install-github-app in Claude Code).
+#
+# Fork PRs: GitHub withholds secrets from pull_request runs on forks, so this
+# job only auto-runs on same-repo PRs. For an outside contributor's PR, a
+# maintainer reviews the gate results, then can trigger Claude by commenting
+# "@claude review this PR against the privacy rule and schema" (GitHub App
+# flow), or re-push the branch to a same-repo ref.
+name: Claude review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  claude-review:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Review this pull request to the CNTXT1 starter kit. CNTXT1 is a
+            PUBLIC template for private personal knowledge bases — it ships a
+            framework (schema, templates, runbooks, scripts) and must contain
+            ZERO personal or instance-specific content. Read meta/AGENTS.md
+            ("Privacy & content separation") first — it is the constitution.
+
+            Review the diff for, in priority order:
+
+            1. PRIVACY (blocking): any content that looks personal or
+               instance-specific rather than framework-generic — real names,
+               family/household details, employers, addresses, emails, IPs,
+               device/host names, populated People/raw/daily/Initiatives
+               content, an owner: field with a real name, placeholders
+               ({{NAME}}, {{PERSONAL_IDENTIFIERS}}, etc.) replaced with real
+               values, or personal specifics leaking through examples. The
+               deterministic gate catches known patterns; you catch what
+               patterns miss. When in doubt, it's personal — flag it.
+
+            2. SCHEMA CONSISTENCY: changes must conform to meta/AGENTS.md —
+               new Jobs indexed in concepts/jobs.md with owner: {{NAME}};
+               concepts carry frontmatter (type/updated/status/tags); the
+               link map regenerated when link targets change; index.md stays
+               a pure map (no change history); root gains no new permanent
+               files; wikilinks resolve; dates are YYYY-MM-DD.
+
+            3. DOC COHERENCE: does the change keep setup.md, README.md,
+               CLAUDE.md, and AGENTS.md telling the same story (counts,
+               paths, folder tables, phase instructions)?
+
+            Post your findings as a PR review: request changes for any
+            privacy finding (quote the smallest identifying snippet possible
+            — do not amplify personal data in your comments); otherwise
+            approve or comment with specific, actionable notes. Be concise.
+          claude_args: |
+            --model claude-sonnet-5
+            --max-turns 12
