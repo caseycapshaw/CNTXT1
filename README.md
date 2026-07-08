@@ -51,3 +51,9 @@ see anything else loose at the root, it's waiting to be filed** (ask Claude to
 ---
 
 _Last updated: {{DATE}}._
+
+## License
+
+The CNTXT1 starter kit (templates, schema, scripts) is [MIT-licensed](LICENSE) —
+free to use, copy, and adapt. Your own knowledge base built from it is yours;
+delete this section when you personalize the repo.
