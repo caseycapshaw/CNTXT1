@@ -2,9 +2,11 @@
 # mechanical violations; this catches what needs judgment: content that is
 # personal/instance-specific rather than framework-generic, and schema drift.
 #
-# Auth: needs the ANTHROPIC_API_KEY repo secret (set with
-#   gh secret set ANTHROPIC_API_KEY
-# or install the Claude GitHub App via /install-github-app in Claude Code).
+# Auth: needs the CLAUDE_CODE_OAUTH_TOKEN repo secret — generate with
+#   claude setup-token   (bills to your Claude subscription)
+# then: gh secret set CLAUDE_CODE_OAUTH_TOKEN
+# (An ANTHROPIC_API_KEY from console.anthropic.com works too — swap the
+# auth input below to anthropic_api_key.)
 #
 # Fork PRs: GitHub withholds secrets from pull_request runs on forks, so this
 # job only auto-runs on same-repo PRs. For an outside contributor's PR, a
@@ -33,7 +35,7 @@ jobs:
 
       - uses: anthropics/claude-code-action@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
             Review this pull request to the CNTXT1 starter kit. CNTXT1 is a
             PUBLIC template for private personal knowledge bases — it ships a
