@@ -57,3 +57,9 @@ _Last updated: {{DATE}}._
 The CNTXT1 starter kit (templates, schema, scripts) is [MIT-licensed](LICENSE) —
 free to use, copy, and adapt. Your own knowledge base built from it is yours;
 delete this section when you personalize the repo.
+
+## Contributing
+
+Generic improvements to the framework are welcome — see
+[.github/CONTRIBUTING.md](.github/CONTRIBUTING.md). One rule dominates: this
+repo ships a framework, never personal content.
