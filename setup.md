@@ -147,6 +147,7 @@ equivalents but don't set them up unless asked.
 
 1. Offer to delete the **example files** now that real ones exist:
    - `raw/2026-01-01-example-capture.md` (clearly-labeled example).
+   - `.github/` (the starter kit's own CI: PR privacy gate + contributor docs — they guard the *public template repo*, and the gate will fail on a personalized vault; a private instance doesn't need them).
    - Keep `concepts/karpathy-method.md` — it explains the method; suggest they keep it.
 2. Remove any remaining `{{placeholders}}` and the placeholder note at the top of `CLAUDE.md`.
 3. Run the **health checks** from `meta/AGENTS.md` once and report a clean bill (no broken wikilinks, index lists every file, inbox clean).
