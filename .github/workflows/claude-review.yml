@@ -34,6 +34,7 @@ jobs:
           fetch-depth: 0
 
       - uses: anthropics/claude-code-action@v1
+        id: claude
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
@@ -73,3 +74,15 @@ jobs:
           claude_args: |
             --model claude-sonnet-5
             --max-turns 12
+
+      # The action exits 0 even when Claude itself errors (e.g. bad auth) —
+      # parse the execution log so a failed review turns the check red
+      # instead of silently passing.
+      - name: Fail if Claude errored
+        run: |
+          f='${{ steps.claude.outputs.execution_file }}'
+          if [ -f "$f" ] && jq -e '.[] | select(.type=="result") | .is_error == true' "$f" >/dev/null 2>&1; then
+            echo "Claude execution reported is_error=true:"
+            jq '.[] | select(.type=="result")' "$f" || true
+            exit 1
+          fi
