@@ -106,6 +106,7 @@ them is a fine answer (the core loop needs none of this). Full install detail:
 | 3 | **8am daily plan** (launchd) | writes `daily/YYYY-MM-DD.md`: schedule + live `#action` query + priorities | headless `claude -p` working; calendar/Gmail optional |
 | 4 | **Gmail digest in the daily plan** | a grouped "From the inbox" section from the last 2 days of email (read-only) | `gws`; **privacy note: mail headers/snippets land in daily notes** — say this out loud |
 | 5 | **6pm summary + git snapshot** (launchd) | evening lint, "what we did today" recap, then a nightly commit (+push if a remote exists) | git repo; remote optional |
+| 6 | **Claude Desktop MCP server** | lets the Claude Desktop chat app read the vault (index/read/search/actions) and capture new facts to `raw/` — the "prioritize the KB" rule rides into every chat as server instructions | Claude Desktop + `python3` (stdlib only) |
 
 For whichever they accept:
 
@@ -119,9 +120,15 @@ For whichever they accept:
 3. **Register the SessionStart hook** (option 1) in `~/.claude/settings.json`.
 4. **Install the launchd plists** (options 3/5): copy to `~/Library/LaunchAgents/`,
    personalize the `Label` and paths, `launchctl load` them.
-5. **Test immediately** — don't wait for the schedule: `daily-plan.sh --force`
+5. **Register the MCP server** (option 6): personalize the `INSTRUCTIONS`
+   block in `meta/bin/kb-mcp-server.py` (`{{NAME}}`, `{{SCOPE}}` — one phrase
+   for what the KB covers), then add it to
+   `~/Library/Application Support/Claude/claude_desktop_config.json` under
+   `mcpServers` (the config snippet is in the script's docstring). Restart
+   Claude Desktop and verify the `cntxt-kb` tools appear.
+6. **Test immediately** — don't wait for the schedule: `daily-plan.sh --force`
    and `daily-summary.sh` by hand; show the user the generated note.
-6. **Record what was enabled** in `meta/log.md` (one line listing the options).
+7. **Record what was enabled** in `meta/log.md` (one line listing the options).
 
 Non-macOS: the scripts and hook port; launchd doesn't — offer cron/systemd
 equivalents but don't set them up unless asked.
@@ -152,7 +159,7 @@ your-kb/
 │   ├── log.md        ← changelog, one line per update
 │   ├── Journal.md    ← wins & milestones brag doc
 │   ├── link-map.md   ← generated [[wikilink]] → path index
-│   └── bin/          ← lint.sh + build-link-map.sh (KB tooling)
+│   └── bin/          ← lint.sh + build-link-map.sh + kb-mcp-server.py (KB tooling)
 │   └── optional/     ← opt-in automation bundle (offered during setup, Phase 5)
 ├── raw/              ← your first dated capture
 ├── concepts/         ← karpathy-method + contacts + jobs + your first concept (all carry frontmatter)
@@ -182,7 +189,10 @@ a `daily/YYYY-MM-DD.md` note (schedule + a "From the inbox" Gmail digest + live
 `#action` query + priorities — calendar and Gmail via the [`gws`](https://github.com/googleworkspace/cli)
 CLI, read-only), and a **6pm end-of-day job** that runs the KB health check, appends
 a "What we did today" recap, and commits a nightly git snapshot — so the lint and
-the backup run automatically every evening.
+the backup run automatically every evening. There's also a **Claude Desktop MCP
+server** (`meta/bin/kb-mcp-server.py`, stdlib-only python) that gives the chat
+app read access to the vault plus capture-to-`raw/` — registration snippet in
+the script's docstring.
 Not required to start — see `meta/optional/automation/README.md` when you're ready.
 
 ---
