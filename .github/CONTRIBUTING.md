@@ -49,3 +49,9 @@ Every PR runs two layers:
 
 A privacy finding always blocks. If you're unsure whether something counts as
 personal — it does; keep it in your vault and send the generic version here.
+
+## License of contributions
+
+By submitting a pull request you agree that your contribution is licensed
+under the [MIT License](../LICENSE), the same as the rest of the project
+(the standard "inbound = outbound" rule).
