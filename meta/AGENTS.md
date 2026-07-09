@@ -137,3 +137,21 @@ file reads, and that same bloat can make an in-process subagent/Task tool
 unusable — which is exactly why explicit, lean pane workers are the reliable
 path. Entirely optional — skip it if you're not running a multi-agent terminal
 tool.
+
+Optionally, give workers a **named identity** instead of a blank agent: drop
+one system-prompt fragment per role in `meta/agent-roles/` (a starter set —
+`research`, `compile`, `lint`, `initiative-worker` — maps onto this KB's own
+raw→compile→index→lint verbs and its initiative-delegation model, not a
+generic app-build split) and pass one via your agent CLI's system-prompt flag
+when launching a worker (e.g.
+`--append-system-prompt <vault>/meta/agent-roles/<role>.md`, with an
+**absolute path** — a worker's cwd may not be your vault). These are plain
+files, not anything your agent CLI auto-discovers as
+a built-in subagent type — that keeps them from leaking into ordinary,
+non-orchestration sessions, and sidesteps betting on whether a restricted
+tool list would dodge the MCP-bloat problem above for a native subagent path
+too. If your agent CLI supports custom slash commands or macros, wrapping
+these launch steps behind one (e.g. `/spawn <role> <task>` that reads the
+matching `meta/agent-roles/<role>.md` and walks the runbook) turns a several-
+step launch into a one-line invocation — worth doing once the pattern is used
+often enough to be worth automating.
