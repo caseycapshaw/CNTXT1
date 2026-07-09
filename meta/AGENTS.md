@@ -129,5 +129,11 @@ sharing a context — `Jobs/Spawn subagent panes in a CMUX workspace.md`). Both
 runbooks use the same four-verb control loop (type → submit → read → close),
 event-driven coordination (a `DONE: <summary>` sentinel — "notify" from the tool
 isn't the same as "done"), and a model policy of a more capable model as
-lead/orchestrator with cheaper/faster models as workers. Entirely optional —
-skip it if you're not running a multi-agent terminal tool.
+lead/orchestrator with cheaper/faster models as workers. **Launch pane workers
+lean** — give each worker few or no MCP servers (e.g. a `--strict-mcp-config`
+flag with an empty config, if your agent CLI supports it); a large MCP fleet
+injects enough tool schema to crowd out a worker's context after a handful of
+file reads, and that same bloat can make an in-process subagent/Task tool
+unusable — which is exactly why explicit, lean pane workers are the reliable
+path. Entirely optional — skip it if you're not running a multi-agent terminal
+tool.

@@ -31,8 +31,9 @@ split, the four-verb loop, model policy). **The lead coordinates — it does not
 the heavy editing itself once workers exist.**
 
 ## Steps
-1. **Know your own surface.** From the lead pane, `cmux identify --json` (socket
-   check) and `cmux list-pane-surfaces` to see the workspace + your surface ref.
+1. **Know your own surface.** From the lead pane, `cmux identify --json` (a routine
+   self-identify — the in-pane socket works by default, no setup) and
+   `cmux list-pane-surfaces` to see the workspace + your surface ref.
    Set `WS=<workspace_ref>` and `LEAD=<your surface_ref>`.
 2. **Split off worker panes** — anchor each split on an existing surface; capture
    each new ref. E.g. three workers:
@@ -48,11 +49,17 @@ the heavy editing itself once workers exist.**
    `send` the CLI line, then `send-key enter`, and give it a moment to boot:
    ```bash
    for S in "$W1" "$W2" "$W3"; do
-     cmux send --surface "$S" "claude --model <model-id>"
+     cmux send --surface "$S" "claude --model <model-id> --strict-mcp-config --mcp-config '{\"mcpServers\":{}}'"
      cmux send-key --surface "$S" enter
    done
    sleep 4
    ```
+   **Launch lean** — `--strict-mcp-config --mcp-config '{"mcpServers":{}}'` (if your
+   agent CLI supports it) gives each worker **few or no MCP servers**. A large MCP
+   fleet injects enough tool schema to crowd out a worker's context after ~a handful
+   of file reads — the same bloat that can make an in-process subagent/Task tool
+   unusable, which is why explicit pane workers are the reliable path. Add back only
+   a server the leg truly needs.
 5. **Dispatch one single-line task per worker**, each ending in a sentinel. **One
    line, no embedded newlines:**
    ```bash

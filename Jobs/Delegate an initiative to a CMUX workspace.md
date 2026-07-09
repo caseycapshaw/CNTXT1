@@ -33,8 +33,9 @@ in `Initiatives/` (if not, run [[Run an initiative]] first) — that note is the
 delegated workspace's `backlog.md`.
 
 ## Steps
-1. **Preflight the socket.** `cmux identify --json` should succeed. If not, launch
-   CMUX and poll:
+1. **Confirm CMUX is up (routine — no setup).** The in-pane control socket works by
+   default; `cmux identify --json` is just a sanity-check. If CMUX isn't running,
+   launch it and poll:
    ```bash
    cmux identify --json >/dev/null 2>&1 || { open -a cmux; \
      for i in $(seq 1 30); do cmux identify --json >/dev/null 2>&1 && break; sleep 0.5; done; }
@@ -59,10 +60,14 @@ delegated workspace's `backlog.md`.
    task weight — a cheaper model for well-scoped execution, a more capable one
    for heavy reasoning):
    ```bash
-   cmux send --surface "$LEAD" "claude --model <model-id>"
+   cmux send --surface "$LEAD" "claude --model <model-id> --strict-mcp-config --mcp-config '{\"mcpServers\":{}}'"
    cmux send-key --surface "$LEAD" enter
    sleep 4
    ```
+   **Launch lean** — `--strict-mcp-config --mcp-config '{"mcpServers":{}}'` (if your
+   agent CLI supports it) gives the worker **few or no MCP servers**. A large MCP
+   fleet injects enough tool schema to crowd out a worker's context after a handful
+   of file reads. Add back only a server the task truly needs.
 6. **Kick it off with a one-line brief** that points at the vault note as its
    source of truth and demands a sentinel on completion. **One line, no newlines:**
    ```bash
@@ -95,8 +100,10 @@ delegated workspace's `backlog.md`.
   and reuse them — never guess a surface address.
 - **Notify ≠ done.** Always `read-screen` and confirm the sentinel; agents notify
   when they need input too.
-- **`socketControlMode: cmuxOnly` is fine** for an orchestrator running inside a
-  CMUX pane (the default). Only raise to `allowAll` if you drive from outside CMUX.
+- **No socket setup needed.** The default `socketControlMode: cmuxOnly` already lets
+  an in-pane orchestrator drive CMUX — that's this case, out of the box. You'd only
+  touch config (`allowAll`) to drive CMUX from *outside* a pane (a cron/scheduled
+  job, a plain terminal).
 - **One workspace = one repo context.** If the "delegation" is really N concurrent
   sub-tasks sharing one context, use panes instead → [[Spawn subagent panes in a CMUX workspace]].
 
