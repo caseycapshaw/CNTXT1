@@ -111,3 +111,23 @@ zero-dependency generator that emits native Obsidian-Excalidraw `.excalidraw.md`
 files (shapes + bound labels + auto-routing arrows) from a compact Python
 node/edge spec — no npm, no browser, no network. Files land in the optional
 `Excalidraw/` structural folder. See `Jobs/Create an Excalidraw diagram.md`.
+
+**Multi-agent orchestration (CMUX)** is a further optional *runtime* layer, for
+anyone running a terminal multiplexer/agent-orchestration tool (e.g.
+[CMUX](https://github.com/disler/learning-cmux-with-agents)) alongside this KB.
+The model: two interfaces with a clean division of labour — the **vault stays
+memory/state** (durable — initiatives, actions, concepts) and the **orchestration
+tool is runtime** (ephemeral — windows/workspaces/panes, spun up and torn down
+per task). **State round-trips through the vault, not through the runtime tool**:
+whatever gets dispatched, and whatever comes back (decisions, milestones,
+follow-up `#action`s), gets written into the relevant `Initiatives/<slug>.md`
+note — if it isn't in the vault, it didn't happen. Two granularities of
+delegation, each its own runbook: workspace-level (a whole initiative gets its
+own repo context and its own agent — `Jobs/Delegate an initiative to a CMUX
+workspace.md`) and pane-level (one task fans out into concurrent sub-tasks
+sharing a context — `Jobs/Spawn subagent panes in a CMUX workspace.md`). Both
+runbooks use the same four-verb control loop (type → submit → read → close),
+event-driven coordination (a `DONE: <summary>` sentinel — "notify" from the tool
+isn't the same as "done"), and a model policy of a more capable model as
+lead/orchestrator with cheaper/faster models as workers. Entirely optional —
+skip it if you're not running a multi-agent terminal tool.
