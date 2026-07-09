@@ -30,6 +30,8 @@ Jobs for maintaining the knowledge base itself — always useful, ship with the 
 | [[Optimize the knowledge base]] | monthly / when the KB feels bloated | efficiency pass: injection budget · index-as-map · frontmatter staleness · link-map · lint |
 | [[Sync an improvement to CNTXT1]] | a generic schema/tooling/template change is worth sharing | the ONLY outward path — manual copy + re-template + grep gate; personal content never leaves the vault (`AGENTS.md` § Privacy) |
 | [[Create an Excalidraw diagram]] | need a diagram / visual in the vault *(optional)* | zero-dep `meta/bin/excalidraw.py` (spec→file) or Mermaid by hand; text ids ≤8 chars or the mirror breaks |
+| [[Delegate an initiative to a CMUX workspace]] | an initiative is ready to run in its own repo context *(optional, needs CMUX)* | workspace-level delegation; state round-trips through `Initiatives/<slug>.md`, not the runtime tool |
+| [[Spawn subagent panes in a CMUX workspace]] | one task fans out into concurrent sub-tasks *(optional, needs CMUX)* | pane-level fan-out; four-verb loop (send/send-key/read-screen/close-surface) + `DONE:` sentinel |
 
 ## 🛠️ Dev
 _(add job runbooks for your recurring dev tasks)_
