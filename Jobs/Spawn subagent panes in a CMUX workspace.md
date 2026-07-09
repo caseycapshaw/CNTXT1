@@ -46,10 +46,14 @@ the heavy editing itself once workers exist.**
    --surface "$W1" "🔬 research-A"` (repeat per worker); optional `cmux
    trigger-flash --surface "$W1"` to point at one.
 4. **Launch an agent in each pane** (a cheaper/faster model for well-scoped legs).
-   `send` the CLI line, then `send-key enter`, and give it a moment to boot:
+   `send` the CLI line, then `send-key enter`, and give it a moment to boot. If
+   your agent CLI supports a system-prompt flag, append one of the role files
+   in `meta/agent-roles/` (`research`, `compile`, `lint`, `initiative-worker` —
+   or your own) so the worker gets a named identity instead of a blank agent.
+   Use an **absolute path** — the pane's cwd may not be your vault:
    ```bash
    for S in "$W1" "$W2" "$W3"; do
-     cmux send --surface "$S" "claude --model <model-id> --strict-mcp-config --mcp-config '{\"mcpServers\":{}}'"
+     cmux send --surface "$S" "claude --model <model-id> --strict-mcp-config --mcp-config '{\"mcpServers\":{}}' --append-system-prompt <vault>/meta/agent-roles/research.md"
      cmux send-key --surface "$S" enter
    done
    sleep 4
@@ -114,6 +118,7 @@ the heavy editing itself once workers exist.**
 - [ ] Finished panes torn down with `close-surface`.
 
 ## Related
-- `meta/AGENTS.md` § Optional extensions — the model + why (the four-verb loop, coordination patterns, model policy).
+- `meta/AGENTS.md` § Optional extensions — the model + why (the four-verb loop, coordination patterns, model policy, `meta/agent-roles/`).
 - [[Delegate an initiative to a CMUX workspace]] — sibling runbook for workspace-level (whole-task) delegation.
+- `meta/agent-roles/` — the role-prompt files this runbook launches.
 - [[AGENTS]]
