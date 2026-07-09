@@ -6,11 +6,9 @@ frequency: per-initiative
 tools: cmux, Claude Code, git, Initiatives/
 owner: {{NAME}}
 status: active
-tags: [job, env]
+tags: [job, kb-meta]
 aliases: [Delegate to a workspace, Spin up a CMUX workspace, Delegate an initiative]
 ---
-
-## Model — orchestrator: a capable model (Claude Code lead). Delegated workspace agent: a capable or cheaper model by task weight.
 
 # Job — Delegate an initiative to a CMUX workspace
 
@@ -20,6 +18,8 @@ aliases: [Delegate to a workspace, Spin up a CMUX workspace, Delegate an initiat
 > **Outcome:** a dedicated, colour-coded CMUX workspace running its own Claude
 > Code on the right `--cwd`, kicked off against an `Initiatives/<slug>.md` note
 > that is the shared source of truth — with the dispatch recorded back in that note.
+> **Model:** orchestrator — a capable model (Claude Code lead); delegated
+> workspace agent — a capable or cheaper model by task weight.
 
 ## When to run this
 The unit of work is a **whole workstream** that wants its own repo context and

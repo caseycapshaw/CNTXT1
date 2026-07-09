@@ -13,7 +13,11 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Contribute to CNTXT1]]` | `Jobs/Sync an improvement to CNTXT1.md` |
 | `[[Create an Excalidraw diagram]]` | `Jobs/Create an Excalidraw diagram.md` |
 | `[[Create Excalidraw]]` | `Jobs/Create an Excalidraw diagram.md` |
+| `[[Delegate an initiative to a CMUX workspace]]` | `Jobs/Delegate an initiative to a CMUX workspace.md` |
+| `[[Delegate an initiative]]` | `Jobs/Delegate an initiative to a CMUX workspace.md` |
+| `[[Delegate to a workspace]]` | `Jobs/Delegate an initiative to a CMUX workspace.md` |
 | `[[Excalidraw diagram]]` | `Jobs/Create an Excalidraw diagram.md` |
+| `[[Fan out subagents]]` | `Jobs/Spawn subagent panes in a CMUX workspace.md` |
 | `[[jobs]]` | `concepts/jobs.md` |
 | `[[karpathy-method]]` | `concepts/karpathy-method.md` |
 | `[[KB efficiency pass]]` | `Jobs/Optimize the knowledge base.md` |
@@ -23,7 +27,12 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Optimize the knowledge base]]` | `Jobs/Optimize the knowledge base.md` |
 | `[[Run an initiative]]` | `Jobs/Run an initiative.md` |
 | `[[Run the KB health check]]` | `Jobs/Run the KB health check.md` |
+| `[[Spawn subagent panes in a CMUX workspace]]` | `Jobs/Spawn subagent panes in a CMUX workspace.md` |
+| `[[Spawn subagent panes]]` | `Jobs/Spawn subagent panes in a CMUX workspace.md` |
+| `[[Spawn workers in panes]]` | `Jobs/Spawn subagent panes in a CMUX workspace.md` |
+| `[[Spin up a CMUX workspace]]` | `Jobs/Delegate an initiative to a CMUX workspace.md` |
 | `[[Start an initiative]]` | `Jobs/Run an initiative.md` |
+| `[[Subagent panes]]` | `Jobs/Spawn subagent panes in a CMUX workspace.md` |
 | `[[Sync a KB improvement to the shared repo]]` | `Jobs/Sync an improvement to CNTXT1.md` |
 | `[[Sync an improvement to CNTXT1]]` | `Jobs/Sync an improvement to CNTXT1.md` |
 | `[[Tune the knowledge base]]` | `Jobs/Optimize the knowledge base.md` |

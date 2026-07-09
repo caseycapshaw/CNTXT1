@@ -6,11 +6,9 @@ frequency: ad-hoc
 tools: cmux, Claude Code
 owner: {{NAME}}
 status: active
-tags: [job, env]
+tags: [job, kb-meta]
 aliases: [Spawn subagent panes, Fan out subagents, Subagent panes, Spawn workers in panes]
 ---
-
-## Model — lead: a capable model (coordinates, doesn't do the heavy edits). Worker panes: a cheaper/faster model where appropriate.
 
 # Job — Spawn subagent panes in a CMUX workspace
 
@@ -20,6 +18,8 @@ aliases: [Spawn subagent panes, Fan out subagents, Subagent panes, Spawn workers
 > **Outcome:** N worker agents running in split panes, each driven by the session
 > lead through the four-verb loop, each reporting a `DONE:` sentinel — torn down
 > when finished.
+> **Model:** lead — a capable model (coordinates, doesn't do the heavy edits);
+> worker panes — a cheaper/faster model where appropriate.
 
 ## When to run this
 The work is **one task with concurrent legs that share a context** (e.g.
