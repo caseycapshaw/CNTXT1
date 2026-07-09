@@ -77,14 +77,19 @@ delegated workspace's `backlog.md`.
 7. **Record the dispatch in the vault** *(this is the round-trip — do not skip)* —
    in `Initiatives/<slug>.md` add a dated Milestone ("delegated to CMUX workspace
    `<slug>` on `<cwd>`, <date>") and any `#action`s you're now waiting on.
-8. **Coordinate to completion** (event-driven, not busy-poll):
+8. **Coordinate to completion** (event-driven, not busy-poll, but bounded by a
+   timeout — the notification can fire before the listener attaches, a real race
+   observed in testing):
    ```bash
-   cmux events --category notification --reconnect | grep -m1 "$WS" >/dev/null
+   timeout 30 cmux events --category notification --reconnect | grep -m1 "$WS" >/dev/null
    cmux read-screen --surface "$LEAD" --scrollback --lines 60 | tail -30
    ```
    **Confirm the `DONE:` sentinel actually printed** before trusting it — a wake
    can mean "needs input", not "finished". If it's asking for input, `send` the
-   answer + `send-key enter`.
+   answer + `send-key enter`. If the `grep` times out with no match, don't treat
+   that as a failure — it usually just means the notification already fired
+   before this listener connected; check `read-screen` regardless, and poll it
+   every few seconds if no sentinel has printed yet.
 9. **Close out.** When the initiative note reflects the outcome (results, decisions,
    next actions written back), tear the workspace down: `cmux workspace close
    --workspace "$WS"` (or keep it if work continues). The vault, not CMUX, is the record.
@@ -104,6 +109,10 @@ delegated workspace's `backlog.md`.
   an in-pane orchestrator drive CMUX — that's this case, out of the box. You'd only
   touch config (`allowAll`) to drive CMUX from *outside* a pane (a cron/scheduled
   job, a plain terminal).
+- **The notification stream can race the listener** — a worker can finish (and
+  fire its notification) before `cmux events` attaches, so a `grep -m1` miss is
+  not a failure signal. Wrap the event wait in a `timeout` and always fall back
+  to `read-screen` for the actual sentinel.
 - **One workspace = one repo context.** If the "delegation" is really N concurrent
   sub-tasks sharing one context, use panes instead → [[Spawn subagent panes in a CMUX workspace]].
 

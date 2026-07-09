@@ -67,12 +67,19 @@ the heavy editing itself once workers exist.**
    cmux send-key --surface "$W1" enter
    # repeat for W2, W3
    ```
-6. **Wait on the doorbell, then confirm** — block on the notification stream, then
-   read the pane and check the sentinel actually printed:
+6. **Wait on the doorbell, then confirm** — block on the notification stream with a
+   timeout, then read the pane and check the sentinel actually printed. The
+   notification can fire before the listener attaches (a real race, observed in
+   testing — not theoretical), so `read-screen` is the source of truth, never the
+   event alone:
    ```bash
-   cmux events --category notification --reconnect | grep -m1 "$W1" >/dev/null
+   timeout 30 cmux events --category notification --reconnect | grep -m1 "$W1" >/dev/null
    cmux read-screen --surface "$W1" --scrollback --lines 80 | tail -30
    ```
+   A `grep` miss after the timeout does **not** mean the worker is stuck — it
+   usually just means this listener attached after the notification already
+   fired. Check `read-screen` regardless; if no sentinel has printed yet, poll
+   `read-screen` every few seconds rather than re-waiting on the event stream.
    One event stream serves all workers for parallel dispatch. A wake can mean
    "needs input" — if so, `send` the answer + `send-key enter`, don't mark it done.
 7. **Integrate + write back.** The lead collects each worker's result and folds it
@@ -88,6 +95,10 @@ the heavy editing itself once workers exist.**
   guess an address.
 - **Notify ≠ done** — always `read-screen` and confirm the `DONE:` sentinel; agents
   notify when they need input too. Wait on events; **don't busy-poll**.
+- **The notification stream can race the listener** — a worker can finish (and
+  fire its notification) before `cmux events` attaches, so a `grep -m1` miss is
+  not a failure signal. Wrap the event wait in a `timeout` and always fall back
+  to `read-screen` for the actual sentinel.
 - **Lead doesn't do the heavy lifting** once workers exist — it decomposes,
   dispatches, integrates, reports. Keep its own edits to integration.
 - **Panes share the workspace cwd/context** — if a leg needs a different repo, it's
