@@ -47,10 +47,16 @@ swapped back to `{{placeholders}}`) via the runbook
 **grep gate** before anything is committed publicly.
 
 Hard rules:
-- **Never add the public CNTXT1 repo as a git remote of this vault**, and
-  never push any branch of this vault to it — the private instance and the
-  public framework stay two independent repos with independent histories,
-  on purpose.
+- **Never push from this vault to the public CNTXT1 repo** — no pushable
+  remote, no pushed branch, ever; the private instance and the public
+  framework keep independent histories on purpose. A **fetch-only**
+  `upstream` remote pointing at the public kit *is* sanctioned (its push URL
+  set to `DISABLED` so git physically cannot push): public → private can't
+  leak, so that direction is git-automated — pull kit improvements inward
+  via `Jobs/Pull framework updates from CNTXT1.md`. Author generic
+  improvements **upstream-first** (in the public kit, through its CI gates)
+  when they aren't already implemented privately; the manual re-template
+  sync below remains the only outward path.
 - **Never automate the outward copy** (no export script, no
   subtree/filter-repo exclude list) — the manual re-template step *is* the
   leak protection; automation drifts stale and leaks.

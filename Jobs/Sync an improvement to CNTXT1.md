@@ -34,6 +34,13 @@ Whenever a change made in *this* private vault is generic enough to help
 anyone running the CNTXT1 method — a schema tweak in `meta/AGENTS.md`, a
 new/improved `Jobs/` runbook, a `meta/bin/` script fix, a template change.
 
+> **Prefer upstream-first.** If the improvement *isn't already implemented
+> in your vault*, don't build it privately and then run this runbook —
+> author it directly in your clone of the public kit (through its CI gates)
+> and bring it into your vault with [[Pull framework updates from CNTXT1]].
+> This runbook is the exception path: improvements discovered while they're
+> already implemented in the vault.
+
 **Precondition:** a local working tree of CNTXT1 (e.g. `~/dev/CNTXT1`) with
 its **own independent git history** — clone your fork of
 [caseycapshaw/CNTXT1](https://github.com/caseycapshaw/CNTXT1) (or the repo

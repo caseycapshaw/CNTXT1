@@ -75,9 +75,12 @@ anything destined to be published. The only sanctioned outward path is
 *generic framework improvements* (schema, templates, runbooks, scripts)
 flowing to the public **CNTXT1** starter kit via
 `Jobs/Sync an improvement to CNTXT1.md` — always re-templated to
-`{{placeholders}}`, always through its grep gate. Never add the public repo
-as a git remote of this vault. Full rules: `meta/AGENTS.md` § Privacy &
-content separation. When in doubt, it's personal — it stays here.
+`{{placeholders}}`, always through its grep gate. Never push from this
+vault to the public repo — the only sanctioned remote for it is a
+**fetch-only** `upstream` (push URL `DISABLED`) used to pull framework
+updates *inward* (`Jobs/Pull framework updates from CNTXT1.md`); author
+generic improvements upstream-first when possible. Full rules:
+`meta/AGENTS.md` § Privacy & content separation. When in doubt, it's personal — it stays here.
 
 ---
 
