@@ -50,6 +50,48 @@ see anything else loose at the root, it's waiting to be filed** (ask Claude to
 
 ---
 
+## Staying in sync with the kit (your instance is *not* a fork)
+
+Your KB is a **private instance generated from this kit**, with its own
+independent git history — deliberately not a GitHub fork. Forks of a public
+repo can't be made private, and shared history would put your personal
+content one mistyped `git push` (or one PR from the wrong branch) away from
+being published. With independent histories, **no single command can leak**.
+
+The two sync directions have opposite risk profiles, so they use opposite
+tooling:
+
+**Kit → instance (safe — automate it).** Everything in this repo is already
+public, so pulling it into your private vault can't leak anything. One-time
+setup, from your vault root:
+
+```
+git remote add upstream https://github.com/caseycapshaw/CNTXT1.git
+git remote set-url --push upstream DISABLED   # git physically cannot push
+```
+
+Then adopt any kit improvement with `git fetch upstream` +
+`git cherry-pick <sha>`. Files that stay byte-identical across instances
+(`meta/AGENTS.md`, `meta/bin/*`, most `Jobs/`, templates) apply cleanly;
+files your instance has populated (`index.md`, `CLAUDE.md`, the concept
+indexes) occasionally need a small manual merge. Step-by-step runbook:
+[`Jobs/Pull framework updates from CNTXT1.md`](Jobs/Pull%20framework%20updates%20from%20CNTXT1.md).
+
+**Instance → kit (dangerous — stays manual).** Personal content never leaves
+your vault, so this direction is a deliberate, hand-operated path:
+re-template to `{{placeholders}}`, run the identifier grep gate, and go
+through this repo's CI (privacy gate + review). Runbook:
+[`Jobs/Sync an improvement to CNTXT1.md`](Jobs/Sync%20an%20improvement%20to%20CNTXT1.md).
+
+**Rule of thumb: author upstream-first.** When you're about to build
+something generic — a lint check, a runbook, a template improvement — build
+it *here* (PRs welcome, see Contributing) and pull it into your vault via
+the safe direction. That keeps every framework enhancement maintained in
+exactly one place; the manual outward sync is only for improvements you
+discover after they're already implemented privately.
+
+---
+
 _Last updated: {{DATE}}._
 
 ## License

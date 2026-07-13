@@ -26,6 +26,9 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[open-knowledge-format]]` | `concepts/open-knowledge-format.md` |
 | `[[Optimize the KB]]` | `Jobs/Optimize the knowledge base.md` |
 | `[[Optimize the knowledge base]]` | `Jobs/Optimize the knowledge base.md` |
+| `[[Pull framework updates from CNTXT1]]` | `Jobs/Pull framework updates from CNTXT1.md` |
+| `[[Pull framework updates]]` | `Jobs/Pull framework updates from CNTXT1.md` |
+| `[[Pull from upstream CNTXT1]]` | `Jobs/Pull framework updates from CNTXT1.md` |
 | `[[Run an initiative]]` | `Jobs/Run an initiative.md` |
 | `[[Run the KB health check]]` | `Jobs/Run the KB health check.md` |
 | `[[Spawn subagent panes in a CMUX workspace]]` | `Jobs/Spawn subagent panes in a CMUX workspace.md` |
