@@ -14,7 +14,7 @@ of this file; keep the skeleton inside that). Group your concepts here as the ba
 grows; rich descriptions follow in the sections below.
 
 - **Initiatives (live):** _(none yet — goal-directed workstreams land here)_
-- **Method:** [[karpathy-method]] · [[AGENTS]]
+- **Method:** [[karpathy-method]] · [[open-knowledge-format]] · [[AGENTS]]
 - **Indexes:** [[contacts]] → `People/` · [[jobs]] → `Jobs/`
 - _(add your concept groups here: role, product, ops, … one line each)_
 - **Live to-dos:** [[Actions]] · **History:** [[log]]
@@ -28,6 +28,7 @@ Bigger outcomes spanning multiple actions over time. Built from [`Initiative TEM
 
 ## Concepts (compiled, queryable truth)
 - **[[karpathy-method]]** — the architecture this KB is built on: an LLM-maintained "wiki" (raw→compile→index→lint, no RAG at personal scale). Why it works, the scale sweet spot, and the hallucination-propagation risk. The operating rules live in [[AGENTS]].
+- **[[open-knowledge-format]]** — Google's OKF v0.1: the open interchange standard for Karpathy-style LLM wikis, how a CNTXT1 vault maps to it (a superset), and how to adopt it at the boundaries (bundle ingest/export) without refactoring internals.
 - **[[contacts]]** — the **People index**: usage-context map + grouped tables over the [`People/`](People) folder. Per-person detail lives in each person's own note; this is the *who-for-what* map.
 - **[[jobs]]** — the **runbook index**: grouped tables over the [`Jobs/`](Jobs) folder. Each recurring "job to be done" is an agent-executable runbook; this is the *how-do-I-X* map.
 

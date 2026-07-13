@@ -1,5 +1,6 @@
 ---
 type: concept
+description: The runbook index — the how-do-I-X map and grouped tables over the Jobs/ folder.
 updated: {{DATE}}
 status: current
 tags: [concept, index]
