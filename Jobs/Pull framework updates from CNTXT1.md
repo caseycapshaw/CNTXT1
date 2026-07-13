@@ -63,7 +63,12 @@ git remote set-url --push upstream DISABLED
    can be dropped: `git cherry-pick --skip`.
 4. **Post-pull hygiene:** if any concept/person/job was added or renamed,
    `meta/bin/build-link-map.sh`; then `meta/bin/lint.sh` must be green.
-5. **Log it:** one line in `meta/log.md` — what was pulled and the upstream
+5. **Update the adopted baseline** so the nightly upstream check stands
+   down: write the upstream SHA you just adopted to
+   `~/.claude/cache/cntxt1-upstream-adopted`, and delete the auto-generated
+   `Upstream kit updates (pending).md` from the vault root if present (the
+   6pm daily-summary job also clears it once the baseline is current).
+6. **Log it:** one line in `meta/log.md` — what was pulled and the upstream
    SHA now adopted (the next run diffs from there).
 
 ## Gotchas / rules
@@ -82,6 +87,7 @@ git remote set-url --push upstream DISABLED
 - [ ] Wanted upstream commits applied (cherry-picked or hand-applied), unwanted ones consciously skipped
 - [ ] Personal content in populated files untouched
 - [ ] Link map regenerated if needed; `lint.sh` green
+- [ ] Adopted-baseline cache updated; pending-updates inbox note gone
 - [ ] `meta/log.md` records the pull + the upstream SHA adopted
 
 ## Related
