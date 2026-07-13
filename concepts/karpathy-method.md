@@ -1,5 +1,6 @@
 ---
 type: concept
+description: The LLM-maintained wiki architecture this KB is built on — raw→compile→index→lint, replacing RAG at personal scale.
 updated: 2026-07-02
 status: current
 tags: [concept, method]

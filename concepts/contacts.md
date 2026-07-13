@@ -1,5 +1,6 @@
 ---
 type: concept
+description: The People index — the who-for-what map and grouped tables over the People/ folder.
 updated: {{DATE}}
 status: current
 tags: [concept, index]

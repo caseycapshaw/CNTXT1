@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # lint.sh — deterministic KB health check (the mechanical half of the lint).
 # Checks: (1) root inbox clean, (2) all wikilinks resolve, (3) index complete,
-# (4) concepts/Initiatives/People/Jobs carry frontmatter. Exit 0 = pass, 1 = problems.
+# (4) concepts/Initiatives/People/Jobs carry frontmatter, (5) concepts +
+# initiatives carry a non-empty description:. Exit 0 = pass, 1 = problems.
 # The LLM lint keeps only the judgment checks (stale facts, resolved questions).
 #
 # Link scan ignores: TEMPLATE files, and any [[link]] inside an inline `code`
@@ -84,6 +85,15 @@ for f in concepts/*.md Initiatives/*.md People/*.md Jobs/*.md; do
   [ "$(head -1 "$f")" = "---" ] || fm_fail="$fm_fail $f"
 done
 if [ -z "$fm_fail" ]; then ok "concepts/Initiatives/People/Jobs all carry frontmatter"; else bad "missing frontmatter:"; for m in $fm_fail; do note "$m"; done; fi
+
+# ---- 5. description: present on concepts + initiatives --------------------
+desc_fail=""
+for f in concepts/*.md Initiatives/*.md; do
+  [ -e "$f" ] || continue
+  case "$f" in *TEMPLATE*) continue ;; esac
+  awk '/^---$/{c++; next} c==1 && /^description:[[:space:]]*[^[:space:]]/{found=1} c==2{exit} END{exit !found}' "$f" || desc_fail="$desc_fail $f"
+done
+if [ -z "$desc_fail" ]; then ok "concepts + initiatives carry a description:"; else bad "missing/empty description: frontmatter:"; for m in $desc_fail; do note "$m"; done; fi
 
 rm -f "$valid" "$broken"
 echo

@@ -1,5 +1,6 @@
 ---
 type: initiative
+description: <one-line summary of the workstream — single-sources the index one-liner>
 status: active        # active | paused | done
 started: YYYY-MM-DD
 updated: YYYY-MM-DD   # bump on every meaningful rewrite (same rule as concepts)
