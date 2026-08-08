@@ -7,6 +7,7 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | Wikilink | Path |
 | :-- | :-- |
 | `[[Add a person to the KB]]` | `Jobs/Add a person to the KB.md` |
+| `[[Audit state freshness]]` | `Jobs/Audit state freshness.md` |
 | `[[Capture a meeting or conversation into the KB]]` | `Jobs/Capture a meeting or conversation into the KB.md` |
 | `[[Close an initiative]]` | `Jobs/Run an initiative.md` |
 | `[[contacts]]` | `concepts/contacts.md` |
@@ -31,11 +32,13 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Pull from upstream CNTXT1]]` | `Jobs/Pull framework updates from CNTXT1.md` |
 | `[[Run an initiative]]` | `Jobs/Run an initiative.md` |
 | `[[Run the KB health check]]` | `Jobs/Run the KB health check.md` |
+| `[[second brain audit]]` | `Jobs/Audit state freshness.md` |
 | `[[Spawn subagent panes in a CMUX workspace]]` | `Jobs/Spawn subagent panes in a CMUX workspace.md` |
 | `[[Spawn subagent panes]]` | `Jobs/Spawn subagent panes in a CMUX workspace.md` |
 | `[[Spawn workers in panes]]` | `Jobs/Spawn subagent panes in a CMUX workspace.md` |
 | `[[Spin up a CMUX workspace]]` | `Jobs/Delegate an initiative to a CMUX workspace.md` |
 | `[[Start an initiative]]` | `Jobs/Run an initiative.md` |
+| `[[state freshness audit]]` | `Jobs/Audit state freshness.md` |
 | `[[Subagent panes]]` | `Jobs/Spawn subagent panes in a CMUX workspace.md` |
 | `[[Sync a KB improvement to the shared repo]]` | `Jobs/Sync an improvement to CNTXT1.md` |
 | `[[Sync an improvement to CNTXT1]]` | `Jobs/Sync an improvement to CNTXT1.md` |
