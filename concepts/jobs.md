@@ -29,6 +29,7 @@ Jobs for maintaining the knowledge base itself — always useful, ship with the 
 | [[Run an initiative]] | an outcome needs multiple actions over time | one note per initiative in `Initiatives/` (`type: initiative` + lifecycle); start / keep current / close |
 | [[Run the KB health check]] | lint (on request or automated at 6pm) | inbox clean · links resolve · index complete · actions current |
 | [[Optimize the knowledge base]] | monthly / when the KB feels bloated | efficiency pass: injection budget · index-as-map · frontmatter staleness · link-map · lint |
+| [[Audit state freshness]] | monthly with the optimize pass, or when the index Quick map feels behind reality | the judgment layer of lint: verify every state-shaped claim on the always-loaded surfaces against its source note; replace drifted state in place |
 | [[Sync an improvement to CNTXT1]] | a generic change is already implemented privately and worth sharing | the ONLY outward path — manual copy + re-template + grep gate; the exception path — prefer authoring upstream-first (`AGENTS.md` § Privacy) |
 | [[Pull framework updates from CNTXT1]] | a kit improvement should land in your vault | git cherry-pick from the fetch-only `upstream` remote — the safe inbound direction |
 | [[Create an Excalidraw diagram]] | need a diagram / visual in the vault *(optional)* | zero-dep `meta/bin/excalidraw.py` (spec→file) or Mermaid by hand; text ids ≤8 chars or the mirror breaks |

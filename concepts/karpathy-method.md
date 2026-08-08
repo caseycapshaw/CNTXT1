@@ -45,7 +45,7 @@ The reframe is: **knowledge is source code; the LLM is a compiler.**
 ## The workflow loop
 - **Ingest** — drop a source in raw; the LLM reads it, discusses takeaways with you, writes a summary page, **updates the index**, updates related pages, and appends to the log. *A single source might touch 10–15 wiki pages.*
 - **Query** — search the relevant pages via the index and synthesize a **cited** answer. Key trick: **good answers get filed back into the wiki as new pages** — the base compounds.
-- **Lint** — periodic audit for contradictions, stale claims, orphan pages, missing cross-references, and gaps that need new research.
+- **Lint** — periodic audit for contradictions, stale claims, orphan pages, missing cross-references, and gaps that need new research. A useful lens for the stale-claims half (from Medin's later *second-brain-audit* skill): distinguish **state** (current values — replaced in place; here `concepts/` + initiative "Now & next") from **events** (dated occurrences — append-only; here `raw/`, logs, Decisions/Milestones). Stale *state* on an always-loaded surface (the `index.md` Quick map) is the highest-damage failure; run that check with [[Audit state freshness]].
 - **index.md** — a content catalog (links + one-line summaries) the LLM auto-maintains; **log.md** — chronological, append-only, greppable.
 
 ## Why it matters (the case against RAG-at-personal-scale)
