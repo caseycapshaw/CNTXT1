@@ -26,6 +26,7 @@ Jobs for maintaining the knowledge base itself — always useful, ship with the 
 | :-- | :-- | :-- |
 | [[Add a person to the KB]] | a new person appears | copy People template → note → index in [[contacts]] |
 | [[Capture a meeting or conversation into the KB]] | new durable knowledge | inbox→`raw/`→compile→`index.md`→`meta/log.md` |
+| [[Capture a YouTube video into the KB]] | a YouTube link worth keeping | `yt-dlp` metadata + transcript digest → `raw/` → compile; every note links the video + its description links |
 | [[Run an initiative]] | an outcome needs multiple actions over time | one note per initiative in `Initiatives/` (`type: initiative` + lifecycle); start / keep current / close |
 | [[Run the KB health check]] | lint (on request or automated at 6pm) | inbox clean · links resolve · index complete · actions current |
 | [[Optimize the knowledge base]] | monthly / when the KB feels bloated | efficiency pass: injection budget · index-as-map · frontmatter staleness · link-map · lint |
@@ -54,6 +55,7 @@ _(add job runbooks for recurring communications and operations tasks)_
 
 ## Adding & maintaining jobs
 - A job earns a note when the task **recurs** and has **non-obvious steps or a gotcha** worth not re-deriving. One-offs stay as actions/notes.
+- **Domain reviews:** when a domain (finances, health, …) accumulates enough state, pair a standing role (`meta/agent-roles/domain-advisor TEMPLATE.md`) with a review runbook built from `Jobs/Run a domain review TEMPLATE.md` — see `meta/AGENTS.md` § Optional extensions.
 - Keep steps **executable** — name the exact tool / CLI / file. If a job's "why" grows, push it into the concept and keep the job lean.
 
 ## Related
