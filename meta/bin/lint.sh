@@ -16,19 +16,22 @@ bad()  { printf 'FAIL  %s\n' "$1"; fail=1; }
 
 # ---- 1. Root inbox clean -------------------------------------------------
 anchors="README.md index.md Actions.md CLAUDE.md"
-structural="concepts Initiatives meta raw daily People Jobs attachments Excalidraw"
+structural="concepts Initiatives meta raw daily People Jobs attachments docs Excalidraw Writing"
 # Template-only artifacts (present in kb-starter; absent in a live vault — harmless either way).
 template_extras="setup.md LICENSE"
-inbox=""
+# Standing root files (machinery write-targets, not inbox items) — one per line.
+standing=""
+inbox=()
 for e in *; do
   case " $anchors $structural $template_extras " in *" $e "*) continue ;; esac
-  inbox="$inbox $e"
+  while IFS= read -r s; do [ -n "$s" ] && [ "$e" = "$s" ] && continue 2; done <<< "$standing"
+  inbox+=("$e")
 done
-if [ -z "$inbox" ]; then ok "root inbox clean"; else bad "root inbox has un-triaged items:"; for i in $inbox; do note "$i"; done; fi
+if [ ${#inbox[@]} -eq 0 ]; then ok "root inbox clean"; else bad "root inbox has un-triaged items:"; for i in "${inbox[@]}"; do note "$i"; done; fi
 
 # ---- content files (exclude template files) ------------------------------
 files=()
-for f in concepts/*.md Initiatives/*.md Jobs/*.md People/*.md index.md; do
+for f in concepts/*.md Initiatives/*.md Initiatives/archive/*.md Jobs/*.md People/*.md index.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*) continue ;; esac
   files+=("$f")
@@ -36,7 +39,7 @@ done
 
 # ---- valid wikilink-name set (canonical names + aliases + outside anchors) ----
 valid="$(mktemp)"
-for f in concepts/*.md Initiatives/*.md; do
+for f in concepts/*.md Initiatives/*.md Initiatives/archive/*.md Excalidraw/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*) continue ;; esac
   basename "$f" .md >> "$valid"
@@ -51,6 +54,9 @@ for f in People/*.md Jobs/*.md; do
 done
 # real link targets that live outside the four scanned dirs (root/meta anchors)
 for p in log AGENTS Actions; do echo "$p" >> "$valid"; done
+# raw/ captures referenced via path-style links: [[raw/YYYY-MM-DD-topic]],
+# including subfolders
+find raw -name '*.md' -type f 2>/dev/null | sed 's/\.md$//' >> "$valid"
 sort -u "$valid" -o "$valid"
 
 # ---- 2. Wikilinks resolve (strip inline-code spans first) ----------------
@@ -69,7 +75,7 @@ if [ ! -s "$broken" ]; then ok "all wikilinks resolve"; else bad "broken wikilin
 
 # ---- 3. Index completeness ----------------------------------------------
 missing=""
-for f in concepts/*.md Initiatives/*.md; do
+for f in concepts/*.md Initiatives/*.md Initiatives/archive/*.md; do
   [ -e "$f" ] || continue   # skip the literal glob when a dir is empty (else slug becomes '*')
   case "$f" in *TEMPLATE*) continue ;; esac
   slug="$(basename "$f" .md)"
@@ -79,7 +85,7 @@ if [ -z "$missing" ]; then ok "index lists every concept + initiative"; else bad
 
 # ---- 4. Frontmatter present ---------------------------------------------
 fm_fail=""
-for f in concepts/*.md Initiatives/*.md People/*.md Jobs/*.md; do
+for f in concepts/*.md Initiatives/*.md Initiatives/archive/*.md People/*.md Jobs/*.md; do
   [ -e "$f" ] || continue   # skip literal glob for empty dirs
   case "$f" in *TEMPLATE*) continue ;; esac
   [ "$(head -1 "$f")" = "---" ] || fm_fail="$fm_fail $f"
@@ -88,7 +94,7 @@ if [ -z "$fm_fail" ]; then ok "concepts/Initiatives/People/Jobs all carry frontm
 
 # ---- 5. description: present on concepts + initiatives --------------------
 desc_fail=""
-for f in concepts/*.md Initiatives/*.md; do
+for f in concepts/*.md Initiatives/*.md Initiatives/archive/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*) continue ;; esac
   awk '/^---$/{c++; next} c==1 && /^description:[[:space:]]*[^[:space:]]/{found=1} c==2{exit} END{exit !found}' "$f" || desc_fail="$desc_fail $f"

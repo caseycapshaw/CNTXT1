@@ -50,6 +50,8 @@ collect_with_aliases() {
 
 collect_simple concepts
 collect_simple Initiatives
+collect_simple Initiatives/archive
+collect_simple Excalidraw
 collect_with_aliases People
 collect_with_aliases Jobs
 

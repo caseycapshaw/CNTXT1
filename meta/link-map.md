@@ -9,6 +9,8 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Add a person to the KB]]` | `Jobs/Add a person to the KB.md` |
 | `[[Audit state freshness]]` | `Jobs/Audit state freshness.md` |
 | `[[Capture a meeting or conversation into the KB]]` | `Jobs/Capture a meeting or conversation into the KB.md` |
+| `[[Capture a YouTube video into the KB]]` | `Jobs/Capture a YouTube video into the KB.md` |
+| `[[Capture a YouTube video]]` | `Jobs/Capture a YouTube video into the KB.md` |
 | `[[Close an initiative]]` | `Jobs/Run an initiative.md` |
 | `[[contacts]]` | `concepts/contacts.md` |
 | `[[Contribute to CNTXT1]]` | `Jobs/Sync an improvement to CNTXT1.md` |
@@ -17,6 +19,7 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Delegate an initiative to a CMUX workspace]]` | `Jobs/Delegate an initiative to a CMUX workspace.md` |
 | `[[Delegate an initiative]]` | `Jobs/Delegate an initiative to a CMUX workspace.md` |
 | `[[Delegate to a workspace]]` | `Jobs/Delegate an initiative to a CMUX workspace.md` |
+| `[[Example — KB data flow.excalidraw]]` | `Excalidraw/Example — KB data flow.excalidraw.md` |
 | `[[Excalidraw diagram]]` | `Jobs/Create an Excalidraw diagram.md` |
 | `[[Fan out subagents]]` | `Jobs/Spawn subagent panes in a CMUX workspace.md` |
 | `[[jobs]]` | `concepts/jobs.md` |
@@ -43,3 +46,4 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Sync a KB improvement to the shared repo]]` | `Jobs/Sync an improvement to CNTXT1.md` |
 | `[[Sync an improvement to CNTXT1]]` | `Jobs/Sync an improvement to CNTXT1.md` |
 | `[[Tune the knowledge base]]` | `Jobs/Optimize the knowledge base.md` |
+| `[[yt capture]]` | `Jobs/Capture a YouTube video into the KB.md` |

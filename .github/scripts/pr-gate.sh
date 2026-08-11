@@ -39,8 +39,27 @@ check_only raw    "2026-01-01-example-capture.md"
 check_only daily  ""
 check_only attachments ""
 
-# Initiatives/ ships only the template (instances add real initiative notes).
-check_only Initiatives "Initiative TEMPLATE.md"
+# Initiatives/ ships only the template (instances add real initiative notes)
+# plus the empty archive/ scaffold (done initiatives move there in instances).
+extras=""
+for f in Initiatives/*; do
+  [ -e "$f" ] || continue
+  b=$(basename "$f")
+  [ "$b" = "Initiative TEMPLATE.md" ] && continue
+  if [ "$b" = "archive" ]; then
+    for g in Initiatives/archive/* Initiatives/archive/.[!.]*; do
+      [ -e "$g" ] || continue
+      [ "$(basename "$g")" = ".gitkeep" ] || extras="$extras archive/$(basename "$g")"
+    done
+    continue
+  fi
+  extras="$extras $b"
+done
+if [ -n "$extras" ]; then
+  bad "Initiatives/ must ship only its template + empty archive/ — personal/instance content never lands in this repo:$extras"
+else
+  ok "Initiatives/ ships only its template + empty archive/"
+fi
 
 # ---- 2. Placeholders intact (the kit stays a template) --------------------
 grep -q '{{NAME}}' CLAUDE.md   && ok "CLAUDE.md keeps {{NAME}} placeholder"   || bad "CLAUDE.md lost its {{NAME}} placeholder — looks personalized"
@@ -102,7 +121,7 @@ fi
 # ---- 5. Consistency: new Jobs are indexed + link map is current ------------
 for f in Jobs/*.md; do
   b=$(basename "$f" .md)
-  [ "$b" = "Jobs TEMPLATE" ] && continue
+  case "$b" in *TEMPLATE) continue ;; esac   # Jobs TEMPLATE + any '<name> TEMPLATE' pattern file
   grep -q "\[\[$b\]\]" concepts/jobs.md || bad "Jobs/$b.md is not indexed in concepts/jobs.md"
 done
 ok "Jobs indexed in concepts/jobs.md (any misses listed above)"
