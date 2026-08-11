@@ -26,6 +26,11 @@ Read path: kb_index / kb_read / kb_search / kb_actions (read-only).
 Write path: kb_capture only — new dated file in raw/ + one meta/log.md line.
 Nothing else in the vault is writable from here by design (the compile →
 index → log pipeline stays in Claude Code, per meta/AGENTS.md).
+
+Protocol: MCP 2026-07-28 (stateless — server/discover, per-request _meta
+version, resultType, ttlMs/cacheScope cache hints), with the legacy
+initialize/ping handshake kept for pre-2026 clients (e.g. Claude Desktop
+builds still on 2025-06-18).
 """
 import datetime
 import difflib
@@ -300,18 +305,39 @@ TOOL_FNS = {
 }
 
 
+LATEST_VERSION = "2026-07-28"
+SUPPORTED_VERSIONS = ["2026-07-28", "2025-11-25", "2025-06-18", "2025-03-26"]
+SERVER_INFO = {"name": "cntxt-kb", "version": "2.0.0"}
+CAPABILITIES = {"tools": {}, "resources": {}}
+
+
+def cacheable(result, ttl_ms=60_000):
+    """CacheableResult fields required on list/read results since 2026-07-28."""
+    result["ttlMs"] = ttl_ms
+    result["cacheScope"] = "private"  # personal vault — never shared-cacheable
+    return result
+
+
 def handle(method, params):
-    if method == "initialize":
+    if method == "initialize":  # legacy handshake — kept for pre-2026 clients
+        requested = params.get("protocolVersion", LATEST_VERSION)
         return {
-            "protocolVersion": params.get("protocolVersion", "2025-06-18"),
-            "capabilities": {"tools": {}, "resources": {}},
-            "serverInfo": {"name": "cntxt-kb", "version": "1.0.0"},
+            "protocolVersion": requested if requested in SUPPORTED_VERSIONS else LATEST_VERSION,
+            "capabilities": CAPABILITIES,
+            "serverInfo": SERVER_INFO,
             "instructions": INSTRUCTIONS,
         }
-    if method == "ping":
+    if method == "server/discover":
+        return {
+            "protocolVersions": SUPPORTED_VERSIONS,
+            "capabilities": CAPABILITIES,
+            "serverInfo": SERVER_INFO,
+            "instructions": INSTRUCTIONS,
+        }
+    if method == "ping":  # removed in 2026-07-28; harmless for older clients
         return {}
     if method == "tools/list":
-        return {"tools": TOOLS}
+        return cacheable({"tools": TOOLS})
     if method == "tools/call":
         name = params.get("name")
         if name not in TOOL_FNS:
@@ -322,10 +348,10 @@ def handle(method, params):
         except Exception as e:  # tool errors go back as results, not protocol errors
             return {"content": [{"type": "text", "text": f"Error: {e}"}], "isError": True}
     if method == "resources/list":
-        return {"resources": RESOURCES}
+        return cacheable({"resources": RESOURCES})
     if method == "resources/read":
         rel = params.get("uri", "").replace("cntxt://", "", 1)
-        return {
+        return cacheable({
             "contents": [
                 {
                     "uri": params.get("uri"),
@@ -333,9 +359,9 @@ def handle(method, params):
                     "text": clip(vault_path(rel).read_text(encoding="utf-8")),
                 }
             ]
-        }
+        })
     if method == "prompts/list":
-        return {"prompts": []}
+        return cacheable({"prompts": []})
     raise KeyError(method)
 
 
@@ -351,10 +377,28 @@ def main():
         if "id" not in msg:  # notification — no response
             continue
         reply = {"jsonrpc": "2.0", "id": msg["id"]}
+        params = msg.get("params") or {}
+        req_version = (params.get("_meta") or {}).get(
+            "io.modelcontextprotocol/protocolVersion"
+        )
         try:
-            reply["result"] = handle(msg.get("method", ""), msg.get("params") or {})
+            if req_version and req_version not in SUPPORTED_VERSIONS:
+                reply["error"] = {
+                    "code": -32022,  # UnsupportedProtocolVersionError
+                    "message": f"unsupported protocol version: {req_version}",
+                    "data": {"supported": SUPPORTED_VERSIONS},
+                }
+            else:
+                result = handle(msg.get("method", ""), params)
+                result.setdefault("resultType", "complete")
+                result.setdefault("_meta", {})[
+                    "io.modelcontextprotocol/serverInfo"
+                ] = SERVER_INFO
+                reply["result"] = result
         except KeyError:
             reply["error"] = {"code": -32601, "message": f"method not found: {msg.get('method')}"}
+        except FileNotFoundError as e:
+            reply["error"] = {"code": -32602, "message": f"not found: {e}"}
         except Exception as e:
             reply["error"] = {"code": -32603, "message": str(e)}
         sys.stdout.write(json.dumps(reply) + "\n")
