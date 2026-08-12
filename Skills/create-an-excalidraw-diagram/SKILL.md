@@ -1,16 +1,17 @@
 ---
-type: job
+name: create-an-excalidraw-diagram
+description: Produce an editable Excalidraw diagram in excalidraw/, embedded in its home note — use when you need a diagram / flowchart / visual map in the vault.
+type: skill
 domain: kb-meta
-trigger: need a diagram / flowchart / visual map in the vault
-frequency: ad-hoc
 tools: Excalidraw (Obsidian plugin), python3 (stdlib only), mermaid
 owner: {{NAME}}
 status: active
-tags: [job]
-aliases: [Create Excalidraw, Make an Excalidraw diagram, Excalidraw diagram]
+tags: [skill]
+aliases: [Create an Excalidraw diagram, Create Excalidraw, Make an Excalidraw diagram, Excalidraw diagram]
+updated: 2026-08-11
 ---
 
-# Job — Create an Excalidraw diagram
+# Skill — Create an Excalidraw diagram
 
 > **When:** you need a visual (flowchart, architecture, reasoning map) as a native `.excalidraw.md` in the vault · **Frequency:** ad-hoc · **Tools:** Obsidian Excalidraw plugin (v2.25+), python3 (stdlib only), mermaid
 > **Outcome:** a file in `Excalidraw/` that opens in **Excalidraw view** as real shapes + arrows (not raw text, no duplicated text pile), labels centred in boxes, arrows that re-route when a box is dragged.
@@ -47,7 +48,7 @@ The script auto-handles the two things that make hand-authored Excalidraw fail: 
 - **Never hand-author full element JSON** with manual arrow `points` + a hand-written mirror. That path mis-binds and overlaps. Use `excalidraw.py` (auto-binds) or Mermaid (auto-layout).
 - **Text width/height are left `0` on purpose.** The plugin re-measures every text element on open (`autoResize:true`) — so we need no font metrics, and container-bound labels self-centre. (This is also exactly what the official headless converter emits.)
 - **`compress:true`** is the plugin default: it recompresses your uncompressed `## Drawing` to `compressed-json` the first time you open+save in Excalidraw view. Expected — the script writes uncompressed for diffable history; let the plugin compress. (A file showing `compressed-json` just means it's been opened.)
-- **`Excalidraw/` is a registered structural folder** (`meta/bin/lint.sh` + `meta/AGENTS.md` + `CLAUDE.md`) — new drawings there don't trip the inbox lint. Reference them with plain links, not `[[wikilinks]]` (the lint resolver only knows concepts/Initiatives/People/Jobs).
+- **`Excalidraw/` is a registered structural folder** (`meta/bin/lint.sh` + `meta/AGENTS.md` + `CLAUDE.md`) — new drawings there don't trip the inbox lint. Reference them with plain links, not `[[wikilinks]]` (the lint resolver only knows concepts/Initiatives/People/Skills).
 - **This is an optional extension** (see `meta/AGENTS.md` § Optional extensions) — nothing else in the KB depends on it. Skip it entirely if you don't need visual diagrams.
 
 ## Done when

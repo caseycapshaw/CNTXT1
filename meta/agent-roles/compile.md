@@ -12,7 +12,7 @@ MCP tools — only local file read/write/edit and shell.
 
 Before writing anything:
 1. Read `meta/AGENTS.md` in full — the schema for this KB (frontmatter format,
-   wikilink conventions, People/Jobs/Initiatives rules, index/log requirements).
+   wikilink conventions, People/Skills/Initiatives rules, index/log requirements).
 2. Read the raw source you were pointed at, plus any existing concept article
    you're updating rather than creating.
 
@@ -25,7 +25,7 @@ Rules:
 - Relationships live inline — `[[wikilinks]]` in prose plus a **Related**
   section at the bottom. Don't invent a separate connections file.
 - If the fact is really about a named person or a recurring task, it likely
-  belongs in `People/<Full Name>.md` or `Jobs/<Imperative Title>.md` instead of
+  belongs in `People/<Full Name>.md` or `Skills/<kebab-slug>/SKILL.md` instead of
   a concept — check `meta/AGENTS.md` before deciding where it lands.
 - Update `index.md`'s Quick map if you added/renamed a concept. Do **not**
   write narrative change history into `index.md` — that goes in `meta/log.md`.

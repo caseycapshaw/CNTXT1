@@ -60,13 +60,13 @@ Then update the header lines of `index.md` and `README.md` to name the user and
 their domain (replace the `{{...}}` placeholders there too).
 
 Two placeholders live outside `CLAUDE.md`:
-- `owner: {{NAME}}` in each `Jobs/*.md` runbook → the user's name.
-- `{{PERSONAL_IDENTIFIERS}}` in `Jobs/Sync an improvement to CNTXT1.md` → a
+- `owner: {{NAME}}` in each `Skills/*/SKILL.md` skill → the user's name.
+- `{{PERSONAL_IDENTIFIERS}}` in `Skills/sync-an-improvement-to-cntxt1/SKILL.md` → a
   `|`-separated grep pattern of the user's personal identifiers (full name,
   family members, employer, email domain — from the interview). **State the
   privacy rule out loud while doing this:** this vault is private; personal
   content never leaves it; only re-templated framework improvements flow out,
-  through that runbook's grep gate (`meta/AGENTS.md` § Privacy & content
+  through that skill's grep gate (`meta/AGENTS.md` § Privacy & content
   separation).
 
 ### Phase 3 — Run one real loop (the important part)
@@ -173,10 +173,11 @@ your-kb/
 │   └── bin/          ← lint.sh + build-link-map.sh + kb-mcp-server.py (KB tooling)
 │   └── optional/     ← opt-in automation bundle (offered during setup, Phase 5)
 ├── raw/              ← your first dated capture
-├── concepts/         ← karpathy-method + contacts + jobs + your first concept (all carry frontmatter)
+├── concepts/         ← karpathy-method + contacts + skills + your first concept (all carry frontmatter)
 ├── Initiatives/      ← one note per goal-directed workstream (+ its template)
 ├── People/           ← one note per person (single source of truth for per-person detail)
-└── Jobs/             ← agent-executable runbooks for recurring tasks (7 KB-meta ones ship)
+├── Skills/           ← agent-invocable SKILL.md runbooks for recurring tasks (12 KB-meta ones ship)
+└── .claude/skills/   ← symlinks into Skills/<slug> so each skill is discoverable/invocable
 ```
 
 ## The daily habit

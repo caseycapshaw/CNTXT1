@@ -1,15 +1,17 @@
 ---
-type: job
+name: run-the-kb-health-check
+description: Produce a green/issues verdict on KB mechanical health (broken links, stale actions, inbox pile-up) — use on request, or automatically at end of day if automated (weekly manual / daily automated cadence).
+type: skill
 domain: kb-meta
-trigger: on request, or automatically at end of day if automated
-frequency: weekly (manual) or daily (automated)
 tools: Grep, Glob, Read
 owner: {{NAME}}
 status: active
-tags: [job]
+tags: [skill]
+aliases: [Run the KB health check]
+updated: 2026-08-11
 ---
 
-# Job — Run the KB health check
+# Skill — Run the KB health check
 
 > **When:** on request ("run the knowledge health check") or on a schedule
 > **Outcome:** a verdict (green / issues) + a list of any real problems to fix
@@ -20,13 +22,13 @@ tags: [job]
 - Any time you suspect the KB has drifted (broken links, stale actions, inbox pile-up).
 
 ## Steps
-1. **Inbox check.** List the vault root. Flag anything that isn't: `README.md`, `index.md`, `Actions.md`, `CLAUDE.md`, or a registered structural folder (`concepts/`, `Initiatives/`, `meta/`, `raw/`, `daily/`, `People/`, `Jobs/`, `attachments/`, `Excalidraw/`). Each un-filed item is a lint failure.
+1. **Inbox check.** List the vault root. Flag anything that isn't: `README.md`, `index.md`, `Actions.md`, `CLAUDE.md`, or a registered structural folder (`concepts/`, `Initiatives/`, `meta/`, `raw/`, `daily/`, `People/`, `Skills/`, `attachments/`, `Excalidraw/`). Each un-filed item is a lint failure.
 2. **Wikilink check.** Grep all `[[wikilinks]]` across the vault. For each target, confirm a `.md` file with that basename exists. Report any that don't — filtering known false positives (e.g. convention-example links in `AGENTS.md` and `CLAUDE.md`).
 3. **Index completeness.** Scan `concepts/` and `Initiatives/`. Every file there should appear in `index.md`. Report any that don't.
 4. **Raw provenance.** Every fact in a concept article should trace to a `raw/` capture. Spot-check if asked; flag any concept with no raw citation.
 5. **Actions audit.** Grep `#action` checkboxes across all non-daily notes. Every open `- [ ]` should be real and still open; every completed `- [x]` should be checked, not deleted.
 6. **People links.** Grep `[[Person Name]]` wikilinks across all notes. Each should resolve to a `People/<Person Name>.md` file.
-7. **Jobs index.** Verify every file in `Jobs/` is listed in `concepts/jobs.md`.
+7. **Skills index.** Verify every skill under `Skills/*/SKILL.md` is listed in `concepts/skills.md`.
 8. **Report.** State: `green — <one clause>` or `issues — <sub-bullet per real problem>`. Log a one-line entry in `meta/log.md`.
 
 ## Gotchas / rules

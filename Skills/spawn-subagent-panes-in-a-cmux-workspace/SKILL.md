@@ -1,16 +1,17 @@
 ---
-type: job
+name: spawn-subagent-panes-in-a-cmux-workspace
+description: Fan a task out into N worker agents running in split CMUX panes, each driven through the four-verb loop and torn down when finished — use when one task decomposes into concurrent sub-tasks you want to run and watch as panes.
+type: skill
 domain: kb-meta
-trigger: one task decomposes into concurrent sub-tasks you want to run and watch as panes
-frequency: ad-hoc
 tools: cmux, Claude Code
 owner: {{NAME}}
 status: active
-tags: [job, kb-meta]
-aliases: [Spawn subagent panes, Fan out subagents, Subagent panes, Spawn workers in panes]
+tags: [skill]
+aliases: [Spawn subagent panes in a CMUX workspace, Spawn subagent panes, Fan out subagents, Subagent panes, Spawn workers in panes]
+updated: 2026-08-11
 ---
 
-# Job — Spawn subagent panes in a CMUX workspace
+# Skill — Spawn subagent panes in a CMUX workspace
 
 > **When:** a single task fans out into concurrent sub-tasks you want visible and
 > drivable as panes in the current workspace · **Frequency:** ad-hoc ·

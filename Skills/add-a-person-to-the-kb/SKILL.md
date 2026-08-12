@@ -1,15 +1,17 @@
 ---
-type: job
+name: add-a-person-to-the-kb
+description: Create a People/ note (and index it in concepts/contacts.md) for a new person relevant to your work — use when a new person appears who is relevant to your work.
+type: skill
 domain: kb-meta
-trigger: a new person appears who is relevant to your work
-frequency: ad-hoc
 tools: Read, Write, Edit
 owner: {{NAME}}
 status: active
-tags: [job]
+tags: [skill]
+aliases: [Add a person to the KB]
+updated: 2026-08-11
 ---
 
-# Job — Add a person to the KB
+# Skill — Add a person to the KB
 
 > **When:** a new person enters the picture — a collaborator, stakeholder, or contact
 > **Outcome:** a note in `People/` + a row in `concepts/contacts.md`

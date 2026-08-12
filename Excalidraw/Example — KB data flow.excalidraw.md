@@ -35,7 +35,7 @@ read / query ^t014
 
 capture / write ^t016
 
-People · Jobs · structural ^t018
+People · Skills · structural ^t018
 
 decision ^t020
 
@@ -1139,13 +1139,13 @@ always-on (session start) ^t026
 			"updated": 1720400000000,
 			"link": null,
 			"locked": false,
-			"text": "People · Jobs · structural",
+			"text": "People · Skills · structural",
 			"fontSize": 14,
 			"fontFamily": 5,
 			"textAlign": "left",
 			"verticalAlign": "top",
 			"containerId": null,
-			"originalText": "People · Jobs · structural",
+			"originalText": "People · Skills · structural",
 			"autoResize": true,
 			"lineHeight": 1.25,
 			"roundness": null

@@ -1,16 +1,17 @@
 ---
-type: job
+name: run-an-initiative
+description: Open, update, or close an Initiatives/ note that carries a multi-action workstream from start to done — use when an outcome needs multiple actions over time (rule of thumb: 3+ actions or more than a week).
+type: skill
 domain: kb-meta
-trigger: an outcome needs multiple actions over time (rule of thumb - 3+ actions or more than a week)
-frequency: ad-hoc (start/close) + whenever the workstream moves (update)
 tools: Write, Edit, Read
 owner: {{NAME}}
 status: active
-tags: [job]
-aliases: [Start an initiative, Close an initiative, Open an initiative]
+tags: [skill]
+aliases: [Run an initiative, Start an initiative, Close an initiative, Open an initiative]
+updated: 2026-08-11
 ---
 
-# Job — Run an initiative
+# Skill — Run an initiative
 
 > **When:** a goal is bigger than a single `#action` — multiple actions over
 > time, accreting decisions and state · **Outcome:** one initiative note in
@@ -54,7 +55,7 @@ aliases: [Start an initiative, Close an initiative, Open an initiative]
 ## Gotchas / rules
 
 - **Not every project is an initiative** — a single action stays an `#action`
-  in its home note; a recurring procedure is a [[jobs|Job]], not an initiative.
+  in its home note; a recurring procedure is a [[skills|Skill]], not an initiative.
 - **Actions live IN the initiative note** (they aggregate to `Actions.md` and
   group under the initiative's filename automatically) — never keep a separate
   task list for the initiative.
@@ -73,4 +74,4 @@ aliases: [Start an initiative, Close an initiative, Open an initiative]
 - [ ] Link map regenerated; `meta/log.md` entry appended.
 
 ## Related
-[[jobs]] (runbook index) · [[AGENTS]] (conventions) · [[Optimize the knowledge base]] (initiatives are part of the index-budget review)
+[[skills]] (skill index) · [[AGENTS]] (conventions) · [[Optimize the knowledge base]] (initiatives are part of the index-budget review)

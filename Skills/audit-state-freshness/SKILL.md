@@ -1,16 +1,17 @@
 ---
-type: job
+name: audit-state-freshness
+description: Audit the always-loaded surfaces for stale state-shaped claims and fix drift in place — use monthly with the optimize pass, when the index Quick map feels behind reality, or on request.
+type: skill
 domain: kb-meta
-trigger: monthly with the optimize pass, when the index Quick map feels behind reality, or on request
-frequency: monthly
 tools: Read, Grep, Edit
 owner: {{NAME}}
 status: active
-tags: [job]
-aliases: [state freshness audit, second brain audit]
+tags: [skill]
+aliases: [Audit state freshness, state freshness audit, second brain audit]
+updated: 2026-08-11
 ---
 
-# Job — Audit state freshness
+# Skill — Audit state freshness
 
 > **When:** monthly alongside [[Optimize the knowledge base]], or whenever the
 > always-loaded surfaces "feel" behind reality

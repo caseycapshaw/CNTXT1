@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # lint.sh — deterministic KB health check (the mechanical half of the lint).
 # Checks: (1) root inbox clean, (2) all wikilinks resolve, (3) index complete,
-# (4) concepts/Initiatives/People/Jobs carry frontmatter, (5) concepts +
+# (4) concepts/Initiatives/People/Skills carry frontmatter, (5) concepts +
 # initiatives carry a non-empty description:. Exit 0 = pass, 1 = problems.
 # The LLM lint keeps only the judgment checks (stale facts, resolved questions).
 #
@@ -16,7 +16,7 @@ bad()  { printf 'FAIL  %s\n' "$1"; fail=1; }
 
 # ---- 1. Root inbox clean -------------------------------------------------
 anchors="README.md index.md Actions.md CLAUDE.md"
-structural="concepts Initiatives meta raw daily People Jobs attachments docs Excalidraw Writing"
+structural="concepts Initiatives meta raw daily People Skills attachments docs Excalidraw Writing"
 # Template-only artifacts (present in kb-starter; absent in a live vault — harmless either way).
 template_extras="setup.md LICENSE"
 # Standing root files (machinery write-targets, not inbox items) — one per line.
@@ -31,7 +31,7 @@ if [ ${#inbox[@]} -eq 0 ]; then ok "root inbox clean"; else bad "root inbox has 
 
 # ---- content files (exclude template files) ------------------------------
 files=()
-for f in concepts/*.md Initiatives/*.md Initiatives/archive/*.md Jobs/*.md People/*.md index.md; do
+for f in concepts/*.md Initiatives/*.md Initiatives/archive/*.md Skills/*/SKILL.md People/*.md index.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*) continue ;; esac
   files+=("$f")
@@ -44,10 +44,17 @@ for f in concepts/*.md Initiatives/*.md Initiatives/archive/*.md Excalidraw/*.md
   case "$f" in *TEMPLATE*) continue ;; esac
   basename "$f" .md >> "$valid"
 done
-for f in People/*.md Jobs/*.md; do
+for f in People/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*) continue ;; esac
   basename "$f" .md >> "$valid"
+  al="$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//')"
+  [ -z "$al" ] && continue
+  IFS=','; for a in $al; do a="$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"; [ -n "$a" ] && echo "$a" >> "$valid"; done; unset IFS
+done
+for f in Skills/*/SKILL.md; do
+  [ -e "$f" ] || continue
+  basename "$(dirname "$f")" >> "$valid"
   al="$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//')"
   [ -z "$al" ] && continue
   IFS=','; for a in $al; do a="$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"; [ -n "$a" ] && echo "$a" >> "$valid"; done; unset IFS
@@ -85,12 +92,12 @@ if [ -z "$missing" ]; then ok "index lists every concept + initiative"; else bad
 
 # ---- 4. Frontmatter present ---------------------------------------------
 fm_fail=""
-for f in concepts/*.md Initiatives/*.md Initiatives/archive/*.md People/*.md Jobs/*.md; do
+for f in concepts/*.md Initiatives/*.md Initiatives/archive/*.md People/*.md Skills/*/SKILL.md; do
   [ -e "$f" ] || continue   # skip literal glob for empty dirs
   case "$f" in *TEMPLATE*) continue ;; esac
   [ "$(head -1 "$f")" = "---" ] || fm_fail="$fm_fail $f"
 done
-if [ -z "$fm_fail" ]; then ok "concepts/Initiatives/People/Jobs all carry frontmatter"; else bad "missing frontmatter:"; for m in $fm_fail; do note "$m"; done; fi
+if [ -z "$fm_fail" ]; then ok "concepts/Initiatives/People/Skills all carry frontmatter"; else bad "missing frontmatter:"; for m in $fm_fail; do note "$m"; done; fi
 
 # ---- 5. description: present on concepts + initiatives --------------------
 desc_fail=""

@@ -1,16 +1,17 @@
 ---
-type: job
+name: capture-a-youtube-video-into-the-kb
+description: Capture a YouTube video's metadata, description links, and transcript digest into raw/ and compile it into the relevant concept(s)/person(s) — use when {{NAME}} shares a YouTube URL to "capture" (e.g. "yt capture this …").
+type: skill
 domain: kb-meta
-trigger: "{{NAME}} shares a YouTube URL to \"capture\" (e.g. \"yt capture this …\")"
-frequency: ad-hoc
 tools: yt-dlp (brew), raw/, concepts/, People/
 owner: {{NAME}}
 status: active
-tags: [job]
-aliases: [yt capture, Capture a YouTube video]
+tags: [skill]
+aliases: [Capture a YouTube video into the KB, yt capture]
+updated: 2026-08-11
 ---
 
-# Job — Capture a YouTube video into the KB
+# Skill — Capture a YouTube video into the KB
 
 > **When:** {{NAME}} shares a YouTube link to capture · **Frequency:** ad-hoc · **Tools:** `yt-dlp`
 > **Outcome:** a dated `raw/` capture of the video (metadata + description links + transcript digest), compiled into the concept(s)/person(s) named, indexed and logged. **Every note created must link back to the video and carry the links from its description.**
@@ -60,4 +61,4 @@ video is really about a person (interview, talk, creator worth tracking).
 
 ## Related
 
-[[Capture a meeting or conversation into the KB]] (the generic capture flow this specializes) · [[Add a person to the KB]] · [[jobs]] · [[AGENTS]]
+[[Capture a meeting or conversation into the KB]] (the generic capture flow this specializes) · [[Add a person to the KB]] · [[skills]] · [[AGENTS]]

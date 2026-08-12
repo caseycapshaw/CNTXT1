@@ -15,7 +15,7 @@ grows; rich descriptions follow in the sections below.
 
 - **Initiatives (live):** _(none yet — goal-directed workstreams land here)_
 - **Method:** [[karpathy-method]] · [[open-knowledge-format]] · [[AGENTS]]
-- **Indexes:** [[contacts]] → `People/` · [[jobs]] → `Jobs/`
+- **Indexes:** [[contacts]] → `People/` · [[skills]] → `Skills/`
 - _(add your concept groups here: role, product, ops, … one line each)_
 - **Live to-dos:** [[Actions]] · **History:** [[log]]
 
@@ -30,7 +30,7 @@ Bigger outcomes spanning multiple actions over time. Built from [`Initiative TEM
 - **[[karpathy-method]]** — the architecture this KB is built on: an LLM-maintained "wiki" (raw→compile→index→lint, no RAG at personal scale). Why it works, the scale sweet spot, and the hallucination-propagation risk. The operating rules live in [[AGENTS]].
 - **[[open-knowledge-format]]** — Google's OKF v0.1: the open interchange standard for Karpathy-style LLM wikis, how a CNTXT1 vault maps to it (a superset), and how to adopt it at the boundaries (bundle ingest/export) without refactoring internals.
 - **[[contacts]]** — the **People index**: usage-context map + grouped tables over the [`People/`](People) folder. Per-person detail lives in each person's own note; this is the *who-for-what* map.
-- **[[jobs]]** — the **runbook index**: grouped tables over the [`Jobs/`](Jobs) folder. Each recurring "job to be done" is an agent-executable runbook; this is the *how-do-I-X* map.
+- **[[skills]]** — the **skill index**: grouped tables over the [`Skills/`](Skills) folder. Each recurring "job to be done" is an agent-invocable `SKILL.md` runbook (Claude Code Agent Skills format); this is the *how-do-I-X* map.
 
 _New concepts get added here, one line each, as you compile them._
 
@@ -39,10 +39,10 @@ A note per named person under [`People/`](People) — the **single source of tru
 
 _Add person notes here as you build the network._
 
-## Jobs (one runbook per recurring task — `Jobs/`)
-Agent-executable runbooks for recurring "jobs to be done" under [`Jobs/`](Jobs) — the **single source of truth for the *steps*** of a repeatable task. Built from [`Jobs TEMPLATE.md`](Jobs/Jobs%20TEMPLATE.md). `Jobs/` is a **structural folder, not an inbox item**.
+## Skills (one agent-invocable runbook per recurring task — `Skills/`)
+Agent-invocable `SKILL.md` runbooks for recurring "jobs to be done", filed as [`Skills/<slug>/SKILL.md`](Skills) (Claude Code Agent Skills format) — the **single source of truth for the *steps*** of a repeatable task, invocable by natural language or `/<slug>` via the `.claude/skills/` symlinks. Built from [`SKILL TEMPLATE.md`](Skills/SKILL%20TEMPLATE.md). `Skills/` is a **structural folder, not an inbox item**.
 
-Five starter runbooks ship with the kit (KB-meta): [[Add a person to the KB]] · [[Capture a meeting or conversation into the KB]] · [[Run an initiative]] · [[Run the KB health check]] · [[Optimize the knowledge base]].
+Twelve starter skills ship with the kit (KB-meta): [[Add a person to the KB]] · [[Capture a meeting or conversation into the KB]] · [[Run an initiative]] · [[Run the KB health check]] · [[Optimize the knowledge base]] · and more — see [[skills]].
 
 ## Raw (source of truth — append-only)
 - `raw/2026-01-01-example-capture.md` — **example** showing the dated-capture format (provenance header, a fact, a `[[wikilink]]`, an `#action`). Delete once you have real captures.

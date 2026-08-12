@@ -35,4 +35,4 @@ durable knowledge into the relevant concept(s) — the note itself stays as the
 record (never delete)._
 
 ## Related
-_[[concepts]], [[People]], [[Jobs]], and `raw/` captures this draws on._
+_[[concepts]], [[People]], [[skills]], and `raw/` captures this draws on._

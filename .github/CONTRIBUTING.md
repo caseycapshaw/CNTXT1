@@ -14,8 +14,8 @@ base. That split is the whole design, so one rule dominates every review:
 Generic improvements to the method or its machinery:
 
 - Schema clarifications in `meta/AGENTS.md`
-- New or sharper `Jobs/` runbooks (with `owner: {{NAME}}`, indexed in
-  `concepts/jobs.md`)
+- New or sharper `Skills/` skills (with `owner: {{NAME}}`, indexed in
+  `concepts/skills.md`)
 - `meta/bin/` tooling fixes (`lint.sh`, `build-link-map.sh`,
   `kb-mcp-server.py`)
 - Template and setup-flow improvements (`setup.md`, the TEMPLATE files)
@@ -24,15 +24,15 @@ Generic improvements to the method or its machinery:
 ## Before you open a PR
 
 1. **If your change was born in your own vault, re-template it** — swap your
-   real values back to `{{placeholders}}`. The runbook you already have for
-   this is `Jobs/Sync an improvement to CNTXT1.md`; run your own grep gate
+   real values back to `{{placeholders}}`. The skill you already have for
+   this is `Skills/sync-an-improvement-to-cntxt1/SKILL.md`; run your own grep gate
    before pushing anything public.
 2. Run the checks CI will run:
    ```
    ./meta/bin/lint.sh
    ./.github/scripts/pr-gate.sh
    ```
-3. If you added or renamed a concept, person-template, or job: regenerate the
+3. If you added or renamed a concept, person-template, or skill: regenerate the
    link map (`./meta/bin/build-link-map.sh`) and commit it.
 
 ## What CI enforces
@@ -41,7 +41,7 @@ Every PR runs two layers:
 
 - **`PR gate`** (deterministic, blocking): instance-content folders hold only
   their shipped templates/examples, placeholders stay intact, no PII or
-  credential patterns, jobs indexed, link map current, KB lint green.
+  credential patterns, skills indexed, link map current, KB lint green.
 - **`Claude review`** (judgment layer): an automated reviewer checks that the
   change is framework-generic rather than personal, conforms to the schema in
   `meta/AGENTS.md`, and keeps the docs coherent. It runs automatically on

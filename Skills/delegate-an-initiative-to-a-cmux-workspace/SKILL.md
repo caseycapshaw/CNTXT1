@@ -1,16 +1,17 @@
 ---
-type: job
+name: delegate-an-initiative-to-a-cmux-workspace
+description: Hand a whole task/initiative to its own CMUX workspace (own repo/worktree, own agent) kicked off against the shared Initiatives/ note — use when an initiative/task is ready to run in its own repo context, delegated from the main workspace.
+type: skill
 domain: kb-meta
-trigger: an initiative/task is ready to run in its own repo context, delegated from the main workspace
-frequency: per-initiative
 tools: cmux, Claude Code, git, Initiatives/
 owner: {{NAME}}
 status: active
-tags: [job, kb-meta]
-aliases: [Delegate to a workspace, Spin up a CMUX workspace, Delegate an initiative]
+tags: [skill]
+aliases: [Delegate an initiative to a CMUX workspace, Delegate to a workspace, Spin up a CMUX workspace, Delegate an initiative]
+updated: 2026-08-11
 ---
 
-# Job — Delegate an initiative to a CMUX workspace
+# Skill — Delegate an initiative to a CMUX workspace
 
 > **When:** the main workspace needs to hand a whole task/initiative to its own
 > CMUX workspace (own repo/worktree, own agent) · **Frequency:** per-initiative ·

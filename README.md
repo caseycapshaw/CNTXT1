@@ -72,16 +72,16 @@ git remote set-url --push upstream DISABLED   # git physically cannot push
 
 Then adopt any kit improvement with `git fetch upstream` +
 `git cherry-pick <sha>`. Files that stay byte-identical across instances
-(`meta/AGENTS.md`, `meta/bin/*`, most `Jobs/`, templates) apply cleanly;
+(`meta/AGENTS.md`, `meta/bin/*`, most `Skills/`, templates) apply cleanly;
 files your instance has populated (`index.md`, `CLAUDE.md`, the concept
-indexes) occasionally need a small manual merge. Step-by-step runbook:
-[`Jobs/Pull framework updates from CNTXT1.md`](Jobs/Pull%20framework%20updates%20from%20CNTXT1.md).
+indexes) occasionally need a small manual merge. Step-by-step skill:
+[`Skills/pull-framework-updates-from-cntxt1/SKILL.md`](Skills/pull-framework-updates-from-cntxt1/SKILL.md).
 
 **Instance → kit (dangerous — stays manual).** Personal content never leaves
 your vault, so this direction is a deliberate, hand-operated path:
 re-template to `{{placeholders}}`, run the identifier grep gate, and go
-through this repo's CI (privacy gate + review). Runbook:
-[`Jobs/Sync an improvement to CNTXT1.md`](Jobs/Sync%20an%20improvement%20to%20CNTXT1.md).
+through this repo's CI (privacy gate + review). Skill:
+[`Skills/sync-an-improvement-to-cntxt1/SKILL.md`](Skills/sync-an-improvement-to-cntxt1/SKILL.md).
 
 **Rule of thumb: author upstream-first.** When you're about to build
 something generic — a lint check, a runbook, a template improvement — build

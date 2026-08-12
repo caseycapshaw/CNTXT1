@@ -1,16 +1,17 @@
 ---
-type: job
+name: optimize-the-knowledge-base
+description: Keep the KB fast for the LLM (lean injected map, resolvable links) and accurate (fresh frontmatter, green lint) via a measured efficiency pass — use monthly, or when the KB feels slow/bloated to navigate.
+type: skill
 domain: kb-meta
-trigger: periodic efficiency review (monthly), or when the KB feels slow/bloated to navigate
-frequency: monthly / ad-hoc
 tools: bash (wc/grep/head), meta/bin/lint.sh, meta/bin/build-link-map.sh
 owner: {{NAME}}
 status: active
-tags: [job, kb-meta]
-aliases: [Optimize the KB, KB efficiency pass, Tune the knowledge base]
+tags: [skill]
+aliases: [Optimize the knowledge base, Optimize the KB, KB efficiency pass, Tune the knowledge base]
+updated: 2026-08-11
 ---
 
-# Job — Optimize the knowledge base
+# Skill — Optimize the knowledge base
 
 > **When:** monthly, or whenever the KB feels slow/bloated to navigate · **Frequency:** monthly / ad-hoc · **Tools:** `bash`, `meta/bin/lint.sh`, `meta/bin/build-link-map.sh`
 > **Outcome:** the KB stays *fast for the LLM* (lean injected map, resolvable links) and *accurate* (fresh frontmatter, green lint). Distinct from [[Run the KB health check]], which checks **correctness**; this checks **efficiency/structure**.

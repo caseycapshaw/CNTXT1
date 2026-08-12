@@ -65,17 +65,17 @@ fi
 grep -q '{{NAME}}' CLAUDE.md   && ok "CLAUDE.md keeps {{NAME}} placeholder"   || bad "CLAUDE.md lost its {{NAME}} placeholder — looks personalized"
 grep -q '{{NAME}}' README.md   && ok "README.md keeps {{NAME}} placeholder"   || bad "README.md lost its {{NAME}} placeholder — looks personalized"
 
-owners=$(grep -rn '^owner:' Jobs/*.md | grep -v 'owner: {{NAME}}' || true)
+owners=$(grep -rn '^owner:' Skills/*/SKILL.md | grep -v 'owner: {{NAME}}' || true)
 if [ -n "$owners" ]; then
-  bad "Jobs/ runbooks must carry owner: {{NAME}}, found real values:
+  bad "Skills/ skills must carry owner: {{NAME}}, found real values:
 $owners"
 else
-  ok "all Jobs/ runbooks carry owner: {{NAME}}"
+  ok "all Skills/ skills carry owner: {{NAME}}"
 fi
 
-grep -q '{{PERSONAL_IDENTIFIERS}}' "Jobs/Sync an improvement to CNTXT1.md" \
-  && ok "sync runbook keeps its {{PERSONAL_IDENTIFIERS}} placeholder" \
-  || bad "Jobs/Sync an improvement to CNTXT1.md lost {{PERSONAL_IDENTIFIERS}} — a real identifier list must never be committed here"
+grep -q '{{PERSONAL_IDENTIFIERS}}' "Skills/sync-an-improvement-to-cntxt1/SKILL.md" \
+  && ok "sync skill keeps its {{PERSONAL_IDENTIFIERS}} placeholder" \
+  || bad "Skills/sync-an-improvement-to-cntxt1/SKILL.md lost {{PERSONAL_IDENTIFIERS}} — a real identifier list must never be committed here"
 
 # ---- 3. Generic PII / credential patterns ----------------------------------
 # Tuned to this tree: anything matching is either a leak or needs an explicit
@@ -118,13 +118,22 @@ else
   printf 'SKIP  maintainer identifier sweep (PERSONAL_IDENTIFIERS not set — expected on fork PRs)\n'
 fi
 
-# ---- 5. Consistency: new Jobs are indexed + link map is current ------------
-for f in Jobs/*.md; do
-  b=$(basename "$f" .md)
-  case "$b" in *TEMPLATE) continue ;; esac   # Jobs TEMPLATE + any '<name> TEMPLATE' pattern file
-  grep -q "\[\[$b\]\]" concepts/jobs.md || bad "Jobs/$b.md is not indexed in concepts/jobs.md"
+# ---- 5. Consistency: new Skills are indexed + link map is current ---------
+for f in Skills/*/SKILL.md; do
+  slug=$(basename "$(dirname "$f")")
+  case "$slug" in *TEMPLATE*) continue ;; esac
+  aliases=$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//')
+  found=0
+  grep -q "\[\[$slug\]\]" concepts/skills.md && found=1
+  if [ "$found" -eq 0 ] && [ -n "$aliases" ]; then
+    IFS=','; for a in $aliases; do
+      a=$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')
+      [ -n "$a" ] && grep -qF "[[$a]]" concepts/skills.md && found=1
+    done; unset IFS
+  fi
+  [ "$found" -eq 0 ] && bad "Skills/$slug/SKILL.md is not indexed in concepts/skills.md"
 done
-ok "Jobs indexed in concepts/jobs.md (any misses listed above)"
+ok "Skills indexed in concepts/skills.md (any misses listed above)"
 
 if [ -x meta/bin/build-link-map.sh ]; then
   before=$(cat meta/link-map.md 2>/dev/null || true)

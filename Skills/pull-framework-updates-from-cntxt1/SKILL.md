@@ -1,16 +1,17 @@
 ---
-type: job
+name: pull-framework-updates-from-cntxt1
+description: Pull a generic schema/script/runbook/template improvement from the public CNTXT1 starter kit into this vault via git, leaving personal content untouched — use ad-hoc, after a framework improvement lands in the public CNTXT1 kit.
+type: skill
 domain: kb-meta
-trigger: a framework improvement has landed in the public CNTXT1 kit and this vault should adopt it
-frequency: ad-hoc
 tools: git
 owner: {{NAME}}
 status: active
-tags: [job]
-aliases: [Pull framework updates, Pull from upstream CNTXT1]
+tags: [skill]
+aliases: [Pull Framework Updates from CNTXT1, Pull framework updates from CNTXT1, Pull framework updates, Pull from upstream CNTXT1]
+updated: 2026-08-11
 ---
 
-# Job — Pull Framework Updates from CNTXT1
+# Skill — Pull Framework Updates from CNTXT1
 
 > **When:** the public `CNTXT1` starter kit gains a generic improvement
 > (schema, `meta/bin/` script, runbook, template) this vault should adopt ·
@@ -52,9 +53,9 @@ git remote set-url --push upstream DISABLED
    git cherry-pick <sha>
    ```
    Files byte-identical across the repos (`meta/AGENTS.md`, `meta/bin/*`,
-   most `Jobs/`, templates) apply cleanly. Conflicts concentrate in the
+   most `Skills/`, templates) apply cleanly. Conflicts concentrate in the
    **populated-vs-skeleton files** (`CLAUDE.md`, `index.md`,
-   `concepts/contacts.md`, `concepts/jobs.md`, `README.md`): resolve by
+   `concepts/contacts.md`, `concepts/skills.md`, `README.md`): resolve by
    keeping your vault's personal content and hand-applying only the
    *structural* change the kit commit made. `--strategy-option=ours` is
    usually wrong here — read the conflict.

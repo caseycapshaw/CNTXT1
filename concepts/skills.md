@@ -1,28 +1,28 @@
 ---
 type: concept
-description: The runbook index — the how-do-I-X map and grouped tables over the Jobs/ folder.
+description: The skills index — the how-do-I-X map and grouped tables over the Skills/ folder.
 updated: {{DATE}}
 status: current
 tags: [concept, index]
 ---
 
-# Concept — Jobs (runbook index)
+# Concept — Skills (skill index)
 
-**The index to the [`Jobs/`](../Jobs) folder.** A **Job** is a reusable runbook for a recurring "job to be done" — the **single source of truth for the *steps*** of a repeatable task, written agent-executable (imperative, tool-specific) so an agent or you can run it. The matching **concept** keeps the *why/context/principles* and links here. This page is the map.
+**The index to the [`Skills/`](../Skills) folder.** A **Skill** is a reusable, agent-invocable runbook for a recurring "job to be done" — the **single source of truth for the *steps*** of a repeatable task, filed at `Skills/<kebab-slug>/SKILL.md` (Claude Code Agent Skills format), auto-discovered via `.claude/skills/` symlinks, and invocable by natural language or `/<slug>`. The matching **concept** keeps the *why/context/principles* and links here. This page is the map.
 
 > **How to use this**
-> - **Each recurring task = one runbook**, filed as `Jobs/Imperative Title.md`, wikilinked `[[Imperative Title]]`.
-> - **Add a job:** copy `Jobs/Jobs TEMPLATE.md` → `Jobs/<Imperative Title>.md`, fill `When / Steps / Gotchas / Done-when / Related`, add a row here.
-> - **Naming:** imperative verb-first, Title Case (`Create a pull request`, not "Creating…").
-> - `Jobs/` is a **structural folder, not the inbox**.
-> - **Steps live in the job; context lives in the concept** — jobs link to their concept for the deeper why.
+> - **Each recurring task = one skill**, filed as `Skills/<kebab-slug>/SKILL.md`, wikilinked `[[<kebab-slug>]]`.
+> - **Add a skill:** copy `Skills/SKILL TEMPLATE.md` → `Skills/<slug>/SKILL.md`, symlink it (`ln -sfn ../../Skills/<slug> .claude/skills/<slug>`), fill `When / Steps / Gotchas / Done-when / Related`, regen the link map, add a row here.
+> - **Naming:** kebab-case slug; the old-style imperative title (`Imperative Title`) becomes the first alias so existing `[[Imperative Title]]` links keep resolving.
+> - `Skills/` is a **structural folder, not the inbox**.
+> - **Steps live in the skill; context lives in the concept** — skills link to their concept for the deeper why.
 
 ---
 
 ## 📚 KB-meta
-Jobs for maintaining the knowledge base itself — always useful, ship with the starter.
+Skills for maintaining the knowledge base itself — always useful, ship with the starter.
 
-| Job | Trigger | Notes |
+| Skill | Trigger | Notes |
 | :-- | :-- | :-- |
 | [[Add a person to the KB]] | a new person appears | copy People template → note → index in [[contacts]] |
 | [[Capture a meeting or conversation into the KB]] | new durable knowledge | inbox→`raw/`→compile→`index.md`→`meta/log.md` |
@@ -38,25 +38,25 @@ Jobs for maintaining the knowledge base itself — always useful, ship with the 
 | [[Spawn subagent panes in a CMUX workspace]] | one task fans out into concurrent sub-tasks *(optional, needs CMUX)* | pane-level fan-out; four-verb loop (send/send-key/read-screen/close-surface) + `DONE:` sentinel |
 
 ## 🛠️ Dev
-_(add job runbooks for your recurring dev tasks)_
+_(add skills for your recurring dev tasks)_
 
-| Job | Trigger | Notes |
+| Skill | Trigger | Notes |
 | :-- | :-- | :-- |
 | _(add rows here)_ | — | — |
 
 ## 🤝 Ops & comms
-_(add job runbooks for recurring communications and operations tasks)_
+_(add skills for recurring communications and operations tasks)_
 
-| Job | Trigger | Notes |
+| Skill | Trigger | Notes |
 | :-- | :-- | :-- |
 | _(add rows here)_ | — | — |
 
 ---
 
-## Adding & maintaining jobs
-- A job earns a note when the task **recurs** and has **non-obvious steps or a gotcha** worth not re-deriving. One-offs stay as actions/notes.
-- **Domain reviews:** when a domain (finances, health, …) accumulates enough state, pair a standing role (`meta/agent-roles/domain-advisor TEMPLATE.md`) with a review runbook built from `Jobs/Run a domain review TEMPLATE.md` — see `meta/AGENTS.md` § Optional extensions.
-- Keep steps **executable** — name the exact tool / CLI / file. If a job's "why" grows, push it into the concept and keep the job lean.
+## Adding & maintaining skills
+- A skill earns a note when the task **recurs** and has **non-obvious steps or a gotcha** worth not re-deriving. One-offs stay as actions/notes.
+- **Domain reviews:** when a domain (finances, health, …) accumulates enough state, pair a standing role (`meta/agent-roles/domain-advisor TEMPLATE.md`) with a review skill built from `Skills/Run a domain review TEMPLATE.md` — see `meta/AGENTS.md` § Optional extensions.
+- Keep steps **executable** — name the exact tool / CLI / file. If a skill's "why" grows, push it into the concept and keep the skill lean.
 
 ## Related
 [[contacts]] (the People index — sibling system) · [[AGENTS]] (the method + structural-folder rules) · [[karpathy-method]]

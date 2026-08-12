@@ -1,21 +1,22 @@
 ---
-type: job
+name: run-a-{{domain}}-review
+description: "One sentence: what the {{domain}} review does + when to use it."
+type: skill
 domain: "{{domain}}"
-trigger: "{{NAME}} asks for a {{domain}} review/check-in, or the periodic cadence comes due"
-frequency: ad-hoc (natural cadence ~{{monthly/quarterly}})
 tools: "{{connectors/CLIs used}}, Read, Write, Edit, Bash"
 owner: {{NAME}}
 status: active
-tags: [job]
-aliases: [{{Domain}} review, {{Domain}} check-in]
+tags: [skill]
+aliases: [Run a {{domain}} review, {{Domain}} review, {{Domain}} check-in]
+updated: {YYYY-MM-DD}
 ---
 
-# Job — Run a {{domain}} review
+# Skill — Run a {{domain}} review
 
-<!-- TEMPLATE — copy to Jobs/Run a <domain> review.md and fill every
+<!-- TEMPLATE — copy to Skills/run-a-{{domain}}-review/SKILL.md and fill every
      {{placeholder}}. Pairs with a role file built from
      `meta/agent-roles/domain-advisor TEMPLATE.md`: the role carries the
-     stance (sources, caveats, checklist, sync contract); this job carries
+     stance (sources, caveats, checklist, sync contract); this skill carries
      the steps. -->
 
 > **When:** on request, or the periodic pass · **Tools:** {{sources}} · vault ·
@@ -54,4 +55,4 @@ cadence comes due.
 
 ## Related
 
-`{{home note}}` · `meta/agent-roles/{{domain}}-advisor.md` (the role) · [[jobs]] · [[AGENTS]]
+`{{home note}}` · `meta/agent-roles/{{domain}}-advisor.md` (the role) · [[skills]] · [[AGENTS]]

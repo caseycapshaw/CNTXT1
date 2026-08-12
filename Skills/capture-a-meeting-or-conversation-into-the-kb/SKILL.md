@@ -1,15 +1,17 @@
 ---
-type: job
+name: capture-a-meeting-or-conversation-into-the-kb
+description: Turn a meeting, conversation, or document into a dated raw/ capture compiled into concepts/ — use whenever a meeting, conversation, or document produces durable knowledge.
+type: skill
 domain: kb-meta
-trigger: a meeting, conversation, or document produces durable knowledge
-frequency: ad-hoc
 tools: Write, Edit, Read
 owner: {{NAME}}
 status: active
-tags: [job]
+tags: [skill]
+aliases: [Capture a meeting or conversation into the KB]
+updated: 2026-08-11
 ---
 
-# Job — Capture a meeting or conversation into the KB
+# Skill — Capture a meeting or conversation into the KB
 
 > **When:** a meeting, conversation, or document produces facts worth keeping
 > **Outcome:** raw capture in `raw/` → compiled concept in `concepts/` → indexed + logged

@@ -57,11 +57,11 @@ functionally a **superset** of OKF — nearly every OKF idea already exists:
 
 | OKF | CNTXT1 vault |
 | :-- | :-- |
-| `type` required frontmatter | ✓ `type: concept/initiative` + People/Jobs frontmatter |
+| `type` required frontmatter | ✓ `type: concept/initiative` + People/Skills frontmatter |
 | `description` recommended | ✓ one stable sentence on every concept/initiative (enforced by `lint.sh`) |
 | `timestamp` recommended | `updated: YYYY-MM-DD` (dialect difference) |
 | Root `index.md` with described links | ✓ (Quick map + rich sections) |
-| Per-directory `index.md` | Functional equivalent: [[contacts]] indexes `People/`, [[jobs]] indexes `Jobs/` |
+| Per-directory `index.md` | Functional equivalent: [[contacts]] indexes `People/`, [[skills]] indexes `Skills/` |
 | `log.md` | ✓ `meta/log.md` (append-only one-liners vs OKF's newest-first groups — dialect difference) |
 | Markdown path links | **Divergent:** Obsidian `[[wikilinks]]` + `meta/link-map.md` |
 | Citations / provenance | ✓ stronger: every concept fact must trace to a `raw/` capture |

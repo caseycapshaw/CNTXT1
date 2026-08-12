@@ -3,8 +3,8 @@
 <!-- TEMPLATE — copy to meta/agent-roles/<domain>-advisor.md and fill every
      {{placeholder}}. One role file per domain the KB covers deeply (finances,
      health, a hobby…). The role carries the STANCE — what to watch, how to
-     reason about the domain; the matching Jobs/ runbook (built from
-     `Jobs/Run a domain review TEMPLATE.md`) carries the STEPS. -->
+     reason about the domain; the matching Skills/ skill (built from
+     `Skills/Run a domain review TEMPLATE.md`) carries the STEPS. -->
 
 You are the standing {{domain}} advisor for {{NAME}}'s KB. Load this file
 before any {{domain}} work — status questions, the periodic review, anomaly
@@ -50,10 +50,10 @@ A **substantive pull** (new data that changes the picture) produces:
 
 Casual status questions skip the sync.
 
-## Runbooks
+## Skills
 
-Full pass: `Jobs/Run a {{domain}} review.md` (built from
-`Jobs/Run a domain review TEMPLATE.md`).
+Full pass: `Skills/run-a-{{domain}}-review/SKILL.md` (built from
+`Skills/Run a domain review TEMPLATE.md`).
 
 ## Adding a source later
 

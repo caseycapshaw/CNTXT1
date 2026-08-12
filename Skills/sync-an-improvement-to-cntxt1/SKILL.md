@@ -1,16 +1,17 @@
 ---
-type: job
+name: sync-an-improvement-to-cntxt1
+description: Land a generic schema/tooling/template improvement from this private KB into the public CNTXT1 starter kit's own repo, fully re-templated with zero personal content — use ad-hoc, whenever a generic improvement is ready to share publicly.
+type: skill
 domain: kb-meta
-trigger: a generic schema/tooling/template improvement is ready to share publicly
-frequency: ad-hoc
 tools: Read, Write, Edit, git, grep
 owner: {{NAME}}
 status: active
-tags: [job]
-aliases: [Sync a KB improvement to the shared repo, Contribute to CNTXT1]
+tags: [skill]
+aliases: [Sync an Improvement to CNTXT1, Sync an improvement to CNTXT1, Sync a KB improvement to the shared repo, Contribute to CNTXT1]
+updated: 2026-08-11
 ---
 
-# Job — Sync an Improvement to CNTXT1
+# Skill — Sync an Improvement to CNTXT1
 
 > **When:** a change to schema/tooling/templates in this private vault is
 > worth sharing with the public **CNTXT1** starter kit ·
@@ -20,7 +21,7 @@ aliases: [Sync a KB improvement to the shared repo, Contribute to CNTXT1]
 > vault's history — then pushed to your public copy and/or PR'd upstream to
 > [caseycapshaw/CNTXT1](https://github.com/caseycapshaw/CNTXT1).
 
-## Why this job exists (the privacy rule)
+## Why this skill exists (the privacy rule)
 
 **Personal content never leaves this vault** — see `meta/AGENTS.md` § Privacy
 & content separation. This runbook is the *only* sanctioned outward path, and
@@ -32,7 +33,7 @@ vault — ever.
 
 Whenever a change made in *this* private vault is generic enough to help
 anyone running the CNTXT1 method — a schema tweak in `meta/AGENTS.md`, a
-new/improved `Jobs/` runbook, a `meta/bin/` script fix, a template change.
+new/improved `Skills/` skill, a `meta/bin/` script fix, a template change.
 
 > **Prefer upstream-first.** If the improvement *isn't already implemented
 > in your vault*, don't build it privately and then run this runbook —
@@ -52,15 +53,15 @@ remote of this vault.
 1. **Classify the changed file(s):**
    - **Copy verbatim** (no personal content ever lives here): `setup.md`,
      `meta/AGENTS.md`, `meta/bin/*` scripts, `concepts/karpathy-method.md`,
-     `Jobs/Jobs TEMPLATE.md`, `People/People TEMPLATE.md`,
+     `Skills/SKILL TEMPLATE.md`, `People/People TEMPLATE.md`,
      `Initiatives/Initiative TEMPLATE.md`, `meta/optional/automation/*`
      (already parameterized with `{{VAULT}}` / `{{NAME}}`).
-   - **Copy after checking frontmatter:** other `Jobs/*.md` runbooks — the
-     `owner:` field must read `{{NAME}}`, not a real name, in the public copy;
-     strip any personal examples from the body.
+   - **Copy after checking frontmatter:** other `Skills/<slug>/SKILL.md`
+     skills — the `owner:` field must read `{{NAME}}`, not a real name, in
+     the public copy; strip any personal examples from the body.
    - **Copy only the skeleton, re-templated** — never the live rows/content:
      `CLAUDE.md`, `index.md`, `README.md`, `concepts/contacts.md`,
-     `concepts/jobs.md`. Diff for what changed *structurally* (a new
+     `concepts/skills.md`. Diff for what changed *structurally* (a new
      convention, a new section) and hand-apply just that structural change to
      the kit's own templated version — don't paste this vault's populated
      version over it.
