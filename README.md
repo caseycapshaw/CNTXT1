@@ -1,7 +1,7 @@
 # {{NAME}}'s Knowledge Base — Project Hub
 
 A **memory-first** knowledge base for {{DOMAIN}}. Durable facts compiled into
-`concepts/` (relationships inline via `[[wikilinks]]`), sources in `raw/`, mapped by
+`CONTENT/Concepts/` (relationships inline via `[[wikilinks]]`), sources in `CONTENT/raw/`, mapped by
 `index.md`. Built on the Karpathy "knowledge-base-as-compiler" method.
 
 > ### 📌 Start here
@@ -15,7 +15,7 @@ A **memory-first** knowledge base for {{DOMAIN}}. Durable facts compiled into
 
 This KB is **two tools working together**:
 
-- **Claude Code** — the agent that *maintains* the base: it captures, compiles, links, and lints, reading `CLAUDE.md` + `meta/AGENTS.md` every session and doing the bookkeeping for you.
+- **Claude Code** — the agent that *maintains* the base: it captures, compiles, links, and lints, reading `CLAUDE.md` + `SYSTEM/AGENTS.md` every session and doing the bookkeeping for you.
 - **Obsidian** — how *you* read and navigate it. The vault is plain markdown (any editor works), but Obsidian is the intended "IDE": it renders `[[wikilinks]]`, gives you a backlinks panel and graph view, and — with one plugin — turns `Actions.md` into a live to-do dashboard.
 
 > Karpathy's framing: *"Obsidian is the IDE; the LLM is the programmer; the wiki is the codebase."*
@@ -35,17 +35,17 @@ Full walkthrough — including the no-agent manual path and what you'll have whe
 ## Capture → inbox
 
 The **vault root is the inbox**. Drop new notes/files anywhere at the root; they
-get triaged into `raw/` and compiled into `concepts/`. The only permanent root
+get triaged into `CONTENT/raw/` and compiled into `CONTENT/Concepts/`. The only permanent root
 residents are `README.md`, `index.md`, `Actions.md`, and `CLAUDE.md` — **if you
 see anything else loose at the root, it's waiting to be filed** (ask Claude to
 "file the inbox" or "run the knowledge health check"). Full method in
-[AGENTS.md](meta/AGENTS.md).
+[AGENTS.md](SYSTEM/AGENTS.md).
 
 ## Project memory
 
 | Doc | Use it for |
 | :-- | :-- |
-| [AGENTS.md](meta/AGENTS.md) · [index.md](index.md) | The knowledge base, structured with the Karpathy compiler method. Read AGENTS.md (how it works) then index.md (the map). Concepts in `concepts/`, sources in `raw/`. |
+| [AGENTS.md](SYSTEM/AGENTS.md) · [index.md](index.md) | The knowledge base, structured with the Karpathy compiler method. Read AGENTS.md (how it works) then index.md (the map). Concepts in `CONTENT/Concepts/`, sources in `CONTENT/raw/`. |
 | [Actions.md](Actions.md) | The single live to-do view — every open `#action` across the KB (needs the Obsidian **Tasks** plugin). |
 
 ---
@@ -72,16 +72,16 @@ git remote set-url --push upstream DISABLED   # git physically cannot push
 
 Then adopt any kit improvement with `git fetch upstream` +
 `git cherry-pick <sha>`. Files that stay byte-identical across instances
-(`meta/AGENTS.md`, `meta/bin/*`, most `Skills/`, templates) apply cleanly;
+(`SYSTEM/AGENTS.md`, `SYSTEM/bin/*`, most `CONTENT/Skills/`, templates) apply cleanly;
 files your instance has populated (`index.md`, `CLAUDE.md`, the concept
 indexes) occasionally need a small manual merge. Step-by-step skill:
-[`Skills/pull-framework-updates-from-cntxt1/SKILL.md`](Skills/pull-framework-updates-from-cntxt1/SKILL.md).
+[`CONTENT/Skills/DO/Pull Framework Updates from CNTXT1.md`](CONTENT/Skills/DO/Pull Framework Updates from CNTXT1.md).
 
 **Instance → kit (dangerous — stays manual).** Personal content never leaves
 your vault, so this direction is a deliberate, hand-operated path:
 re-template to `{{placeholders}}`, run the identifier grep gate, and go
 through this repo's CI (privacy gate + review). Skill:
-[`Skills/sync-an-improvement-to-cntxt1/SKILL.md`](Skills/sync-an-improvement-to-cntxt1/SKILL.md).
+[`CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md`](CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md).
 
 **Rule of thumb: author upstream-first.** When you're about to build
 something generic — a lint check, a runbook, a template improvement — build

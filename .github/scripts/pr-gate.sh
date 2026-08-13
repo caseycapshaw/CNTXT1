@@ -34,20 +34,20 @@ check_only() { # $1=dir  $2=allowed basename (empty = dir must be empty/absent)
     ok "$dir/ ships only its template/example"
   fi
 }
-check_only People "People TEMPLATE.md"
-check_only raw    "2026-01-01-example-capture.md"
+check_only CONTENT/People "People TEMPLATE.md"
+check_only CONTENT/raw    "2026-01-01-example-capture.md"
 check_only daily  ""
 check_only attachments ""
 
-# Initiatives/ ships only the template (instances add real initiative notes)
+# CONTENT/Initiatives/ ships only the template (instances add real initiative notes)
 # plus the empty archive/ scaffold (done initiatives move there in instances).
 extras=""
-for f in Initiatives/*; do
+for f in CONTENT/Initiatives/*; do
   [ -e "$f" ] || continue
   b=$(basename "$f")
   [ "$b" = "Initiative TEMPLATE.md" ] && continue
   if [ "$b" = "archive" ]; then
-    for g in Initiatives/archive/* Initiatives/archive/.[!.]*; do
+    for g in CONTENT/Initiatives/archive/* CONTENT/Initiatives/archive/.[!.]*; do
       [ -e "$g" ] || continue
       [ "$(basename "$g")" = ".gitkeep" ] || extras="$extras archive/$(basename "$g")"
     done
@@ -56,26 +56,26 @@ for f in Initiatives/*; do
   extras="$extras $b"
 done
 if [ -n "$extras" ]; then
-  bad "Initiatives/ must ship only its template + empty archive/ — personal/instance content never lands in this repo:$extras"
+  bad "CONTENT/Initiatives/ must ship only its template + empty archive/ — personal/instance content never lands in this repo:$extras"
 else
-  ok "Initiatives/ ships only its template + empty archive/"
+  ok "CONTENT/Initiatives/ ships only its template + empty archive/"
 fi
 
 # ---- 2. Placeholders intact (the kit stays a template) --------------------
 grep -q '{{NAME}}' CLAUDE.md   && ok "CLAUDE.md keeps {{NAME}} placeholder"   || bad "CLAUDE.md lost its {{NAME}} placeholder — looks personalized"
 grep -q '{{NAME}}' README.md   && ok "README.md keeps {{NAME}} placeholder"   || bad "README.md lost its {{NAME}} placeholder — looks personalized"
 
-owners=$(grep -rn '^owner:' Skills/*/SKILL.md | grep -v 'owner: {{NAME}}' || true)
+owners=$(grep -rn '^owner:' CONTENT/Skills/*/*.md | grep -v 'owner: "{{NAME}}"' | grep -v 'owner: {{NAME}}' || true)
 if [ -n "$owners" ]; then
-  bad "Skills/ skills must carry owner: {{NAME}}, found real values:
+  bad "CONTENT/Skills/ skills must carry owner: {{NAME}}, found real values:
 $owners"
 else
-  ok "all Skills/ skills carry owner: {{NAME}}"
+  ok "all CONTENT/Skills/ skills carry owner: {{NAME}}"
 fi
 
-grep -q '{{PERSONAL_IDENTIFIERS}}' "Skills/sync-an-improvement-to-cntxt1/SKILL.md" \
+grep -q '{{PERSONAL_IDENTIFIERS}}' "CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md" \
   && ok "sync skill keeps its {{PERSONAL_IDENTIFIERS}} placeholder" \
-  || bad "Skills/sync-an-improvement-to-cntxt1/SKILL.md lost {{PERSONAL_IDENTIFIERS}} — a real identifier list must never be committed here"
+  || bad "CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md lost {{PERSONAL_IDENTIFIERS}} — a real identifier list must never be committed here"
 
 # ---- 3. Generic PII / credential patterns ----------------------------------
 # Tuned to this tree: anything matching is either a leak or needs an explicit
@@ -119,31 +119,32 @@ else
 fi
 
 # ---- 5. Consistency: new Skills are indexed + link map is current ---------
-for f in Skills/*/SKILL.md; do
-  slug=$(basename "$(dirname "$f")")
-  case "$slug" in *TEMPLATE*) continue ;; esac
+for f in CONTENT/Skills/*/*.md; do
+  [ -e "$f" ] || continue
+  case "$f" in *TEMPLATE*|*" Index.md") continue ;; esac
+  slug=$(basename "$f" .md)
   aliases=$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//')
   found=0
-  grep -q "\[\[$slug\]\]" concepts/skills.md && found=1
+  grep -q "\[\[$slug\]\]" CONTENT/Concepts/skills.md && found=1
   if [ "$found" -eq 0 ] && [ -n "$aliases" ]; then
     IFS=','; for a in $aliases; do
-      a=$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')
-      [ -n "$a" ] && grep -qF "[[$a]]" concepts/skills.md && found=1
+      a=$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/^\"//; s/\"$//')
+      [ -n "$a" ] && grep -qF "[[$a]]" CONTENT/Concepts/skills.md && found=1
     done; unset IFS
   fi
-  [ "$found" -eq 0 ] && bad "Skills/$slug/SKILL.md is not indexed in concepts/skills.md"
+  [ "$found" -eq 0 ] && bad "CONTENT/Skills note \"$slug\" is not indexed in CONTENT/Concepts/skills.md"
 done
-ok "Skills indexed in concepts/skills.md (any misses listed above)"
+ok "Skills indexed in CONTENT/Concepts/skills.md (any misses listed above)"
 
-if [ -x meta/bin/build-link-map.sh ]; then
-  before=$(cat meta/link-map.md 2>/dev/null || true)
-  ./meta/bin/build-link-map.sh >/dev/null 2>&1
-  after=$(cat meta/link-map.md 2>/dev/null || true)
+if [ -x SYSTEM/bin/build-link-map.sh ]; then
+  before=$(cat SYSTEM/link-map.md 2>/dev/null || true)
+  ./SYSTEM/bin/build-link-map.sh >/dev/null 2>&1
+  after=$(cat SYSTEM/link-map.md 2>/dev/null || true)
   if [ "$before" = "$after" ]; then
-    ok "meta/link-map.md is current"
+    ok "SYSTEM/link-map.md is current"
   else
-    printf '%s\n' "$before" > meta/link-map.md
-    bad "meta/link-map.md is stale — run meta/bin/build-link-map.sh and commit the result"
+    printf '%s\n' "$before" > SYSTEM/link-map.md
+    bad "SYSTEM/link-map.md is stale — run SYSTEM/bin/build-link-map.sh and commit the result"
   fi
 fi
 

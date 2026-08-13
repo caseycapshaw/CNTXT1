@@ -41,7 +41,7 @@ jobs:
             Review this pull request to the CNTXT1 starter kit. CNTXT1 is a
             PUBLIC template for private personal knowledge bases — it ships a
             framework (schema, templates, runbooks, scripts) and must contain
-            ZERO personal or instance-specific content. Read meta/AGENTS.md
+            ZERO personal or instance-specific content. Read SYSTEM/AGENTS.md
             ("Privacy & content separation") first — it is the constitution.
 
             Review the diff for, in priority order:
@@ -49,15 +49,15 @@ jobs:
             1. PRIVACY (blocking): any content that looks personal or
                instance-specific rather than framework-generic — real names,
                family/household details, employers, addresses, emails, IPs,
-               device/host names, populated People/raw/daily/Initiatives
+               device/host names, populated CONTENT/People/CONTENT/raw/daily/Initiatives
                content, an owner: field with a real name, placeholders
                ({{NAME}}, {{PERSONAL_IDENTIFIERS}}, etc.) replaced with real
                values, or personal specifics leaking through examples. The
                deterministic gate catches known patterns; you catch what
                patterns miss. When in doubt, it's personal — flag it.
 
-            2. SCHEMA CONSISTENCY: changes must conform to meta/AGENTS.md —
-               new Jobs indexed in concepts/jobs.md with owner: {{NAME}};
+            2. SCHEMA CONSISTENCY: changes must conform to SYSTEM/AGENTS.md —
+               new Jobs indexed in CONTENT/Concepts/jobs.md with owner: {{NAME}};
                concepts carry frontmatter (type/updated/status/tags); the
                link map regenerated when link targets change; index.md stays
                a pure map (no change history); root gains no new permanent

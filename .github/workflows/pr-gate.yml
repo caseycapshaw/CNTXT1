@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: KB lint (mechanical health)
-        run: ./meta/bin/lint.sh
+        run: ./SYSTEM/bin/lint.sh
 
       - name: Privacy & consistency gate
         env:
