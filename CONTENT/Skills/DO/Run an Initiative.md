@@ -1,7 +1,7 @@
 ---
 type: do
 domain: kb-meta
-trigger: an outcome needs multiple actions over time (rule of thumb: 3+ actions or more than a week)
+trigger: "an outcome needs multiple actions over time (rule of thumb: 3+ actions or more than a week)"
 frequency: ad-hoc
 tools: ["Write", "Edit", "Read"]
 owner: "{{NAME}}"

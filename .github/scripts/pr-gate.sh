@@ -83,7 +83,7 @@ grep -q '{{PERSONAL_IDENTIFIERS}}' "CONTENT/Skills/DO/Sync an Improvement to CNT
 # match display is fine for pattern names.
 pii_scan() { # $1=label  $2=pattern  $3=extra grep -v filter (optional, applied to file list)
   hits=$(grep -rilE "$2" . \
-    --exclude-dir=.git --exclude-dir=.github --exclude=LICENSE 2>/dev/null || true)
+    --exclude-dir=.git --exclude-dir=.github --exclude-dir=.venv --exclude=uv.lock --exclude=LICENSE 2>/dev/null || true)
   [ -n "${3:-}" ] && hits=$(printf '%s\n' "$hits" | grep -vE "$3" || true)
   if [ -n "$hits" ]; then
     bad "$1 pattern matched in:$(printf ' %s' $hits)"
@@ -93,7 +93,7 @@ pii_scan() { # $1=label  $2=pattern  $3=extra grep -v filter (optional, applied 
 }
 # Email needs an allowlist (example/anthropic/noreply domains), so it's two-step:
 email_hits=$(grep -rioE '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' . \
-  --exclude-dir=.git --exclude-dir=.github --exclude=LICENSE 2>/dev/null \
+  --exclude-dir=.git --exclude-dir=.github --exclude-dir=.venv --exclude=uv.lock --exclude=LICENSE 2>/dev/null \
   | grep -viE '@(example\.(com|org)|anthropic\.com|users\.noreply\.github\.com)' \
   | cut -d: -f1 | sort -u || true)
 if [ -n "$email_hits" ]; then
@@ -108,7 +108,7 @@ pii_scan "credential/token"  '(sk-ant-[A-Za-z0-9_-]{8,}|ghp_[A-Za-z0-9]{20,}|git
 # ---- 4. Maintainer-specific identifier sweep (optional, secret-fed) --------
 if [ -n "${PERSONAL_IDENTIFIERS:-}" ]; then
   id_hits=$(grep -rilE "$PERSONAL_IDENTIFIERS" . \
-    --exclude-dir=.git --exclude-dir=.github --exclude=LICENSE 2>/dev/null || true)
+    --exclude-dir=.git --exclude-dir=.github --exclude-dir=.venv --exclude=uv.lock --exclude=LICENSE 2>/dev/null || true)
   if [ -n "$id_hits" ]; then
     bad "maintainer identifier sweep matched (filenames only):$(printf ' %s' $id_hits)"
   else

@@ -1,7 +1,7 @@
 ---
 type: concept
 description: The skills index — the how-do-I-X map and grouped tables over the CONTENT/Skills/ folder.
-updated: {{DATE}}
+updated: 2026-08-13
 status: current
 tags: [concept, index]
 ---

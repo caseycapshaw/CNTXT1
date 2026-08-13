@@ -19,11 +19,13 @@ anchors="README.md index.md Actions.md CLAUDE.md"
 structural="CONTENT SYSTEM daily attachments docs Writing"
 # Template-only artifacts (present in kb-starter; absent in a live vault — harmless either way).
 template_extras="setup.md LICENSE"
+# Python tooling files (schema validation layer, managed by uv).
+tooling="pyproject.toml uv.lock"
 # Standing root files (machinery write-targets, not inbox items) — one per line.
 standing=""
 inbox=()
 for e in *; do
-  case " $anchors $structural $template_extras " in *" $e "*) continue ;; esac
+  case " $anchors $structural $template_extras $tooling " in *" $e "*) continue ;; esac
   while IFS= read -r s; do [ -n "$s" ] && [ "$e" = "$s" ] && continue 2; done <<< "$standing"
   inbox+=("$e")
 done
@@ -108,6 +110,17 @@ for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/arch
   awk '/^---$/{c++; next} c==1 && /^description:[[:space:]]*[^[:space:]]/{found=1} c==2{exit} END{exit !found}' "$f" || desc_fail="$desc_fail $f"
 done
 if [ -z "$desc_fail" ]; then ok "concepts + initiatives carry a description:"; else bad "missing/empty description: frontmatter:"; for m in $desc_fail; do note "$m"; done; fi
+
+# ---- 6. Pydantic frontmatter schema validation ----------------------------
+if command -v uv >/dev/null 2>&1; then
+  if uv run python SYSTEM/bin/validate_frontmatter.py; then
+    ok "frontmatter validates against SYSTEM/schemas (Pydantic)"
+  else
+    bad "frontmatter schema validation failed (see errors above)"
+  fi
+else
+  printf 'WARN  uv not installed — skipping Pydantic frontmatter validation (install: brew install uv)\n'
+fi
 
 rm -f "$valid" "$broken"
 echo
