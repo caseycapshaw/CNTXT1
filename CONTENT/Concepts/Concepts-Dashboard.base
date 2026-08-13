@@ -1,0 +1,14 @@
+filters:
+  and:
+    - file.inFolder(this.file.folder)
+    - file.ext == "md"
+views:
+  - type: table
+    name: Frontmatter
+    order:
+      - file.name
+      - type
+      - status
+      - updated
+      - tags
+      - resource

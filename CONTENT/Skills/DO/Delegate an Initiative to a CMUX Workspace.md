@@ -60,11 +60,11 @@ delegated workspace's `backlog.md`.
 5. **Launch the delegated Claude Code** into the lead surface (pick the model by
    task weight — a cheaper model for well-scoped execution, a more capable one
    for heavy reasoning). If your agent CLI supports a system-prompt flag,
-   append `SYSTEM/agent-roles/initiative-worker.md` (absolute path — the
+   append `CONTENT/Agents/initiative-worker.md` (absolute path — the
    workspace's cwd is the target repo, not your vault) to give it that role
    — "the note is the record, not the pane" — instead of a blank agent:
    ```bash
-   cmux send --surface "$LEAD" "claude --model <model-id> --strict-mcp-config --mcp-config '{\"mcpServers\":{}}' --append-system-prompt <vault>/SYSTEM/agent-roles/initiative-worker.md"
+   cmux send --surface "$LEAD" "claude --model <model-id> --strict-mcp-config --mcp-config '{\"mcpServers\":{}}' --append-system-prompt <vault>/CONTENT/Agents/initiative-worker.md"
    cmux send-key --surface "$LEAD" enter
    sleep 4
    ```
@@ -126,8 +126,8 @@ delegated workspace's `backlog.md`.
 - [ ] The `DONE:` sentinel was confirmed via `read-screen` (not assumed from a notification).
 
 ## Related
-- `SYSTEM/AGENTS.md` § Optional extensions — the model + why (the two-interface split, the round-trip rule, `SYSTEM/agent-roles/`).
+- `SYSTEM/AGENTS.md` § Optional extensions — the model + why (the two-interface split, the round-trip rule, `CONTENT/Agents/`).
 - [[Spawn subagent panes in a CMUX workspace]] — sibling runbook for pane-level fan-out.
 - [[Run an initiative]] — creates/maintains the `CONTENT/Initiatives/` note this delegates against.
-- `SYSTEM/agent-roles/` — the role-prompt files this runbook launches.
+- `CONTENT/Agents/` — the role-prompt files this runbook launches.
 - [[AGENTS]]

@@ -6,5 +6,8 @@ own frontmatter — **do not hand-edit the table below**.
 
 | Note | Description | Model | Status | Tags |
 | :-- | :-- | :-- | :-- | :-- |
-| _(none yet)_ | | | | |
+| [[compile]] | Compile a raw capture into (or update) a CONTENT/Concepts/ article, per this va... | sonnet | active | agent, kb-meta, compiler |
+| [[initiative-worker]] | Drive one workstream from its CONTENT/Initiatives/<slug>.md note, writing every... | sonnet | active | agent, kb-meta, initiatives |
+| [[lint]] | Run this KB's health check (SYSTEM/bin/lint.sh + judgment checks) and report fi... | sonnet | active | agent, kb-meta, health-check |
+| [[research]] | Investigate one bounded question/topic for a lead agent, returning cited findin... | sonnet | active | agent, kb-meta, research |
 <!-- dir-index:auto:end -->

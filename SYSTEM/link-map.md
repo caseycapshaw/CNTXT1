@@ -21,15 +21,20 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Close an initiative]]` | `CONTENT/Skills/DO/Run an Initiative.md` |
 | `[[contacts]]` | `CONTENT/Concepts/contacts.md` |
 | `[[Contribute to CNTXT1]]` | `CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md` |
+| `[[Create a Bases dashboard]]` | `CONTENT/Skills/FORMAT/Create Directory Dashboard.md` |
+| `[[Create a directory dashboard]]` | `CONTENT/Skills/FORMAT/Create Directory Dashboard.md` |
 | `[[Create an Excalidraw diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
 | `[[Create an Excalidraw Diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
+| `[[Create Directory Dashboard]]` | `CONTENT/Skills/FORMAT/Create Directory Dashboard.md` |
 | `[[Create Excalidraw]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
 | `[[create-an-excalidraw-diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
+| `[[create-directory-dashboard]]` | `CONTENT/Skills/FORMAT/Create Directory Dashboard.md` |
 | `[[Delegate an initiative to a CMUX workspace]]` | `CONTENT/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
 | `[[Delegate an Initiative to a CMUX Workspace]]` | `CONTENT/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
 | `[[Delegate an initiative]]` | `CONTENT/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
 | `[[Delegate to a workspace]]` | `CONTENT/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
 | `[[delegate-an-initiative-to-a-cmux-workspace]]` | `CONTENT/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
+| `[[Directory dashboard]]` | `CONTENT/Skills/FORMAT/Create Directory Dashboard.md` |
 | `[[Example — KB data flow.excalidraw]]` | `CONTENT/Excalidraw/Example — KB data flow.excalidraw.md` |
 | `[[Excalidraw diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
 | `[[Fan out subagents]]` | `CONTENT/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |

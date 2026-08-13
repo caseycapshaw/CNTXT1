@@ -5,4 +5,5 @@ skill's own frontmatter — **do not hand-edit the table below**.
 
 | Skill | Trigger | Notes |
 | :-- | :-- | :-- |
+| [[Create Directory Dashboard]] | a CONTENT/ folder needs a live, filterable frontmatter table viewable in Obsidian | Produces an Obsidian Bases `.base` dashboard file that renders a live, filterable frontmatter table for one CONTENT/ folder. |
 | [[Create an Excalidraw Diagram]] | you need a diagram / flowchart / visual map in the vault | Produces an editable Excalidraw diagram in CONTENT/Excalidraw/, embedded in its home note. |

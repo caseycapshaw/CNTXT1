@@ -156,25 +156,26 @@ unusable — which is exactly why explicit, lean pane workers are the reliable
 path. Entirely optional — skip it if you're not running a multi-agent terminal
 tool.
 
-Optionally, give workers a **named identity** instead of a blank agent: drop
-one system-prompt fragment per role in `SYSTEM/agent-roles/` (a starter set —
-`research`, `compile`, `lint`, `initiative-worker` — maps onto this KB's own
-raw→compile→index→lint verbs and its initiative-delegation model, not a
-generic app-build split) and pass one via your agent CLI's system-prompt flag
-when launching a worker (e.g.
-`--append-system-prompt <vault>/SYSTEM/agent-roles/<role>.md`, with an
-**absolute path** — a worker's cwd may not be your vault). These are plain
-files, not anything your agent CLI auto-discovers as
-a built-in subagent type — that keeps them from leaking into ordinary,
-non-orchestration sessions, and sidesteps betting on whether a restricted
-tool list would dodge the MCP-bloat problem above for a native subagent path
-too. If your agent CLI supports custom slash commands or macros, wrapping
-these launch steps behind one (e.g. `/spawn <role> <task>` that reads the
-matching `SYSTEM/agent-roles/<role>.md` and walks the runbook) turns a several-
-step launch into a one-line invocation — worth doing once the pattern is used
-often enough to be worth automating.
+Optionally, give workers a **named identity** instead of a blank agent:
+`CONTENT/Agents/` holds one **real Claude Code subagent definition** per role
+(a starter set — `research`, `compile`, `lint`, `initiative-worker` — maps
+onto this KB's own raw→compile→index→lint verbs and its
+initiative-delegation model, not a generic app-build split). Each file is the
+same format as a file under `~/.claude/agents/` — YAML frontmatter
+(`name`/`description`/`model`/`tools`/`color`/`status`/`tags`, validated
+against `AgentFrontmatter` in `SYSTEM/schemas/models.py`) followed by a
+plain-English system prompt — so the identical file works two ways:
+**symlink it into `~/.claude/agents/`** to make it directly invocable as a
+native subagent from any Claude Code session, and/or pass it via your agent
+CLI's system-prompt flag when launching a CMUX pane worker (e.g.
+`--append-system-prompt <vault>/CONTENT/Agents/<role>.md`, with an
+**absolute path** — a worker's cwd may not be your vault). The frontmatter's
+`tools:` list keeps a subagent lean (only the tools the role needs), which
+sidesteps the MCP-bloat problem above for the native subagent path too.
+`SYSTEM/bin/build_directory_indexes.py` regenerates the folder's `index.md`
+table straight from every agent's frontmatter.
 
-**Domain-advisor roles** extend the same `SYSTEM/agent-roles/` idea beyond
+**Domain-advisor roles** extend the same `CONTENT/Agents/` idea beyond
 orchestration: a *standing analyst* over one domain of the KB (finances,
 health, a hobby — whatever the vault covers deeply). Each advisor is one role
 file built from `CONTENT/Agents/domain-advisor TEMPLATE.md` (scope, data
