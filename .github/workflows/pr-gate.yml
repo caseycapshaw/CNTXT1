@@ -18,6 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install uv (Python runner for schema validation + index generators)
+        uses: astral-sh/setup-uv@v5
+
       - name: KB lint (mechanical health)
         run: ./SYSTEM/bin/lint.sh
 

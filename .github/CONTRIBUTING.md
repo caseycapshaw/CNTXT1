@@ -32,8 +32,15 @@ Generic improvements to the method or its machinery:
    ./SYSTEM/bin/lint.sh
    ./.github/scripts/pr-gate.sh
    ```
-3. If you added or renamed a concept, person-template, or skill: regenerate the
-   link map (`./SYSTEM/bin/build-link-map.sh`) and commit it.
+3. If you added or renamed a concept, person-template, agent, or skill:
+   regenerate the link map and the generated indexes, and commit them:
+   ```
+   ./SYSTEM/bin/build-link-map.sh
+   uv run python SYSTEM/bin/build_directory_indexes.py
+   uv run python SYSTEM/bin/build_skills_indexes.py
+   ```
+4. New/changed frontmatter must validate against the Pydantic schemas in
+   `SYSTEM/schemas/` (`uv run python SYSTEM/bin/validate_frontmatter.py`).
 
 ## What CI enforces
 
@@ -41,7 +48,10 @@ Every PR runs two layers:
 
 - **`PR gate`** (deterministic, blocking): instance-content folders hold only
   their shipped templates/examples, placeholders stay intact, no PII or
-  credential patterns, skills indexed, link map current, KB lint green.
+  credential patterns, skills indexed in `CONTENT/Concepts/skills.md` **and**
+  in their `<TYPE> Index.md`, link map + generated directory/skills indexes
+  byte-identical to a fresh regen, frontmatter valid against the
+  `SYSTEM/schemas/` Pydantic models, KB lint green.
 - **`Claude review`** (judgment layer): an automated reviewer checks that the
   change is framework-generic rather than personal, conforms to the schema in
   `SYSTEM/AGENTS.md`, and keeps the docs coherent. It runs automatically on
