@@ -35,7 +35,7 @@ if [ ${#inbox[@]} -eq 0 ]; then ok "root inbox clean"; else bad "root inbox has 
 files=()
 for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/archive/*.md CONTENT/Skills/*/*.md CONTENT/People/*.md CONTENT/Agents/*.md index.md; do
   [ -e "$f" ] || continue
-  case "$f" in *TEMPLATE*|*" Index.md") continue ;; esac
+  case "$f" in *TEMPLATE*|*" Index.md"|*/index.md) continue ;; esac
   files+=("$f")
 done
 
@@ -43,12 +43,12 @@ done
 valid="$(mktemp)"
 for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/archive/*.md CONTENT/Excalidraw/*.md; do
   [ -e "$f" ] || continue
-  case "$f" in *TEMPLATE*) continue ;; esac
+  case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
   basename "$f" .md >> "$valid"
 done
 for f in CONTENT/People/*.md; do
   [ -e "$f" ] || continue
-  case "$f" in *TEMPLATE*) continue ;; esac
+  case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
   basename "$f" .md >> "$valid"
   al="$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//')"
   [ -z "$al" ] && continue
@@ -56,7 +56,7 @@ for f in CONTENT/People/*.md; do
 done
 for f in CONTENT/Skills/*/*.md; do
   [ -e "$f" ] || continue
-  case "$f" in *TEMPLATE*|*" Index.md") continue ;; esac
+  case "$f" in *TEMPLATE*|*" Index.md"|*/index.md) continue ;; esac
   basename "$f" .md >> "$valid"
   al="$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//')"
   [ -z "$al" ] && continue
@@ -87,7 +87,7 @@ if [ ! -s "$broken" ]; then ok "all wikilinks resolve"; else bad "broken wikilin
 missing=""
 for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/archive/*.md; do
   [ -e "$f" ] || continue   # skip the literal glob when a dir is empty (else slug becomes '*')
-  case "$f" in *TEMPLATE*) continue ;; esac
+  case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
   slug="$(basename "$f" .md)"
   grep -qF "[[$slug]]" index.md || missing="$missing $slug"
 done
@@ -97,7 +97,7 @@ if [ -z "$missing" ]; then ok "index lists every concept + initiative"; else bad
 fm_fail=""
 for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/archive/*.md CONTENT/People/*.md CONTENT/Skills/*/*.md; do
   [ -e "$f" ] || continue   # skip literal glob for empty dirs
-  case "$f" in *TEMPLATE*|*" Index.md") continue ;; esac
+  case "$f" in *TEMPLATE*|*" Index.md"|*/index.md) continue ;; esac
   [ "$(head -1 "$f")" = "---" ] || fm_fail="$fm_fail $f"
 done
 if [ -z "$fm_fail" ]; then ok "Concepts/Initiatives/People/Skills all carry frontmatter"; else bad "missing frontmatter:"; for m in $fm_fail; do note "$m"; done; fi
@@ -106,7 +106,7 @@ if [ -z "$fm_fail" ]; then ok "Concepts/Initiatives/People/Skills all carry fron
 desc_fail=""
 for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/archive/*.md; do
   [ -e "$f" ] || continue
-  case "$f" in *TEMPLATE*) continue ;; esac
+  case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
   awk '/^---$/{c++; next} c==1 && /^description:[[:space:]]*[^[:space:]]/{found=1} c==2{exit} END{exit !found}' "$f" || desc_fail="$desc_fail $f"
 done
 if [ -z "$desc_fail" ]; then ok "concepts + initiatives carry a description:"; else bad "missing/empty description: frontmatter:"; for m in $desc_fail; do note "$m"; done; fi

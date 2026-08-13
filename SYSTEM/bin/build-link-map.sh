@@ -15,7 +15,7 @@ collect_simple() {
   local dir="$1"
   for f in "$dir"/*.md; do
     [ -e "$f" ] || continue
-    case "$f" in *TEMPLATE*) continue ;; esac
+    case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
     emit "$(basename "$f" .md)" "$f"
   done
 }
@@ -26,7 +26,7 @@ collect_with_aliases() {
   for f in "$dir"/*.md; do
     [ -e "$f" ] || continue
     local name; name="$(basename "$f" .md)"
-    case "$name" in *TEMPLATE*) continue ;; esac
+    case "$name" in *TEMPLATE*|index) continue ;; esac
     emit "$name" "$f"
     local aliases; aliases="$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//' || true)"
     [ -z "$aliases" ] && continue
@@ -44,7 +44,7 @@ collect_with_aliases() {
 collect_skills() {
   for f in CONTENT/Skills/*/*.md; do
     [ -e "$f" ] || continue
-    case "$f" in *TEMPLATE*|*" Index.md") continue ;; esac
+    case "$f" in *TEMPLATE*|*" Index.md"|*/index.md) continue ;; esac
     local name; name="$(basename "$f" .md)"
     emit "$name" "$f"
     local aliases; aliases="$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//' || true)"

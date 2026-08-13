@@ -25,6 +25,8 @@ check_only() { # $1=dir  $2=allowed basename (empty = dir must be empty/absent)
     for f in "$dir"/*; do
       [ -e "$f" ] || continue
       [ "$(basename "$f")" = "$allowed" ] && continue
+      # generated per-directory index (SYSTEM/bin/build_directory_indexes.py)
+      [ "$(basename "$f")" = "index.md" ] && continue
       extras="$extras $(basename "$f")"
     done
   fi
@@ -46,6 +48,7 @@ for f in CONTENT/Initiatives/*; do
   [ -e "$f" ] || continue
   b=$(basename "$f")
   [ "$b" = "Initiative TEMPLATE.md" ] && continue
+  [ "$b" = "index.md" ] && continue   # generated per-directory index
   if [ "$b" = "archive" ]; then
     for g in CONTENT/Initiatives/archive/* CONTENT/Initiatives/archive/.[!.]*; do
       [ -e "$g" ] || continue

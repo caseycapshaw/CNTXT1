@@ -41,6 +41,10 @@ def _skip(path: Path, folder: Path) -> bool:
     # Generated per-TYPE index: "<TYPE> Index.md" exactly (e.g. "DO Index.md").
     if path.name == f"{folder.name} Index.md":
         return True
+    # Generated per-directory index (SYSTEM/bin/build_directory_indexes.py) —
+    # a pure map with no frontmatter.
+    if path.name == "index.md":
+        return True
     return False
 
 
