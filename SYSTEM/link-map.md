@@ -38,8 +38,12 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Example — KB data flow.excalidraw]]` | `CONTENT/Excalidraw/Example — KB data flow.excalidraw.md` |
 | `[[Excalidraw diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
 | `[[Fan out subagents]]` | `CONTENT/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
+| `[[generated-sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
 | `[[karpathy-method]]` | `CONTENT/Concepts/karpathy-method.md` |
 | `[[KB efficiency pass]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
+| `[[Maintain Generated Sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
+| `[[Maintain Generated Sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
+| `[[maintain-generated-sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
 | `[[Make an Excalidraw diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
 | `[[Open an initiative]]` | `CONTENT/Skills/DO/Run an Initiative.md` |
 | `[[open-knowledge-format]]` | `CONTENT/Concepts/open-knowledge-format.md` |
