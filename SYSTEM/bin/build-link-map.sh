@@ -76,7 +76,7 @@ collect_skills
 
 # sort the table rows (after the 8 header lines), keep header intact
 head -8 "$tmp" > "$out"
-tail -n +9 "$tmp" | sort -f >> "$out"
+tail -n +9 "$tmp" | LC_ALL=C sort -f >> "$out"
 rm -f "$tmp"
 
 echo "wrote $out ($(($(wc -l < "$out") - 6)) link targets)"
