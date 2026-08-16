@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 # lint.sh — deterministic KB health check (the mechanical half of the lint).
-# Checks: (1) root inbox clean, (2) all wikilinks resolve, (3) index complete,
-# (4) CONTENT Concepts/Initiatives/People/Skills notes carry frontmatter, (5) concepts +
-# initiatives carry a non-empty description:. Exit 0 = pass, 1 = problems.
+# Checks: (1) root inbox clean, (2) all wikilinks resolve (incl. aliases),
+# (3) index complete, (4) CONTENT Concepts/Initiatives/People/Skills notes
+# carry frontmatter, (5) concepts + initiatives carry a non-empty
+# description:, (6) no stray non-.md files in note folders, (7) index Quick
+# map fits the SessionStart injection budget, (8) Pydantic frontmatter
+# schema validation. Exit 0 = pass, 1 = problems.
 # The LLM lint keeps only the judgment checks (stale facts, resolved questions).
 #
 # Link scan ignores: TEMPLATE files, and any [[link]] inside an inline `code`
