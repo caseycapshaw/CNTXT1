@@ -84,7 +84,10 @@ collect_skills
 
 # sort the table rows (after the 8 header lines), keep header intact
 head -8 "$tmp" > "$out"
-tail -n +9 "$tmp" | LC_ALL=C sort -fu >> "$out"
+# exact-match dedupe first (sort -u), THEN case-insensitive presentation sort:
+# a single `sort -fu` would fold case for the uniqueness test too, silently
+# collapsing distinct targets that differ only by case.
+tail -n +9 "$tmp" | LC_ALL=C sort -u | LC_ALL=C sort -f >> "$out"
 rm -f "$tmp"
 
 echo "wrote $out ($(($(wc -l < "$out") - 6)) link targets)"

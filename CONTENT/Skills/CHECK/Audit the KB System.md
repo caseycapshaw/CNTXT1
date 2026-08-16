@@ -3,7 +3,7 @@ type: check
 domain: kb-meta
 trigger: "you ask for a high-level / full-system / architectural audit of the KB and its connected systems"
 frequency: quarterly
-tools: "parallel read-only subagents, Bash, SYSTEM/bin/lint.sh"
+tools: ["parallel read-only subagents", "Bash", "SYSTEM/bin/lint.sh"]
 owner: "{{NAME}}"
 status: active
 tags: [check, kb-meta]
