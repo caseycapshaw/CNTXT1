@@ -9,5 +9,5 @@ own frontmatter — **do not hand-edit the table below**.
 | [[contacts]] | The People index — the who-for-what map and grouped tables over the CONTENT/Peo... | 2026-08-13 | current | concept, index |
 | [[karpathy-method]] | The LLM-maintained wiki architecture this KB is built on — raw→compile→index→li... | 2026-07-02 | current | concept, method |
 | [[open-knowledge-format]] | Google's OKF v0.1 — the open interchange standard for Karpathy-style LLM wikis,... | 2026-07-13 | current | concept, method |
-| [[skills]] | The skills index — the how-do-I-X map and grouped tables over the CONTENT/Skill... | 2026-08-13 | current | concept, index |
+| [[skills]] | The skills index — the how-do-I-X map and grouped tables over the CONTENT/Skill... | 2026-08-16 | current | concept, index |
 <!-- dir-index:auto:end -->
