@@ -45,6 +45,9 @@ for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/arch
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
   basename "$f" .md >> "$valid"
+  al="$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//')"
+  [ -z "$al" ] && continue
+  IFS=','; for a in $al; do a="$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/^\"//; s/\"$//')"; [ -n "$a" ] && echo "$a" >> "$valid"; done; unset IFS
 done
 for f in CONTENT/People/*.md; do
   [ -e "$f" ] || continue
@@ -111,7 +114,32 @@ for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/arch
 done
 if [ -z "$desc_fail" ]; then ok "concepts + initiatives carry a description:"; else bad "missing/empty description: frontmatter:"; for m in $desc_fail; do note "$m"; done; fi
 
-# ---- 6. Pydantic frontmatter schema validation ----------------------------
+# ---- 6. No stray non-markdown files in note folders -----------------------
+# Leftover .tmp/.bak/editor droppings in content folders are invisible to the
+# wikilink checks (which glob *.md) — a renamed note can leave a committed
+# .tmp behind while its links dangle. Fail loud on anything that isn't .md.
+stray=""
+for f in CONTENT/Concepts/* CONTENT/Initiatives/* CONTENT/Initiatives/archive/* CONTENT/People/* CONTENT/Skills/*/* CONTENT/Agents/*; do
+  [ -f "$f" ] || continue
+  case "$f" in *.md|*.base) continue ;; esac   # .base = Obsidian Bases dashboards
+  stray="$stray $f"
+done
+if [ -z "$stray" ]; then ok "no stray non-.md files in note folders"; else bad "stray non-.md files (leftover temp/rename artifacts?):"; for m in $stray; do note "$m"; done; fi
+
+# ---- 7. Quick map fits the SessionStart injection budget -------------------
+# The optional SessionStart hook inlines `head -c 8000` of index.md; the Quick
+# map skeleton (everything before the second "## " heading) must fit or the
+# injected map is silently truncated mid-line and everything after the cut —
+# typically the Actions/log pointers — never reaches a session.
+skel_bytes="$(awk '/^## /{c++; if(c==2) exit} {print}' index.md | wc -c | tr -d ' ')"
+budget=8000
+if [ "$skel_bytes" -le "$budget" ]; then
+  ok "index Quick map skeleton fits injection budget ($skel_bytes/$budget bytes)"
+else
+  bad "index Quick map skeleton overflows injection budget ($skel_bytes/$budget bytes) — SessionStart injection truncates; tighten the skeleton"
+fi
+
+# ---- 8. Pydantic frontmatter schema validation ----------------------------
 if command -v uv >/dev/null 2>&1; then
   if uv run python SYSTEM/bin/validate_frontmatter.py; then
     ok "frontmatter validates against SYSTEM/schemas (Pydantic)"
