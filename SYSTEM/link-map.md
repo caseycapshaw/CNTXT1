@@ -11,7 +11,10 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[add-a-person-to-the-kb]]` | `CONTENT/Skills/DO/Add a Person to the KB.md` |
 | `[[Audit State Freshness]]` | `CONTENT/Skills/CHECK/Audit State Freshness.md` |
 | `[[Audit state freshness]]` | `CONTENT/Skills/CHECK/Audit State Freshness.md` |
+| `[[Audit the KB System]]` | `CONTENT/Skills/CHECK/Audit the KB System.md` |
+| `[[Audit the KB system]]` | `CONTENT/Skills/CHECK/Audit the KB System.md` |
 | `[[audit-state-freshness]]` | `CONTENT/Skills/CHECK/Audit State Freshness.md` |
+| `[[audit-the-kb-system]]` | `CONTENT/Skills/CHECK/Audit the KB System.md` |
 | `[[Capture a Meeting or Conversation into the KB]]` | `CONTENT/Skills/DO/Capture a Meeting or Conversation into the KB.md` |
 | `[[Capture a meeting or conversation into the KB]]` | `CONTENT/Skills/DO/Capture a Meeting or Conversation into the KB.md` |
 | `[[Capture a YouTube Video into the KB]]` | `CONTENT/Skills/DO/Capture a YouTube Video into the KB.md` |
@@ -41,7 +44,6 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[generated-sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
 | `[[karpathy-method]]` | `CONTENT/Concepts/karpathy-method.md` |
 | `[[KB efficiency pass]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
-| `[[Maintain Generated Sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
 | `[[Maintain Generated Sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
 | `[[maintain-generated-sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
 | `[[Make an Excalidraw diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
@@ -77,5 +79,6 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Sync an Improvement to CNTXT1]]` | `CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md` |
 | `[[Sync an improvement to CNTXT1]]` | `CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md` |
 | `[[sync-an-improvement-to-cntxt1]]` | `CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md` |
+| `[[system audit]]` | `CONTENT/Skills/CHECK/Audit the KB System.md` |
 | `[[Tune the knowledge base]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
 | `[[yt capture]]` | `CONTENT/Skills/DO/Capture a YouTube Video into the KB.md` |

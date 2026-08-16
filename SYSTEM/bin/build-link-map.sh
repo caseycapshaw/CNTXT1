@@ -10,13 +10,21 @@ tmp="$(mktemp)"
 
 emit() { printf '| `[[%s]]` | `%s` |\n' "$1" "$2" >> "$tmp"; }
 
-# Concepts / Initiatives: slug = filename (TEMPLATE files skipped)
+# Concepts / Initiatives: slug = filename (TEMPLATE files skipped), plus any
+# aliases: [a, b] in frontmatter (e.g. a renamed note keeps its old slug
+# resolvable — renames without aliases silently strand every inbound link).
 collect_simple() {
   local dir="$1"
   for f in "$dir"/*.md; do
     [ -e "$f" ] || continue
     case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
     emit "$(basename "$f" .md)" "$f"
+    local aliases; aliases="$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//' || true)"
+    [ -z "$aliases" ] && continue
+    local IFS=','; for a in $aliases; do
+      a="$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/^\"//; s/\"$//')"
+      [ -n "$a" ] && emit "$a" "$f"
+    done
   done
 }
 
@@ -76,7 +84,10 @@ collect_skills
 
 # sort the table rows (after the 8 header lines), keep header intact
 head -8 "$tmp" > "$out"
-tail -n +9 "$tmp" | LC_ALL=C sort -f >> "$out"
+# exact-match dedupe first (sort -u), THEN case-insensitive presentation sort:
+# a single `sort -fu` would fold case for the uniqueness test too, silently
+# collapsing distinct targets that differ only by case.
+tail -n +9 "$tmp" | LC_ALL=C sort -u | LC_ALL=C sort -f >> "$out"
 rm -f "$tmp"
 
 echo "wrote $out ($(($(wc -l < "$out") - 6)) link targets)"

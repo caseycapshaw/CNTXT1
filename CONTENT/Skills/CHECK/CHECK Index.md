@@ -6,5 +6,6 @@ skill's own frontmatter — **do not hand-edit the table below**.
 | Skill | Trigger | Frequency | Notes |
 | :-- | :-- | :-- | :-- |
 | [[Audit State Freshness]] | monthly with the optimize pass, when the index Quick map feels behind reality, or on request | monthly | Audits the always-loaded surfaces for stale state-shaped claims and fixes drift in place. |
+| [[Audit the KB System]] | you ask for a high-level / full-system / architectural audit of the KB and its connected systems | quarterly | Full-system architectural audit — parallel auditors over structure/UX, interlinking, consistency, and connected systems, producing a ranked report + phased fix... |
 | [[Optimize the Knowledge Base]] | monthly, or when the KB feels slow/bloated to navigate | monthly | Keeps the KB fast for the LLM (lean injected map, resolvable links) and accurate (fresh frontmatter, green lint) via a measured efficiency pass. |
 | [[Run the KB Health Check]] | on request, or automatically at end of day if automated | weekly manual / daily automated | Produces a green/issues verdict on KB mechanical health (broken links, stale actions, inbox pile-up). |

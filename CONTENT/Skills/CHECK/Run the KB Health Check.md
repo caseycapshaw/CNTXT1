@@ -22,22 +22,43 @@ summary: Produces a green/issues verdict on KB mechanical health (broken links, 
 - Any time you suspect the KB has drifted (broken links, stale actions, inbox pile-up).
 
 ## Steps
-1. **Inbox check.** List the vault root. Flag anything that isn't: `README.md`, `index.md`, `Actions.md`, `CLAUDE.md`, or a registered structural folder (`CONTENT/Concepts/`, `CONTENT/Initiatives/`, `SYSTEM/`, `CONTENT/raw/`, `daily/`, `CONTENT/People/`, `CONTENT/Skills/`, `attachments/`, `CONTENT/Excalidraw/`). Each un-filed item is a lint failure.
-2. **Wikilink check.** Grep all `[[wikilinks]]` across the vault. For each target, confirm a `.md` file with that basename exists. Report any that don't — filtering known false positives (e.g. convention-example links in `AGENTS.md` and `CLAUDE.md`).
-3. **Index completeness.** Scan `CONTENT/Concepts/` and `CONTENT/Initiatives/`. Every file there should appear in `index.md`. Report any that don't.
-4. **Raw provenance.** Every fact in a concept article should trace to a `CONTENT/raw/` capture. Spot-check if asked; flag any concept with no raw citation.
-5. **Actions audit.** Grep `#action` checkboxes across all non-daily notes. Every open `- [ ]` should be real and still open; every completed `- [x]` should be checked, not deleted.
-6. **People links.** Grep `[[Person Name]]` wikilinks across all notes. Each should resolve to a `CONTENT/People/<Person Name>.md` file.
-7. **Skills index.** Verify every skill under `CONTENT/Skills/<TYPE>/*.md` is listed in `CONTENT/Concepts/skills.md`.
-8. **Report.** State: `green — <one clause>` or `issues — <sub-bullet per real problem>`. Log a one-line entry in `SYSTEM/log.md`.
+1. **Mechanical half — run `SYSTEM/bin/lint.sh`.** Do NOT hand-re-derive its
+   checks; the script is the single source of truth for what "mechanically
+   sound" means (inbox clean incl. registered exceptions, wikilinks + aliases
+   resolve, index complete, frontmatter present + Pydantic-valid,
+   descriptions present, no stray non-`.md` files, Quick map within the
+   SessionStart injection budget). Exit 0 = mechanical green; on failure the
+   script names each offender.
+2. **Judgment half — the checks a script can't run:**
+   - **Stale facts:** any always-loaded claim (index one-liners, `CLAUDE.md`)
+     contradicted by a fresher note? (Deep version: [[Audit State Freshness]].)
+   - **Resolved open questions:** any note's Open questions actually answered
+     elsewhere?
+   - **Actions real:** spot-check open `#action`s — genuinely still open?
+     Completed ones checked, not deleted? (`SYSTEM/bin/aging-actions.sh`
+     lists the old ones.)
+   - **Initiatives current:** `SYSTEM/bin/stale-initiatives.sh` — any active
+     note weeks-stale, or done-in-substance but not archived?
+   - **Raw provenance (spot-check):** a concept with zero `[[CONTENT/raw/…]]`
+     cites is a soft warning, not a hard failure.
+   - **Generated sections alive:** stamps within cadence AND the generating
+     jobs' logs clean — a fresh stamp can hide a failing generator.
+3. **Report.** State: `green — <one clause>` or `issues — <sub-bullet per real
+   problem>`. Log a one-line entry in `SYSTEM/log.md`.
 
 ## Gotchas / rules
-- Convention examples in `AGENTS.md` / `CLAUDE.md` (`[[note-name]]`, `[[wikilink]]`) are documented false positives — don't flag them.
-- `daily/` notes are ephemeral working notes; don't lint their wikilinks against the main vault.
-- A missing `CONTENT/raw/` citation is a soft warning, not a hard failure — flag it but don't block on it.
+- **Never hand-copy lint's rule lists into this note** — copied rules drift
+  stale the moment the script evolves. Reference the script; let it carry the
+  details.
+- `daily/` notes are ephemeral working notes; judgment checks skip them.
+- A missing `CONTENT/raw/` citation is a soft warning, not a hard failure.
+- If a *judgment* finding recurs, consider promoting it to a mechanical
+  `lint.sh` check — that's the [[Audit the KB System]] feedback rule.
 
 ## Done when
-- [ ] All eight checks run.
+- [ ] `lint.sh` run and its verdict recorded.
+- [ ] Judgment layer done: stale facts, open questions, actions, initiatives,
+      generated-section logs.
 - [ ] Verdict reported: `green` or `issues — <list>`.
 - [ ] One-line entry appended to `SYSTEM/log.md` with the verdict.
 
