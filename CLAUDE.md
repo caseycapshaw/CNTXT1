@@ -32,8 +32,9 @@ schema (how the KB works) is `SYSTEM/AGENTS.md`. The map of all content is
 | `index.md` | The map — keep current after every change |
 | `SYSTEM/AGENTS.md` | KB schema and operating rules |
 | `SYSTEM/log.md` | Append-only changelog — one line per meaningful update |
+| `SYSTEM/decisions.md` | Rulings ledger (index-not-record). Schema: `SYSTEM/AGENTS.md`. |
 | `SYSTEM/link-map.md` | Generated `[[wikilink]]` → file-path index (one-lookup link resolution). Rebuild: `SYSTEM/bin/build-link-map.sh` |
-| `SYSTEM/bin/` | KB tooling — `lint.sh` (mechanical health check), `build-link-map.sh` (regenerate the link map) |
+| `SYSTEM/bin/` | KB tooling — `lint.sh` (mechanical health check), `lint-delta.sh` (scheduled delta), `build-link-map.sh` (regenerate the link map) |
 | `SYSTEM/Journal.md` | Wins & milestones brag doc — use for perf reviews |
 | `Actions.md` | Live to-do dashboard (pinned root anchor) |
 | `CONTENT/People/Full Name.md` | One note per person — single source of truth for per-person detail; built from `CONTENT/People/People TEMPLATE.md`, indexed by `CONTENT/Concepts/contacts.md`. **Structural folder — not the inbox.** |

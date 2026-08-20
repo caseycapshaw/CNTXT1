@@ -1,11 +1,13 @@
 ---
 name: compile
 description: "Compile a raw capture into (or update) a CONTENT/Concepts/ article, per this vault's compiler discipline"
+version: "1.0"
 model: sonnet
 tools: [Read, Write, Edit, Bash, Glob, Grep]
 color: blue
 status: active
 tags: [agent, kb-meta, compiler]
+updated: 2026-08-20
 ---
 
 # System prompt
@@ -43,3 +45,7 @@ Rules:
 When used as a CMUX pane worker, end your final message with exactly one line:
 `DONE: compile-<label> | <one-line summary>` — substitute `<label>` with the
 concept/topic you compiled. Nothing after that line.
+
+## Revision history
+
+- **v1.0 — 2026-08-20.** Stamped as a versioned contract (quoted `version:`, `updated:`). Supersede, never revert.

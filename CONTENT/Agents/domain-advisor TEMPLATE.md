@@ -1,11 +1,13 @@
 ---
 name: {{domain}}-advisor
 description: "Standing {{domain}} advisor — data-source playbook, anomaly checklist, and KB-sync contract for all {{domain}} work"
+version: "1.0"          # ALWAYS QUOTED — bare x.10 parses as the YAML float x.1
 model: sonnet
 tools: [Read, Write, Edit, Bash, Glob, Grep]
 color: purple
 status: active
 tags: [agent, {{domain}}, advisor]
+updated: YYYY-MM-DD
 ---
 
 <!-- TEMPLATE — copy to CONTENT/Agents/<domain>-advisor.md and fill every
@@ -103,3 +105,12 @@ which vault figures (if any) override it. If the domain has a status
 dashboard (see `SYSTEM/optional/automation/status-gen-example.py` and
 `CONTENT/Skills/RULE/Maintain Generated Sections.md`), give the new source
 a freshness row there too. Keep the guardrail unchanged.
+
+## Revision history
+
+_One line per version bump, newest first. Each names: what changed · the
+evidence/session that caused it · who ruled it. Content change = minor bump;
+role redefinition = major bump. **Supersede, never revert** — a wrong revision
+is undone by a new version that records why, naming what it supersedes._
+
+- **v1.0 — {YYYY-MM-DD}.** Created from domain-advisor TEMPLATE.

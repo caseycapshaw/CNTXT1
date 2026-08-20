@@ -34,5 +34,12 @@ initiative with a final entry, set `status: done` above, and distill any
 durable knowledge into the relevant concept(s) — the note itself stays as the
 record (never delete)._
 
+## Trail
+_Optional — for long-running initiatives. Append-only, one line per working
+session (`- YYYY-MM-DD — what moved`), written at the session close
+([[Close a Session]]). The trail is the initiative-scoped log; "Now & next"
+stays the rewritten state — never mix the two. Delete this section for
+short-lived initiatives._
+
 ## Related
 _[[concepts]], [[People]], [[skills]], and `CONTENT/raw/` captures this draws on._

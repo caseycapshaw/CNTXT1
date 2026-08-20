@@ -22,12 +22,13 @@ After any meeting, reading session, or conversation where you learned something 
 ## Steps
 1. **Triage.** If the raw content is already at the vault root (inbox), you're ready. If it's in notes or memory, draft it now.
 2. **Raw capture.** Move or write the content to `CONTENT/raw/YYYY-MM-DD-topic.md` (today's date; topic = one or two descriptive words). Add a one-line provenance header at the top: `_Source: <meeting name / conversation / document>, YYYY-MM-DD._`
-3. **Compile.** Extract the durable facts into the right concept article(s) in `CONTENT/Concepts/`. Ask: which concept does this fact belong to? If no concept exists yet, create one.
+3. **Quote-anchor gate (before compiling — code, not vibes).** Every commitment, decision, or claim you extract from a transcript or meeting notes must carry a **verbatim quote** that literally appears in the source. Verify each anchor mechanically — `grep -F` the quote against the raw capture (normalize only whitespace and curly/straight quotes, identically on both sides). **No anchor, no proposal** — an extraction that can't be anchored is dropped, and the drop is noted in the raw capture. Tune asymmetrically: recall-tuned for *{{NAME}}'s own* commitments (missing one costs them), precision-tuned for what *others* owe them (a fabricated waiting-for pollutes the KB; self-plan narration by the other party never qualifies). Skip this step when the source is already a compiled document, not a transcript.
+4. **Compile.** Extract the durable facts into the right concept article(s) in `CONTENT/Concepts/`. Ask: which concept does this fact belong to? If no concept exists yet, create one.
    - Wikilink liberally: `[[person]]`, `[[concept]]`, `[[workstream]]`.
    - If a real to-do surfaced, write it inline as `- [ ] … #action`.
    - If a new person appeared, run [[Add a person to the KB]].
-4. **Index.** In `index.md`, add the raw note to the Raw section and the new/updated concept(s) to the Concepts section (one-line summary each). Update the "last updated" line.
-5. **Log.** Append one line to `SYSTEM/log.md`: `- YYYY-MM-DD — <what was captured> → compiled into [[concept]]`.
+5. **Index.** In `index.md`, add the raw note to the Raw section and the new/updated concept(s) to the Concepts section (one-line summary each). Update the "last updated" line.
+6. **Log.** Append one line to `SYSTEM/log.md`: `- YYYY-MM-DD — <what was captured> → compiled into [[concept]]`.
 
 ## Gotchas / rules
 - `CONTENT/raw/` is append-only. Never delete or rewrite a raw note — add a correction note dated later if needed.

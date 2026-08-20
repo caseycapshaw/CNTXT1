@@ -17,7 +17,7 @@ grows; rich descriptions follow in the sections below.
 - **Method:** [[karpathy-method]] · [[open-knowledge-format]] · [[AGENTS]]
 - **Indexes:** [[contacts]] → `CONTENT/People/` · [[skills]] → `CONTENT/Skills/`
 - _(add your concept groups here: role, product, ops, … one line each)_
-- **Live to-dos:** [[Actions]] · **History:** [[log]]
+- **Live to-dos:** [[Actions]] · **History:** [[log]] · [[decisions]]
 
 ## Initiatives (goal-directed workstreams — one note each in `CONTENT/Initiatives/`)
 Bigger outcomes spanning multiple actions over time. Built from [`Initiative TEMPLATE.md`](CONTENT/Initiatives/Initiative%20TEMPLATE.md), run via [[Run an initiative]]; `CONTENT/Initiatives/` is a **structural folder, not an inbox item**. Actions stay inline in each note and aggregate to [[Actions]].

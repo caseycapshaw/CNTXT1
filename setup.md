@@ -170,13 +170,13 @@ your-kb/
 │   ├── log.md        ← changelog, one line per update
 │   ├── Journal.md    ← wins & milestones brag doc
 │   ├── link-map.md   ← generated [[wikilink]] → path index
-│   └── bin/          ← lint.sh + build-link-map.sh + kb-mcp-server.py (KB tooling)
+│   └── bin/          ← lint.sh + lint-delta.sh + cap_check.py + build-link-map.sh + kb-mcp-server.py (KB tooling)
 │   └── optional/     ← opt-in automation bundle (offered during setup, Phase 5)
 ├── CONTENT/raw/              ← your first dated capture
 ├── CONTENT/Concepts/         ← karpathy-method + contacts + skills + your first concept (all carry frontmatter)
 ├── CONTENT/Initiatives/      ← one note per goal-directed workstream (+ its template)
 ├── CONTENT/People/           ← one note per person (single source of truth for per-person detail)
-├── CONTENT/Skills/           ← runbooks for recurring tasks, filed by type: DO / CHECK / FORMAT / RULE (12 KB-meta ones ship)
+├── CONTENT/Skills/           ← runbooks for recurring tasks, filed by type: DO / CHECK / FORMAT / RULE (KB-meta ones ship, including Close a Session + Keep Machinery Vendor-Portable)
 ```
 
 ## The daily habit

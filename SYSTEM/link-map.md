@@ -21,7 +21,10 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Capture a YouTube video into the KB]]` | `CONTENT/Skills/DO/Capture a YouTube Video into the KB.md` |
 | `[[capture-a-meeting-or-conversation-into-the-kb]]` | `CONTENT/Skills/DO/Capture a Meeting or Conversation into the KB.md` |
 | `[[capture-a-youtube-video-into-the-kb]]` | `CONTENT/Skills/DO/Capture a YouTube Video into the KB.md` |
+| `[[Close a Session]]` | `CONTENT/Skills/DO/Close a Session.md` |
 | `[[Close an initiative]]` | `CONTENT/Skills/DO/Run an Initiative.md` |
+| `[[close ritual]]` | `CONTENT/Skills/DO/Close a Session.md` |
+| `[[close-a-session]]` | `CONTENT/Skills/DO/Close a Session.md` |
 | `[[contacts]]` | `CONTENT/Concepts/contacts.md` |
 | `[[Contribute to CNTXT1]]` | `CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md` |
 | `[[Create a Bases dashboard]]` | `CONTENT/Skills/FORMAT/Create Directory Dashboard.md` |
@@ -44,6 +47,8 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[generated-sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
 | `[[karpathy-method]]` | `CONTENT/Concepts/karpathy-method.md` |
 | `[[KB efficiency pass]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
+| `[[Keep Machinery Vendor-Portable]]` | `CONTENT/Skills/RULE/Keep Machinery Vendor-Portable.md` |
+| `[[keep-machinery-vendor-portable]]` | `CONTENT/Skills/RULE/Keep Machinery Vendor-Portable.md` |
 | `[[Maintain Generated Sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
 | `[[maintain-generated-sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
 | `[[Make an Excalidraw diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
@@ -53,6 +58,7 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Optimize the Knowledge Base]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
 | `[[Optimize the knowledge base]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
 | `[[optimize-the-knowledge-base]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
+| `[[portability-rule]]` | `CONTENT/Skills/RULE/Keep Machinery Vendor-Portable.md` |
 | `[[Pull Framework Updates from CNTXT1]]` | `CONTENT/Skills/DO/Pull Framework Updates from CNTXT1.md` |
 | `[[Pull framework updates from CNTXT1]]` | `CONTENT/Skills/DO/Pull Framework Updates from CNTXT1.md` |
 | `[[Pull framework updates]]` | `CONTENT/Skills/DO/Pull Framework Updates from CNTXT1.md` |

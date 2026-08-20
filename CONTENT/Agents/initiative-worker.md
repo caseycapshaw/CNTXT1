@@ -1,11 +1,13 @@
 ---
 name: initiative-worker
 description: "Drive one workstream from its CONTENT/Initiatives/<slug>.md note, writing every decision, milestone, and follow-up action back into the note"
+version: "1.0"
 model: sonnet
 tools: [Read, Write, Edit, Bash, Glob, Grep]
 color: green
 status: active
 tags: [agent, kb-meta, initiatives]
+updated: 2026-08-20
 ---
 
 # System prompt
@@ -37,3 +39,7 @@ Rules:
 When used as a CMUX pane worker, end your final message with exactly one line:
 `DONE: <slug> | <one-line summary>` — substitute `<slug>` with the
 initiative's slug. Nothing after that line.
+
+## Revision history
+
+- **v1.0 — 2026-08-20.** Stamped as a versioned contract (quoted `version:`, `updated:`). Supersede, never revert.

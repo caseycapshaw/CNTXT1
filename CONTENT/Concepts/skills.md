@@ -1,7 +1,7 @@
 ---
 type: concept
 description: The skills index — the how-do-I-X map and grouped tables over the CONTENT/Skills/ folder.
-updated: 2026-08-16
+updated: 2026-08-20
 status: current
 tags: [concept, index]
 ---
@@ -25,6 +25,7 @@ Skills for maintaining the knowledge base itself — always useful, ship with th
 | Skill | Trigger | Notes |
 | :-- | :-- | :-- |
 | [[Add a person to the KB]] | a new person appears | copy People template → note → index in [[contacts]] |
+| [[Close a Session]] | "{{NAME}} says close / wrap up" | single-door session close: one feedback question → record (log, decisions, digests) → review (route learnings by scope) |
 | [[Capture a meeting or conversation into the KB]] | new durable knowledge | inbox→`CONTENT/raw/`→compile→`index.md`→`SYSTEM/log.md` |
 | [[Capture a YouTube video into the KB]] | a YouTube link worth keeping | `yt-dlp` metadata + transcript digest → `CONTENT/raw/` → compile; every note links the video + its description links |
 | [[Run an initiative]] | an outcome needs multiple actions over time | one note per initiative in `CONTENT/Initiatives/` (`type: initiative` + lifecycle); start / keep current / close |
@@ -35,6 +36,7 @@ Skills for maintaining the knowledge base itself — always useful, ship with th
 | [[Sync an improvement to CNTXT1]] | a generic change is already implemented privately and worth sharing | the ONLY outward path — manual copy + re-template + grep gate; the exception path — prefer authoring upstream-first (`AGENTS.md` § Privacy) |
 | [[Pull framework updates from CNTXT1]] | a kit improvement should land in your vault | git cherry-pick from the fetch-only `upstream` remote — the safe inbound direction |
 | [[Maintain Generated Sections]] | any file a script rewrites, a new data feed, or an "always current" requirement | RULE — hand config above a `<!-- generated -->` marker, machine content below with a stamp; generators fail loud; never hand-edit below the line |
+| [[Keep Machinery Vendor-Portable]] | building or modifying lint, caps, rituals, hooks, or scheduled jobs | RULE — every enforced guarantee lives at a vendor-independent tier; harnesses accelerate, never solely carry; script failures are declared, never imitated |
 | [[Create an Excalidraw diagram]] | need a diagram / visual in the vault *(optional)* | zero-dep `SYSTEM/bin/excalidraw.py` (spec→file) or Mermaid by hand; text ids ≤8 chars or the mirror breaks |
 | [[Create Directory Dashboard]] | a CONTENT/ folder needs a live frontmatter table in Obsidian *(optional)* | one `.base` file per folder (Obsidian Bases); self-relative filter, columns = schema fields; human counterpart to the generated `index.md` |
 | [[Delegate an initiative to a CMUX workspace]] | an initiative is ready to run in its own repo context *(optional, needs CMUX)* | workspace-level delegation; state round-trips through `CONTENT/Initiatives/<slug>.md`, not the runtime tool |

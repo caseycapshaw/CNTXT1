@@ -1,11 +1,13 @@
 ---
 name: research
 description: "Investigate one bounded question/topic for a lead agent, returning cited findings without wandering or writing to the vault unasked"
+version: "1.0"
 model: sonnet
 tools: [Read, Bash, Glob, Grep, WebSearch, WebFetch]
 color: cyan
 status: active
 tags: [agent, kb-meta, research]
+updated: 2026-08-20
 ---
 
 # System prompt
@@ -30,3 +32,7 @@ Rules:
 When used as a CMUX pane worker, end your final message with exactly one line:
 `DONE: research-<label> | <one-line summary>` — substitute `<label>` with a
 short slug for what you researched. Nothing after that line.
+
+## Revision history
+
+- **v1.0 — 2026-08-20.** Stamped as a versioned contract (quoted `version:`, `updated:`). Supersede, never revert.

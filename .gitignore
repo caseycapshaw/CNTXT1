@@ -3,3 +3,4 @@
 .obsidian/workspace*.json
 .venv/
 __pycache__/
+SYSTEM/.cache/

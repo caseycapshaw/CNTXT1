@@ -7,7 +7,10 @@ concept, initiative, person, or skill).
 
 | Script | Job |
 | :-- | :-- |
-| `lint.sh` | Deterministic KB health check (exit 0 = green). Its check-1 variables are the **authoritative** root-exception + structural-folder lists. |
+| `lint.sh` | Deterministic KB health check (10 mechanical checks; exit 0 = green). Its check-1 variables are the **authoritative** root-exception + structural-folder lists. Interactive runs use this; scheduled runs use `lint-delta.sh`. |
+| `lint-delta.sh` | Scheduled-run wrapper for `lint.sh` — alarms on the finding-count **delta**, not the total (a permanently-red check is an invisible check). State in `SYSTEM/.cache/` (gitignored). |
+| `audit-initiative-next-actions.sh` | GTD next-action audit: every `status: active` initiative must carry ≥1 open `#action` (lint check 9). |
+| `cap_check.py` | Script-measured digest word caps (`cap_config.json`; never by model estimate). Lint check 10. |
 | `build-link-map.sh` | Regenerate `SYSTEM/link-map.md` — every `[[target]]` (slugs + `aliases:`) → file path. |
 | `validate_frontmatter.py` | Pydantic validation of every note's frontmatter against `SYSTEM/schemas` (run via `uv run`). |
 | `build_directory_indexes.py` | Regenerate the per-folder `index.md` tables from note frontmatter. |

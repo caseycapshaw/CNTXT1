@@ -5,7 +5,11 @@
 # carry frontmatter, (5) concepts + initiatives carry a non-empty
 # description:, (6) no stray non-.md files in note folders, (7) index Quick
 # map fits the SessionStart injection budget, (8) Pydantic frontmatter
-# schema validation. Exit 0 = pass, 1 = problems.
+# schema validation, (9) every active initiative has an open next action,
+# (10) registered role digests under their word cap (or a declared
+# cap_exception). Exit 0 = pass, 1 = problems.
+# Scheduled runs should use lint-delta.sh (alarms on the DELTA, not the
+# total — a permanently-red check is an invisible check).
 # The LLM lint keeps only the judgment checks (stale facts, resolved questions).
 #
 # Link scan ignores: TEMPLATE files, and any [[link]] inside an inline `code`
@@ -69,7 +73,7 @@ for f in CONTENT/Skills/*/*.md; do
   IFS=','; for a in $al; do a="$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/^\"//; s/\"$//')"; [ -n "$a" ] && echo "$a" >> "$valid"; done; unset IFS
 done
 # real link targets that live outside the four scanned dirs (root/SYSTEM anchors)
-for p in log AGENTS Actions; do echo "$p" >> "$valid"; done
+for p in log AGENTS Actions decisions; do echo "$p" >> "$valid"; done
 # CONTENT/raw/ captures referenced via path-style links: [[CONTENT/raw/YYYY-MM-DD-topic]],
 # including subfolders
 find CONTENT/raw -name '*.md' -type f 2>/dev/null | sed 's/\.md$//' >> "$valid"
@@ -151,6 +155,31 @@ if command -v uv >/dev/null 2>&1; then
   fi
 else
   printf 'WARN  uv not installed — skipping Pydantic frontmatter validation (install: brew install uv)\n'
+fi
+
+# ---- 9. Every active initiative has an open next action -------------------
+# The GTD next-action audit (SYSTEM/bin/audit-initiative-next-actions.sh);
+# an active initiative with no open #action is stalled-by-definition.
+if ./SYSTEM/bin/audit-initiative-next-actions.sh >/dev/null 2>&1; then
+  ok "every active initiative has an open next action"
+else
+  bad "active initiative(s) without an open next action (run SYSTEM/bin/audit-initiative-next-actions.sh for the list)"
+fi
+
+# ---- 10. Role digests under cap (or declared exception) --------------------
+# Script-measured, never model-estimated (SYSTEM/bin/cap_check.py). A dated
+# cap_exception: in frontmatter downgrades a breach to a declared WARN.
+capout="$(python3 SYSTEM/bin/cap_check.py 2>&1)"
+if [ $? -eq 0 ]; then
+  if printf '%s' "$capout" | grep -q '^WARN'; then
+    ok "role digests under cap (with declared exceptions):"
+    printf '%s\n' "$capout" | grep '^WARN' | while IFS= read -r w; do note "$w"; done
+  else
+    ok "role digests under cap"
+  fi
+else
+  bad "role digest over cap without a declared exception:"
+  printf '%s\n' "$capout" | grep '^FAIL' | while IFS= read -r w; do note "$w"; done
 fi
 
 rm -f "$valid" "$broken"

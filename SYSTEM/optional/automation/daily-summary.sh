@@ -126,8 +126,11 @@ fi
 #    result is AUTHORITATIVE for inbox / wikilinks / index / frontmatter (it
 #    strips code spans + excludes templates — no false positives to adjudicate).
 #    The LLM only adds the judgment layer below.
+#    Scheduled alarm is lint-delta.sh (delta, not total — a permanently-red
+#    check is an invisible check). Interactive sessions keep using lint.sh.
 # ---------------------------------------------------------------------------
 lint_out="$(bash "$vault/SYSTEM/bin/lint.sh" 2>&1)"; lint_rc=$?
+delta_out="$(bash "$vault/SYSTEM/bin/lint-delta.sh" 2>&1)"; delta_rc=$?
 
 # Action counts (excluding daily/) — context for the summary + the "is any
 # #action now stale / should be closed" judgment the script can't make.
@@ -137,6 +140,9 @@ done_actions="$(grep -rE '^\s*- \[x\].*#action' "$vault" --include='*.md' 2>/dev
 read -r -d '' prescan <<PRESCAN
 MECHANICAL LINT — SYSTEM/bin/lint.sh (exit $lint_rc; 0 = green):
 $lint_out
+
+LINT DELTA — SYSTEM/bin/lint-delta.sh (exit $delta_rc; 0 = flat/falling):
+$delta_out
 
 ACTION COUNTS (excluding daily/): open=$open_actions  done=$done_actions
 PRESCAN

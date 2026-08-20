@@ -10,6 +10,20 @@ from typing import Literal, Optional
 from pydantic import BaseModel, Field, field_validator
 
 
+class AuthorshipMixin(BaseModel):
+    """Optional authorship/write-permission keys, valid on any note type.
+
+    `author_type` is a WRITE-PERMISSION SWITCH, not credit (adopted 2026-08-20
+    from the metarelating pattern): `human` -> body is read-only to machines
+    (propose changes, never edit in place); `script` -> producer-owned (fix
+    the generator and re-run, never hand-edit); `assistant` -> machine-editable
+    per normal rules. Absence means normal editability — it is not a gap.
+    """
+
+    author: Optional[str] = None
+    author_type: Optional[Literal["human", "assistant", "script"]] = None
+
+
 def _validate_iso_date(value: object) -> str:
     # Unquoted YAML dates (e.g. `updated: 2026-07-09`) parse to native `date`
     # objects, not strings — normalize those to ISO text rather than forcing
@@ -25,7 +39,7 @@ def _validate_iso_date(value: object) -> str:
     raise ValueError(f"must be an ISO date (YYYY-MM-DD) or date, got {value!r}")
 
 
-class DoFrontmatter(BaseModel):
+class DoFrontmatter(AuthorshipMixin):
     """Frontmatter schema for CONTENT/Skills/DO/*.md — agent-executable runbooks
     that perform a recurring task and produce an outcome."""
 
@@ -42,7 +56,7 @@ class DoFrontmatter(BaseModel):
     summary: str
 
 
-class CheckFrontmatter(BaseModel):
+class CheckFrontmatter(AuthorshipMixin):
     """Frontmatter schema for CONTENT/Skills/CHECK/*.md — agent-executable
     runbooks that verify or audit something and produce a verdict."""
 
@@ -59,7 +73,7 @@ class CheckFrontmatter(BaseModel):
     summary: str
 
 
-class FormatFrontmatter(BaseModel):
+class FormatFrontmatter(AuthorshipMixin):
     """Frontmatter schema for CONTENT/Skills/FORMAT/*.md — agent-executable
     runbooks that produce or structure an artifact in a defined shape."""
 
@@ -76,7 +90,7 @@ class FormatFrontmatter(BaseModel):
     summary: str
 
 
-class RuleFrontmatter(BaseModel):
+class RuleFrontmatter(AuthorshipMixin):
     """Frontmatter schema for CONTENT/Skills/RULE/*.md — standing conventions
     and policies an agent must always follow."""
 
@@ -93,7 +107,7 @@ class RuleFrontmatter(BaseModel):
     summary: str
 
 
-class ConceptFrontmatter(BaseModel):
+class ConceptFrontmatter(AuthorshipMixin):
     """Frontmatter schema for CONTENT/Concepts/*.md — evergreen, rewritten in place."""
 
     type: Literal["concept"] = "concept"
@@ -108,7 +122,7 @@ class ConceptFrontmatter(BaseModel):
         return _validate_iso_date(v)
 
 
-class InitiativeFrontmatter(BaseModel):
+class InitiativeFrontmatter(AuthorshipMixin):
     """Frontmatter schema for CONTENT/Initiatives/*.md — goal-directed
     workstreams with a lifecycle status."""
 
@@ -127,7 +141,7 @@ class InitiativeFrontmatter(BaseModel):
         return _validate_iso_date(v)
 
 
-class PersonFrontmatter(BaseModel):
+class PersonFrontmatter(AuthorshipMixin):
     """Frontmatter schema for CONTENT/People/*.md — one note per person,
     the single source of truth for per-person detail."""
 

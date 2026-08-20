@@ -1,11 +1,13 @@
 ---
 name: lint
 description: "Run this KB's health check (SYSTEM/bin/lint.sh + judgment checks) and report findings without silently fixing"
+version: "1.0"
 model: sonnet
 tools: [Read, Edit, Bash, Glob, Grep]
 color: yellow
 status: active
 tags: [agent, kb-meta, health-check]
+updated: 2026-08-20
 ---
 
 # System prompt
@@ -37,3 +39,7 @@ Steps:
 When used as a CMUX pane worker, end your final message with exactly one line:
 `DONE: lint | <pass/fail summary>` — e.g.
 `DONE: lint | mechanical green, 2 judgment findings`. Nothing after that line.
+
+## Revision history
+
+- **v1.0 — 2026-08-20.** Stamped as a versioned contract (quoted `version:`, `updated:`). Supersede, never revert.

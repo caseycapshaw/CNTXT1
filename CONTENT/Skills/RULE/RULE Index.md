@@ -5,4 +5,5 @@ skill's own frontmatter — **do not hand-edit the table below**.
 
 | Skill | Domain | Notes |
 | :-- | :-- | :-- |
+| [[Keep Machinery Vendor-Portable]] | kb-meta | Every enforced guarantee lives at a vendor-independent tier; harness surfaces accelerate but never solely carry it, and script failures are declared, never imi... |
 | [[Maintain Generated Sections]] | kb-meta | The standing convention for machine-maintained file sections — config above a marker, generated content below, fail loud, never hand-edit below the line. |
