@@ -11,7 +11,7 @@
 #
 # All output is captured by the launchd plist into ~/.claude/cache/daily-plan.log.
 
-export HOME="${HOME:-/Users/CHANGE_ME}"
+export HOME="${HOME:-/Users/{{USER}}}"
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # ===== CONFIG — edit this =====
