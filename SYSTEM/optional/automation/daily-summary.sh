@@ -20,7 +20,7 @@
 #
 # All output is captured by the launchd plist into ~/.claude/cache/daily-summary.log.
 
-export HOME="${HOME:-/Users/{{USER}}}"
+export HOME="${HOME:-/Users/$USER}"
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # ===== CONFIG — edit this =====
@@ -41,7 +41,7 @@ mkdir -p "$daily_dir" "$HOME/.claude/cache"
 
 # ---------------------------------------------------------------------------
 # 0) Upstream framework check — if the vault has a fetch-only `upstream`
-#    remote (see Jobs/Pull framework updates from CNTXT1.md), look for kit
+#    remote (see CONTENT/Skills/DO/Pull Framework Updates from CNTXT1.md), look for kit
 #    commits not yet adopted. If any: write/refresh an "Upstream kit updates
 #    (pending).md" note in the root inbox (+ a macOS notification the first
 #    time a new tip appears) so the next interactive session interviews you
