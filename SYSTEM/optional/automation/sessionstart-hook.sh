@@ -63,9 +63,9 @@ while IFS= read -r entry; do
   name="$(basename "$entry")"
   case "$name" in
     README.md|index.md|Actions.md|CLAUDE.md) continue ;;   # pinned anchors
-    concepts|Initiatives|meta|raw|People|Jobs|attachments|Excalidraw) continue ;;  # structural folders
-    daily) continue ;;                                      # auto-generated plan notes
-    setup.md) continue ;;                                   # starter-kit artifact
+    CONTENT|SYSTEM|daily|attachments|docs|Writing) continue ;;  # structural folders — mirror of lint.sh check 1 `structural` (the single source of truth)
+    setup.md|LICENSE) continue ;;                           # starter-kit artifacts (lint `template_extras`)
+    pyproject.toml|uv.lock) continue ;;                     # Python tooling (lint `tooling`)
     .*) continue ;;                                         # hidden (.obsidian, .DS_Store)
   esac
   if [ -d "$entry" ]; then

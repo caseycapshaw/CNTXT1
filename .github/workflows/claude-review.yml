@@ -57,7 +57,9 @@ jobs:
                patterns miss. When in doubt, it's personal — flag it.
 
             2. SCHEMA CONSISTENCY: changes must conform to SYSTEM/AGENTS.md —
-               new Jobs indexed in CONTENT/Concepts/jobs.md with owner: {{NAME}};
+               new Skills at CONTENT/Skills/<TYPE>/ (DO|CHECK|FORMAT|RULE) with
+               matching type: frontmatter and owner: {{NAME}}, indexed in
+               CONTENT/Concepts/skills.md;
                concepts carry frontmatter (type/updated/status/tags); the
                link map regenerated when link targets change; index.md stays
                a pure map (no change history); root gains no new permanent

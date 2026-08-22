@@ -29,11 +29,11 @@ Usage:
     python3 SYSTEM/bin/excalidraw.py --list          # list defined diagrams
 
 Add a diagram: append a spec dict to DIAGRAMS (see the example below), re-run.
-Runbook: Jobs/Create an Excalidraw diagram.md.
+Runbook: CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md.
 """
 import json, os, sys
 
-OUT = os.path.join(os.path.dirname(__file__), "..", "..", "Excalidraw")
+OUT = os.path.join(os.path.dirname(__file__), "..", "..", "CONTENT", "Excalidraw")
 UPDATED = 1720400000000
 
 # palette: (fill, stroke)

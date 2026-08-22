@@ -8,7 +8,7 @@
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
-        <string>/Users/CHANGE_ME/.claude/hooks/daily-summary.sh</string>
+        <string>/Users/{{USER}}/.claude/hooks/daily-summary.sh</string>
     </array>
 
     <!-- End of day: 18:00 local. Companion to com.example.daily-plan (08:00). -->
@@ -24,8 +24,8 @@
     <false/>
 
     <key>StandardOutPath</key>
-    <string>/Users/CHANGE_ME/.claude/cache/daily-summary.log</string>
+    <string>/Users/{{USER}}/.claude/cache/daily-summary.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/CHANGE_ME/.claude/cache/daily-summary.log</string>
+    <string>/Users/{{USER}}/.claude/cache/daily-summary.log</string>
 </dict>
 </plist>
