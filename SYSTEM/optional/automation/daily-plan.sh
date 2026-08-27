@@ -72,7 +72,7 @@ fi
 
 read -r -d '' prompt <<EOF
 You are writing ${NAME}'s morning planning note in the Obsidian knowledge base at
-$VAULT. Follow the conventions in $VAULT/SYSTEM/AGENTS.md (read it if unsure) and use
+$VAULT. Follow the conventions in $VAULT/SYSTEM/SCHEMA.md (read it if unsure) and use
 [[wikilinks]] to link concepts.
 
 TODAY is $today. Today's calendar (already fetched for you):
@@ -92,7 +92,7 @@ Do the following, then WRITE the result to exactly this path: $note
    the anchor below — Grep $VAULT for "#priority" and for "📅" dates <= $today.
    But DO NOT copy any "#action" checkboxes into the note: the Focus section is a
    LIVE QUERY (step 3), and copying would duplicate tasks in the Actions dashboard.
-2. Skim $VAULT/index.md for the current CONTENT/Concepts/work to anchor the day.
+2. Skim $VAULT/index.md for the current Knowledge/Concepts/work to anchor the day.
 3. Write the note with EXACTLY these sections (skip "From the inbox" entirely if
    the email list above is "(no emails fetched)" or contains nothing noteworthy):
    # $today — Daily plan

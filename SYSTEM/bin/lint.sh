@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # lint.sh — deterministic KB health check (the mechanical half of the lint).
 # Checks: (1) root inbox clean, (2) all wikilinks resolve (incl. aliases),
-# (3) index complete, (4) CONTENT Concepts/Initiatives/People/Skills notes
+# (3) index complete, (4) Knowledge Concepts/Initiatives/People/Skills notes
 # carry frontmatter, (5) concepts + initiatives carry a non-empty
 # description:, (6) no stray non-.md files in note folders, (7) index Quick
 # map fits the SessionStart injection budget, (8) Pydantic frontmatter
@@ -22,8 +22,8 @@ ok()   { printf 'PASS  %s\n' "$1"; }
 bad()  { printf 'FAIL  %s\n' "$1"; fail=1; }
 
 # ---- 1. Root inbox clean -------------------------------------------------
-anchors="README.md index.md Actions.md CLAUDE.md"
-structural="CONTENT SYSTEM daily attachments docs Writing"
+anchors="README.md index.md Actions.md CLAUDE.md AGENTS.md"
+structural="Knowledge SYSTEM daily attachments docs Writing"
 # Template-only artifacts (present in kb-starter; absent in a live vault — harmless either way).
 template_extras="setup.md LICENSE"
 # Python tooling files (schema validation layer, managed by uv).
@@ -40,7 +40,7 @@ if [ ${#inbox[@]} -eq 0 ]; then ok "root inbox clean"; else bad "root inbox has 
 
 # ---- content files (exclude template files) ------------------------------
 files=()
-for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/archive/*.md CONTENT/Skills/*/*.md CONTENT/People/*.md CONTENT/Agents/*.md index.md; do
+for f in Knowledge/Concepts/*.md Knowledge/Initiatives/*.md Knowledge/Initiatives/archive/*.md Knowledge/Skills/*/*.md Knowledge/People/*.md Knowledge/Agents/*.md index.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*|*" Index.md"|*/index.md) continue ;; esac
   files+=("$f")
@@ -48,7 +48,7 @@ done
 
 # ---- valid wikilink-name set (canonical names + aliases + outside anchors) ----
 valid="$(mktemp)"
-for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/archive/*.md CONTENT/Excalidraw/*.md; do
+for f in Knowledge/Concepts/*.md Knowledge/Initiatives/*.md Knowledge/Initiatives/archive/*.md Knowledge/Excalidraw/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
   basename "$f" .md >> "$valid"
@@ -56,7 +56,7 @@ for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/arch
   [ -z "$al" ] && continue
   IFS=','; for a in $al; do a="$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/^\"//; s/\"$//')"; [ -n "$a" ] && echo "$a" >> "$valid"; done; unset IFS
 done
-for f in CONTENT/People/*.md; do
+for f in Knowledge/People/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
   basename "$f" .md >> "$valid"
@@ -64,7 +64,7 @@ for f in CONTENT/People/*.md; do
   [ -z "$al" ] && continue
   IFS=','; for a in $al; do a="$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/^\"//; s/\"$//')"; [ -n "$a" ] && echo "$a" >> "$valid"; done; unset IFS
 done
-for f in CONTENT/Skills/*/*.md; do
+for f in Knowledge/Skills/*/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*|*" Index.md"|*/index.md) continue ;; esac
   basename "$f" .md >> "$valid"
@@ -73,10 +73,10 @@ for f in CONTENT/Skills/*/*.md; do
   IFS=','; for a in $al; do a="$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/^\"//; s/\"$//')"; [ -n "$a" ] && echo "$a" >> "$valid"; done; unset IFS
 done
 # real link targets that live outside the four scanned dirs (root/SYSTEM anchors)
-for p in log AGENTS Actions decisions; do echo "$p" >> "$valid"; done
-# CONTENT/raw/ captures referenced via path-style links: [[CONTENT/raw/YYYY-MM-DD-topic]],
+for p in log AGENTS SCHEMA Actions decisions; do echo "$p" >> "$valid"; done
+# Knowledge/raw/ captures referenced via path-style links: [[Knowledge/raw/YYYY-MM-DD-topic]],
 # including subfolders
-find CONTENT/raw -name '*.md' -type f 2>/dev/null | sed 's/\.md$//' >> "$valid"
+find Knowledge/raw -name '*.md' -type f 2>/dev/null | sed 's/\.md$//' >> "$valid"
 sort -u "$valid" -o "$valid"
 
 # ---- 2. Wikilinks resolve (strip inline-code spans first) ----------------
@@ -95,7 +95,7 @@ if [ ! -s "$broken" ]; then ok "all wikilinks resolve"; else bad "broken wikilin
 
 # ---- 3. Index completeness ----------------------------------------------
 missing=""
-for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/archive/*.md; do
+for f in Knowledge/Concepts/*.md Knowledge/Initiatives/*.md Knowledge/Initiatives/archive/*.md; do
   [ -e "$f" ] || continue   # skip the literal glob when a dir is empty (else slug becomes '*')
   case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
   slug="$(basename "$f" .md)"
@@ -105,7 +105,7 @@ if [ -z "$missing" ]; then ok "index lists every concept + initiative"; else bad
 
 # ---- 4. Frontmatter present ---------------------------------------------
 fm_fail=""
-for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/archive/*.md CONTENT/People/*.md CONTENT/Skills/*/*.md; do
+for f in Knowledge/Concepts/*.md Knowledge/Initiatives/*.md Knowledge/Initiatives/archive/*.md Knowledge/People/*.md Knowledge/Skills/*/*.md; do
   [ -e "$f" ] || continue   # skip literal glob for empty dirs
   case "$f" in *TEMPLATE*|*" Index.md"|*/index.md) continue ;; esac
   [ "$(head -1 "$f")" = "---" ] || fm_fail="$fm_fail $f"
@@ -114,7 +114,7 @@ if [ -z "$fm_fail" ]; then ok "Concepts/Initiatives/People/Skills all carry fron
 
 # ---- 5. description: present on concepts + initiatives --------------------
 desc_fail=""
-for f in CONTENT/Concepts/*.md CONTENT/Initiatives/*.md CONTENT/Initiatives/archive/*.md; do
+for f in Knowledge/Concepts/*.md Knowledge/Initiatives/*.md Knowledge/Initiatives/archive/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
   awk '/^---$/{c++; next} c==1 && /^description:[[:space:]]*[^[:space:]]/{found=1} c==2{exit} END{exit !found}' "$f" || desc_fail="$desc_fail $f"
@@ -126,7 +126,7 @@ if [ -z "$desc_fail" ]; then ok "concepts + initiatives carry a description:"; e
 # wikilink checks (which glob *.md) — a renamed note can leave a committed
 # .tmp behind while its links dangle. Fail loud on anything that isn't .md.
 stray=""
-for f in CONTENT/Concepts/* CONTENT/Initiatives/* CONTENT/Initiatives/archive/* CONTENT/People/* CONTENT/Skills/*/* CONTENT/Agents/*; do
+for f in Knowledge/Concepts/* Knowledge/Initiatives/* Knowledge/Initiatives/archive/* Knowledge/People/* Knowledge/Skills/*/* Knowledge/Agents/*; do
   [ -f "$f" ] || continue
   case "$f" in *.md|*.base) continue ;; esac   # .base = Obsidian Bases dashboards
   stray="$stray $f"
@@ -185,7 +185,7 @@ fi
 # ---- .claude canonical <-> visible mirrors in sync (only once migrated) ----
 # Truth direction (2026-08-27): instances that adopt the standard .claude
 # configuration keep canonical skills/agents in .claude/ and generate the
-# visible CONTENT/Skills + CONTENT/Agents notes with
+# visible Knowledge/Skills + Knowledge/Agents notes with
 # SYSTEM/bin/build_claude_mirrors.py. Skipped until .claude/skills/ exists.
 if [ -d .claude/skills ]; then
   if mirrout=$(uv run python SYSTEM/bin/build_claude_mirrors.py --check 2>&1); then

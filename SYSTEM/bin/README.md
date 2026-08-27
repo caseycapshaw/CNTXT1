@@ -14,7 +14,7 @@ concept, initiative, person, or skill).
 | `build-link-map.sh` | Regenerate `SYSTEM/link-map.md` — every `[[target]]` (slugs + `aliases:`) → file path. |
 | `validate_frontmatter.py` | Pydantic validation of every note's frontmatter against `SYSTEM/schemas` (run via `uv run`). |
 | `build_directory_indexes.py` | Regenerate the per-folder `index.md` tables from note frontmatter. |
-| `build_skills_indexes.py` | Regenerate the per-TYPE `CONTENT/Skills/<TYPE>/<TYPE> Index.md` tables from skill frontmatter. |
+| `build_skills_indexes.py` | Regenerate the per-TYPE `Knowledge/Skills/<TYPE>/<TYPE> Index.md` tables from skill frontmatter. |
 | `active-initiatives.sh` | List every active initiative + its next open action. |
 | `stale-initiatives.sh` | List active initiatives overdue for a check-in. |
 | `aging-actions.sh` | List open `#action` checkboxes older than a threshold. |
@@ -25,4 +25,4 @@ concept, initiative, person, or skill).
 | `backfill-action-dates.sh` | One-time backfill of `#action` created dates — historical, keep for reference. |
 
 Generated-output conventions for anything these scripts write:
-`CONTENT/Skills/RULE/Maintain Generated Sections.md`.
+`Knowledge/Skills/RULE/Maintain Generated Sections.md`.

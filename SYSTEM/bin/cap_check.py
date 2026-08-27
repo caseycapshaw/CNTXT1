@@ -2,7 +2,7 @@
 """cap_check.py — script-measured digest caps ("never by model estimate").
 
 Role digests are state-only files with a word cap (~2,000 vault-wide; see
-SYSTEM/AGENTS.md). This script is the measurement: registered digest files
+SYSTEM/SCHEMA.md). This script is the measurement: registered digest files
 (SYSTEM/bin/cap_config.json) are word-counted (body only, frontmatter
 excluded) against the cap.
 

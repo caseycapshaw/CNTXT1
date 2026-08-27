@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # aging-actions.sh — list open `#action` checkboxes older than a threshold.
-# For each open action line found in CONTENT/ + index.md, the created date is:
+# For each open action line found in Knowledge/ + index.md, the created date is:
 #   1. an explicit "➕ YYYY-MM-DD" stamp on the line (see
 #      backfill-action-dates.sh), if present; otherwise
 #   2. the author date of the first commit that introduced the line
@@ -43,7 +43,7 @@ while IFS=: read -r file line text; do
     printf '%3sd  %s:%s  %s\n' "$age" "$file" "$line" "$text"
     count=$((count + 1))
   fi
-done < <(grep -rnE '^[[:space:]]*- \[ \] .*#action' --include='*.md' CONTENT index.md 2>/dev/null \
+done < <(grep -rnE '^[[:space:]]*- \[ \] .*#action' --include='*.md' Knowledge index.md 2>/dev/null \
            | grep -v 'TEMPLATE' \
            | sed -E 's/^([^:]+):([0-9]+):[[:space:]]*- \[ \][[:space:]]*/\1:\2:/')
 

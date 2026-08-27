@@ -40,7 +40,7 @@ def _validate_iso_date(value: object) -> str:
 
 
 class DoFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for CONTENT/Skills/DO/*.md — agent-executable runbooks
+    """Frontmatter schema for Knowledge/Skills/DO/*.md — agent-executable runbooks
     that perform a recurring task and produce an outcome."""
 
     type: Literal["do"] = "do"
@@ -57,7 +57,7 @@ class DoFrontmatter(AuthorshipMixin):
 
 
 class CheckFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for CONTENT/Skills/CHECK/*.md — agent-executable
+    """Frontmatter schema for Knowledge/Skills/CHECK/*.md — agent-executable
     runbooks that verify or audit something and produce a verdict."""
 
     type: Literal["check"] = "check"
@@ -74,7 +74,7 @@ class CheckFrontmatter(AuthorshipMixin):
 
 
 class FormatFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for CONTENT/Skills/FORMAT/*.md — agent-executable
+    """Frontmatter schema for Knowledge/Skills/FORMAT/*.md — agent-executable
     runbooks that produce or structure an artifact in a defined shape."""
 
     type: Literal["format"] = "format"
@@ -91,7 +91,7 @@ class FormatFrontmatter(AuthorshipMixin):
 
 
 class RuleFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for CONTENT/Skills/RULE/*.md — standing conventions
+    """Frontmatter schema for Knowledge/Skills/RULE/*.md — standing conventions
     and policies an agent must always follow."""
 
     type: Literal["rule"] = "rule"
@@ -108,7 +108,7 @@ class RuleFrontmatter(AuthorshipMixin):
 
 
 class ConceptFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for CONTENT/Concepts/*.md — evergreen, rewritten in place."""
+    """Frontmatter schema for Knowledge/Concepts/*.md — evergreen, rewritten in place."""
 
     type: Literal["concept"] = "concept"
     updated: str
@@ -123,7 +123,7 @@ class ConceptFrontmatter(AuthorshipMixin):
 
 
 class InitiativeFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for CONTENT/Initiatives/*.md — goal-directed
+    """Frontmatter schema for Knowledge/Initiatives/*.md — goal-directed
     workstreams with a lifecycle status."""
 
     type: Literal["initiative"] = "initiative"
@@ -142,7 +142,7 @@ class InitiativeFrontmatter(AuthorshipMixin):
 
 
 class PersonFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for CONTENT/People/*.md — one note per person,
+    """Frontmatter schema for Knowledge/People/*.md — one note per person,
     the single source of truth for per-person detail."""
 
     model_config = {"populate_by_name": True}

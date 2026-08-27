@@ -44,9 +44,9 @@ done
 read -r -d '' pointer <<EOF
 A personal knowledge base (Karpathy "knowledge-base-as-compiler" method) lives at $VAULT — your durable project memory.
 
-For any non-code / knowledge task, BEFORE answering: read $VAULT/SYSTEM/AGENTS.md (how the base works). The map (index.md) and the live inbox state are inlined below — use them as your starting point. Keep the base current per AGENTS.md — capture new material to CONTENT/raw/, compile durable facts into CONTENT/Concepts/, update index.md, append SYSTEM/log.md, use Obsidian [[wikilinks]] for backlinks.
+For any non-code / knowledge task, BEFORE answering: read $VAULT/SYSTEM/SCHEMA.md (how the base works). The map (index.md) and the live inbox state are inlined below — use them as your starting point. Keep the base current per AGENTS.md — capture new material to Knowledge/raw/, compile durable facts into Knowledge/Concepts/, update index.md, append SYSTEM/log.md, use Obsidian [[wikilinks]] for backlinks.
 
-The vault ROOT is the inbox: new notes/files land at the root, and anything there other than the pinned anchors (README.md, index.md, Actions.md, CLAUDE.md) is an un-triaged item — offer to file it into CONTENT/raw/ and compile.
+The vault ROOT is the inbox: new notes/files land at the root, and anything there other than the pinned anchors (README.md, index.md, Actions.md, CLAUDE.md) is an un-triaged item — offer to file it into Knowledge/raw/ and compile.
 
 Read and write $VAULT using absolute paths regardless of the current working directory.
 EOF
@@ -63,7 +63,7 @@ while IFS= read -r entry; do
   name="$(basename "$entry")"
   case "$name" in
     README.md|index.md|Actions.md|CLAUDE.md) continue ;;   # pinned anchors
-    CONTENT|SYSTEM|daily|attachments|docs|Writing) continue ;;  # structural folders — mirror of lint.sh check 1 `structural` (the single source of truth)
+    Knowledge|SYSTEM|daily|attachments|docs|Writing) continue ;;  # structural folders — mirror of lint.sh check 1 `structural` (the single source of truth)
     setup.md|LICENSE) continue ;;                           # starter-kit artifacts (lint `template_extras`)
     pyproject.toml|uv.lock) continue ;;                     # Python tooling (lint `tooling`)
     .*) continue ;;                                         # hidden (.obsidian, .DS_Store)
@@ -78,7 +78,7 @@ while IFS= read -r entry; do
 done < <(find "$VAULT" -maxdepth 1 -mindepth 1 2>/dev/null | sort)
 
 if [ -n "$inbox_items" ]; then
-  inbox="INBOX — un-triaged items at the vault root (offer to file into CONTENT/raw/ and compile):
+  inbox="INBOX — un-triaged items at the vault root (offer to file into Knowledge/raw/ and compile):
 ${inbox_items}"
 else
   inbox="INBOX — empty (root holds only the anchors + structural folders). Nothing to triage."

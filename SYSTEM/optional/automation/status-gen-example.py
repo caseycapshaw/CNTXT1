@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """EXAMPLE domain status-dashboard generator — copy per domain, don't share.
 
-Implements the generated-sections convention (CONTENT/Skills/RULE/Maintain
+Implements the generated-sections convention (Knowledge/Skills/RULE/Maintain
 Generated Sections.md) for a "status.md" freshness dashboard over a folder of
 data modules: recheck due-dates computed from a hand-edited config table,
 plus per-feed staleness flags. Adapt DOMAIN_DIR/FEEDS to your domain (a
@@ -16,7 +16,7 @@ The status file's shape:
 import os, re, sys
 from datetime import date, timedelta
 
-DOMAIN_DIR = os.path.expanduser("{{VAULT}}/CONTENT/raw/{{domain}}")
+DOMAIN_DIR = os.path.expanduser("{{VAULT}}/Knowledge/raw/{{domain}}")
 STATUS = os.path.join(DOMAIN_DIR, "status.md")
 MARKER = "<!-- generated -->"
 DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")

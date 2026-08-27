@@ -4,3 +4,14 @@
 .venv/
 __pycache__/
 SYSTEM/.cache/
+
+# --- User territory (design-repo model, 2026-08-27) -------------------------
+# Anyone using this repo directly keeps their personal content UNTRACKED:
+# git ignores everything new under these paths, so `git pull` always works and
+# nothing personal can be committed by accident. The framework's shipped
+# skeleton files (templates, indexes, generated skill/agent mirrors) were
+# added before this rule, so they stay tracked; framework contributors add
+# new files here with `git add -f` (see .github/CONTRIBUTING.md).
+Knowledge/**
+daily/**
+attachments/**

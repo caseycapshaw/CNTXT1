@@ -46,11 +46,11 @@ collect_with_aliases() {
 }
 
 # Skills: canonical name = filename (Imperative Title), plus any aliases: [a, b]
-# in frontmatter. Layout: CONTENT/Skills/<TYPE>/<Imperative Title>.md
+# in frontmatter. Layout: Knowledge/Skills/<TYPE>/<Imperative Title>.md
 # (TYPE = DO | CHECK | FORMAT | RULE). TEMPLATE files and generated
 # "<TYPE> Index.md" files are skipped.
 collect_skills() {
-  for f in CONTENT/Skills/*/*.md; do
+  for f in Knowledge/Skills/*/*.md; do
     [ -e "$f" ] || continue
     case "$f" in *TEMPLATE*|*" Index.md"|*/index.md) continue ;; esac
     local name; name="$(basename "$f" .md)"
@@ -75,11 +75,11 @@ collect_skills() {
   echo "| :-- | :-- |"
 } > "$tmp"
 
-collect_simple CONTENT/Concepts
-collect_simple CONTENT/Initiatives
-collect_simple CONTENT/Initiatives/archive
-collect_simple CONTENT/Excalidraw
-collect_with_aliases CONTENT/People
+collect_simple Knowledge/Concepts
+collect_simple Knowledge/Initiatives
+collect_simple Knowledge/Initiatives/archive
+collect_simple Knowledge/Excalidraw
+collect_with_aliases Knowledge/People
 collect_skills
 
 # sort the table rows (after the 8 header lines), keep header intact

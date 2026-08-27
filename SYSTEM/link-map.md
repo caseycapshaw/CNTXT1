@@ -6,85 +6,85 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 
 | Wikilink | Path |
 | :-- | :-- |
-| `[[Add a Person to the KB]]` | `CONTENT/Skills/DO/Add a Person to the KB.md` |
-| `[[Add a person to the KB]]` | `CONTENT/Skills/DO/Add a Person to the KB.md` |
-| `[[add-a-person-to-the-kb]]` | `CONTENT/Skills/DO/Add a Person to the KB.md` |
-| `[[Audit State Freshness]]` | `CONTENT/Skills/CHECK/Audit State Freshness.md` |
-| `[[Audit state freshness]]` | `CONTENT/Skills/CHECK/Audit State Freshness.md` |
-| `[[Audit the KB System]]` | `CONTENT/Skills/CHECK/Audit the KB System.md` |
-| `[[Audit the KB system]]` | `CONTENT/Skills/CHECK/Audit the KB System.md` |
-| `[[audit-state-freshness]]` | `CONTENT/Skills/CHECK/Audit State Freshness.md` |
-| `[[audit-the-kb-system]]` | `CONTENT/Skills/CHECK/Audit the KB System.md` |
-| `[[Capture a Meeting or Conversation into the KB]]` | `CONTENT/Skills/DO/Capture a Meeting or Conversation into the KB.md` |
-| `[[Capture a meeting or conversation into the KB]]` | `CONTENT/Skills/DO/Capture a Meeting or Conversation into the KB.md` |
-| `[[Capture a YouTube Video into the KB]]` | `CONTENT/Skills/DO/Capture a YouTube Video into the KB.md` |
-| `[[Capture a YouTube video into the KB]]` | `CONTENT/Skills/DO/Capture a YouTube Video into the KB.md` |
-| `[[capture-a-meeting-or-conversation-into-the-kb]]` | `CONTENT/Skills/DO/Capture a Meeting or Conversation into the KB.md` |
-| `[[capture-a-youtube-video-into-the-kb]]` | `CONTENT/Skills/DO/Capture a YouTube Video into the KB.md` |
-| `[[Close a Session]]` | `CONTENT/Skills/DO/Close a Session.md` |
-| `[[Close an initiative]]` | `CONTENT/Skills/DO/Run an Initiative.md` |
-| `[[close ritual]]` | `CONTENT/Skills/DO/Close a Session.md` |
-| `[[close-a-session]]` | `CONTENT/Skills/DO/Close a Session.md` |
-| `[[contacts]]` | `CONTENT/Concepts/contacts.md` |
-| `[[Contribute to CNTXT1]]` | `CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md` |
-| `[[Create a Bases dashboard]]` | `CONTENT/Skills/FORMAT/Create Directory Dashboard.md` |
-| `[[Create a directory dashboard]]` | `CONTENT/Skills/FORMAT/Create Directory Dashboard.md` |
-| `[[Create an Excalidraw Diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
-| `[[Create an Excalidraw diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
-| `[[Create Directory Dashboard]]` | `CONTENT/Skills/FORMAT/Create Directory Dashboard.md` |
-| `[[Create Excalidraw]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
-| `[[create-an-excalidraw-diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
-| `[[create-directory-dashboard]]` | `CONTENT/Skills/FORMAT/Create Directory Dashboard.md` |
-| `[[Delegate an Initiative to a CMUX Workspace]]` | `CONTENT/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
-| `[[Delegate an initiative to a CMUX workspace]]` | `CONTENT/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
-| `[[Delegate an initiative]]` | `CONTENT/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
-| `[[Delegate to a workspace]]` | `CONTENT/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
-| `[[delegate-an-initiative-to-a-cmux-workspace]]` | `CONTENT/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
-| `[[Directory dashboard]]` | `CONTENT/Skills/FORMAT/Create Directory Dashboard.md` |
-| `[[Example — KB data flow.excalidraw]]` | `CONTENT/Excalidraw/Example — KB data flow.excalidraw.md` |
-| `[[Excalidraw diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
-| `[[Fan out subagents]]` | `CONTENT/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
-| `[[generated-sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
-| `[[karpathy-method]]` | `CONTENT/Concepts/karpathy-method.md` |
-| `[[KB efficiency pass]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
-| `[[Keep Machinery Vendor-Portable]]` | `CONTENT/Skills/RULE/Keep Machinery Vendor-Portable.md` |
-| `[[keep-machinery-vendor-portable]]` | `CONTENT/Skills/RULE/Keep Machinery Vendor-Portable.md` |
-| `[[Maintain Generated Sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
-| `[[maintain-generated-sections]]` | `CONTENT/Skills/RULE/Maintain Generated Sections.md` |
-| `[[Make an Excalidraw diagram]]` | `CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md` |
-| `[[Open an initiative]]` | `CONTENT/Skills/DO/Run an Initiative.md` |
-| `[[open-knowledge-format]]` | `CONTENT/Concepts/open-knowledge-format.md` |
-| `[[Optimize the KB]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
-| `[[Optimize the Knowledge Base]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
-| `[[Optimize the knowledge base]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
-| `[[optimize-the-knowledge-base]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
-| `[[portability-rule]]` | `CONTENT/Skills/RULE/Keep Machinery Vendor-Portable.md` |
-| `[[Pull Framework Updates from CNTXT1]]` | `CONTENT/Skills/DO/Pull Framework Updates from CNTXT1.md` |
-| `[[Pull framework updates from CNTXT1]]` | `CONTENT/Skills/DO/Pull Framework Updates from CNTXT1.md` |
-| `[[Pull framework updates]]` | `CONTENT/Skills/DO/Pull Framework Updates from CNTXT1.md` |
-| `[[Pull from upstream CNTXT1]]` | `CONTENT/Skills/DO/Pull Framework Updates from CNTXT1.md` |
-| `[[pull-framework-updates-from-cntxt1]]` | `CONTENT/Skills/DO/Pull Framework Updates from CNTXT1.md` |
-| `[[Run an Initiative]]` | `CONTENT/Skills/DO/Run an Initiative.md` |
-| `[[Run an initiative]]` | `CONTENT/Skills/DO/Run an Initiative.md` |
-| `[[Run the KB Health Check]]` | `CONTENT/Skills/CHECK/Run the KB Health Check.md` |
-| `[[Run the KB health check]]` | `CONTENT/Skills/CHECK/Run the KB Health Check.md` |
-| `[[run-an-initiative]]` | `CONTENT/Skills/DO/Run an Initiative.md` |
-| `[[run-the-kb-health-check]]` | `CONTENT/Skills/CHECK/Run the KB Health Check.md` |
-| `[[second brain audit]]` | `CONTENT/Skills/CHECK/Audit State Freshness.md` |
-| `[[skills]]` | `CONTENT/Concepts/skills.md` |
-| `[[Spawn Subagent Panes in a CMUX Workspace]]` | `CONTENT/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
-| `[[Spawn subagent panes in a CMUX workspace]]` | `CONTENT/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
-| `[[Spawn subagent panes]]` | `CONTENT/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
-| `[[Spawn workers in panes]]` | `CONTENT/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
-| `[[spawn-subagent-panes-in-a-cmux-workspace]]` | `CONTENT/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
-| `[[Spin up a CMUX workspace]]` | `CONTENT/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
-| `[[Start an initiative]]` | `CONTENT/Skills/DO/Run an Initiative.md` |
-| `[[state freshness audit]]` | `CONTENT/Skills/CHECK/Audit State Freshness.md` |
-| `[[Subagent panes]]` | `CONTENT/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
-| `[[Sync a KB improvement to the shared repo]]` | `CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md` |
-| `[[Sync an Improvement to CNTXT1]]` | `CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md` |
-| `[[Sync an improvement to CNTXT1]]` | `CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md` |
-| `[[sync-an-improvement-to-cntxt1]]` | `CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md` |
-| `[[system audit]]` | `CONTENT/Skills/CHECK/Audit the KB System.md` |
-| `[[Tune the knowledge base]]` | `CONTENT/Skills/CHECK/Optimize the Knowledge Base.md` |
-| `[[yt capture]]` | `CONTENT/Skills/DO/Capture a YouTube Video into the KB.md` |
+| `[[Add a Person to the KB]]` | `Knowledge/Skills/DO/Add a Person to the KB.md` |
+| `[[Add a person to the KB]]` | `Knowledge/Skills/DO/Add a Person to the KB.md` |
+| `[[add-a-person-to-the-kb]]` | `Knowledge/Skills/DO/Add a Person to the KB.md` |
+| `[[Audit State Freshness]]` | `Knowledge/Skills/CHECK/Audit State Freshness.md` |
+| `[[Audit state freshness]]` | `Knowledge/Skills/CHECK/Audit State Freshness.md` |
+| `[[Audit the KB System]]` | `Knowledge/Skills/CHECK/Audit the KB System.md` |
+| `[[Audit the KB system]]` | `Knowledge/Skills/CHECK/Audit the KB System.md` |
+| `[[audit-state-freshness]]` | `Knowledge/Skills/CHECK/Audit State Freshness.md` |
+| `[[audit-the-kb-system]]` | `Knowledge/Skills/CHECK/Audit the KB System.md` |
+| `[[Capture a Meeting or Conversation into the KB]]` | `Knowledge/Skills/DO/Capture a Meeting or Conversation into the KB.md` |
+| `[[Capture a meeting or conversation into the KB]]` | `Knowledge/Skills/DO/Capture a Meeting or Conversation into the KB.md` |
+| `[[Capture a YouTube Video into the KB]]` | `Knowledge/Skills/DO/Capture a YouTube Video into the KB.md` |
+| `[[Capture a YouTube video into the KB]]` | `Knowledge/Skills/DO/Capture a YouTube Video into the KB.md` |
+| `[[capture-a-meeting-or-conversation-into-the-kb]]` | `Knowledge/Skills/DO/Capture a Meeting or Conversation into the KB.md` |
+| `[[capture-a-youtube-video-into-the-kb]]` | `Knowledge/Skills/DO/Capture a YouTube Video into the KB.md` |
+| `[[Close a Session]]` | `Knowledge/Skills/DO/Close a Session.md` |
+| `[[Close an initiative]]` | `Knowledge/Skills/DO/Run an Initiative.md` |
+| `[[close ritual]]` | `Knowledge/Skills/DO/Close a Session.md` |
+| `[[close-a-session]]` | `Knowledge/Skills/DO/Close a Session.md` |
+| `[[contacts]]` | `Knowledge/Concepts/contacts.md` |
+| `[[Contribute to CNTXT1]]` | `Knowledge/Skills/DO/Sync an Improvement to CNTXT1.md` |
+| `[[Create a Bases dashboard]]` | `Knowledge/Skills/FORMAT/Create Directory Dashboard.md` |
+| `[[Create a directory dashboard]]` | `Knowledge/Skills/FORMAT/Create Directory Dashboard.md` |
+| `[[Create an Excalidraw Diagram]]` | `Knowledge/Skills/FORMAT/Create an Excalidraw Diagram.md` |
+| `[[Create an Excalidraw diagram]]` | `Knowledge/Skills/FORMAT/Create an Excalidraw Diagram.md` |
+| `[[Create Directory Dashboard]]` | `Knowledge/Skills/FORMAT/Create Directory Dashboard.md` |
+| `[[Create Excalidraw]]` | `Knowledge/Skills/FORMAT/Create an Excalidraw Diagram.md` |
+| `[[create-an-excalidraw-diagram]]` | `Knowledge/Skills/FORMAT/Create an Excalidraw Diagram.md` |
+| `[[create-directory-dashboard]]` | `Knowledge/Skills/FORMAT/Create Directory Dashboard.md` |
+| `[[Delegate an Initiative to a CMUX Workspace]]` | `Knowledge/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
+| `[[Delegate an initiative to a CMUX workspace]]` | `Knowledge/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
+| `[[Delegate an initiative]]` | `Knowledge/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
+| `[[Delegate to a workspace]]` | `Knowledge/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
+| `[[delegate-an-initiative-to-a-cmux-workspace]]` | `Knowledge/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
+| `[[Directory dashboard]]` | `Knowledge/Skills/FORMAT/Create Directory Dashboard.md` |
+| `[[Example — KB data flow.excalidraw]]` | `Knowledge/Excalidraw/Example — KB data flow.excalidraw.md` |
+| `[[Excalidraw diagram]]` | `Knowledge/Skills/FORMAT/Create an Excalidraw Diagram.md` |
+| `[[Fan out subagents]]` | `Knowledge/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
+| `[[generated-sections]]` | `Knowledge/Skills/RULE/Maintain Generated Sections.md` |
+| `[[karpathy-method]]` | `Knowledge/Concepts/karpathy-method.md` |
+| `[[KB efficiency pass]]` | `Knowledge/Skills/CHECK/Optimize the Knowledge Base.md` |
+| `[[Keep Machinery Vendor-Portable]]` | `Knowledge/Skills/RULE/Keep Machinery Vendor-Portable.md` |
+| `[[keep-machinery-vendor-portable]]` | `Knowledge/Skills/RULE/Keep Machinery Vendor-Portable.md` |
+| `[[Maintain Generated Sections]]` | `Knowledge/Skills/RULE/Maintain Generated Sections.md` |
+| `[[maintain-generated-sections]]` | `Knowledge/Skills/RULE/Maintain Generated Sections.md` |
+| `[[Make an Excalidraw diagram]]` | `Knowledge/Skills/FORMAT/Create an Excalidraw Diagram.md` |
+| `[[Open an initiative]]` | `Knowledge/Skills/DO/Run an Initiative.md` |
+| `[[open-knowledge-format]]` | `Knowledge/Concepts/open-knowledge-format.md` |
+| `[[Optimize the KB]]` | `Knowledge/Skills/CHECK/Optimize the Knowledge Base.md` |
+| `[[Optimize the Knowledge Base]]` | `Knowledge/Skills/CHECK/Optimize the Knowledge Base.md` |
+| `[[Optimize the knowledge base]]` | `Knowledge/Skills/CHECK/Optimize the Knowledge Base.md` |
+| `[[optimize-the-knowledge-base]]` | `Knowledge/Skills/CHECK/Optimize the Knowledge Base.md` |
+| `[[portability-rule]]` | `Knowledge/Skills/RULE/Keep Machinery Vendor-Portable.md` |
+| `[[Pull Framework Updates from CNTXT1]]` | `Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md` |
+| `[[Pull framework updates from CNTXT1]]` | `Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md` |
+| `[[Pull framework updates]]` | `Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md` |
+| `[[Pull from upstream CNTXT1]]` | `Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md` |
+| `[[pull-framework-updates-from-cntxt1]]` | `Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md` |
+| `[[Run an Initiative]]` | `Knowledge/Skills/DO/Run an Initiative.md` |
+| `[[Run an initiative]]` | `Knowledge/Skills/DO/Run an Initiative.md` |
+| `[[Run the KB Health Check]]` | `Knowledge/Skills/CHECK/Run the KB Health Check.md` |
+| `[[Run the KB health check]]` | `Knowledge/Skills/CHECK/Run the KB Health Check.md` |
+| `[[run-an-initiative]]` | `Knowledge/Skills/DO/Run an Initiative.md` |
+| `[[run-the-kb-health-check]]` | `Knowledge/Skills/CHECK/Run the KB Health Check.md` |
+| `[[second brain audit]]` | `Knowledge/Skills/CHECK/Audit State Freshness.md` |
+| `[[skills]]` | `Knowledge/Concepts/skills.md` |
+| `[[Spawn Subagent Panes in a CMUX Workspace]]` | `Knowledge/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
+| `[[Spawn subagent panes in a CMUX workspace]]` | `Knowledge/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
+| `[[Spawn subagent panes]]` | `Knowledge/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
+| `[[Spawn workers in panes]]` | `Knowledge/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
+| `[[spawn-subagent-panes-in-a-cmux-workspace]]` | `Knowledge/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
+| `[[Spin up a CMUX workspace]]` | `Knowledge/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
+| `[[Start an initiative]]` | `Knowledge/Skills/DO/Run an Initiative.md` |
+| `[[state freshness audit]]` | `Knowledge/Skills/CHECK/Audit State Freshness.md` |
+| `[[Subagent panes]]` | `Knowledge/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
+| `[[Sync a KB improvement to the shared repo]]` | `Knowledge/Skills/DO/Sync an Improvement to CNTXT1.md` |
+| `[[Sync an Improvement to CNTXT1]]` | `Knowledge/Skills/DO/Sync an Improvement to CNTXT1.md` |
+| `[[Sync an improvement to CNTXT1]]` | `Knowledge/Skills/DO/Sync an Improvement to CNTXT1.md` |
+| `[[sync-an-improvement-to-cntxt1]]` | `Knowledge/Skills/DO/Sync an Improvement to CNTXT1.md` |
+| `[[system audit]]` | `Knowledge/Skills/CHECK/Audit the KB System.md` |
+| `[[Tune the knowledge base]]` | `Knowledge/Skills/CHECK/Optimize the Knowledge Base.md` |
+| `[[yt capture]]` | `Knowledge/Skills/DO/Capture a YouTube Video into the KB.md` |

@@ -22,7 +22,7 @@ epoch() {
 now="$(date '+%s')"
 
 count=0
-for f in CONTENT/Initiatives/*.md; do
+for f in Knowledge/Initiatives/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*) continue ;; esac
   status="$(awk '/^---$/{c++; next} c==1 && /^status:/{sub(/^status:[[:space:]]*/,""); sub(/[[:space:]]*#.*$/,""); print; exit} c==2{exit}' "$f")"

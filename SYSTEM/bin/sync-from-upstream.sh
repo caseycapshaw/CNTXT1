@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # sync-from-upstream.sh — preview-first puller of FRAMEWORK files from this
 # repo's upstream. Companion to the asymmetric-sync policy (see
-# SYSTEM/AGENTS.md § Privacy & content separation and the
+# SYSTEM/SCHEMA.md § Privacy & content separation and the
 # [[Pull Framework Updates from CNTXT1]] skill): the upstream remote is
 # fetch-only (push URL DISABLED); this script only ever moves files INWARD,
 # and it NEVER auto-commits — you always review the working tree and commit
@@ -18,19 +18,19 @@ cd "$(dirname "$0")/../.."   # vault root
 UPSTREAM_REMOTE="upstream"
 UPSTREAM_BRANCH="main"
 # Framework paths — instance-agnostic files that are safe to take verbatim.
-# Populated/personal surfaces (CLAUDE.md, index.md, CONTENT notes other than
+# Populated/personal surfaces (CLAUDE.md, index.md, Knowledge notes other than
 # templates) are deliberately NOT listed: port those by hand.
 FRAMEWORK_PATHS=(
-  "SYSTEM/AGENTS.md"
+  "SYSTEM/SCHEMA.md"
   "SYSTEM/bin"
   "SYSTEM/schemas"
   "SYSTEM/optional"
   "pyproject.toml"
   "uv.lock"
-  "CONTENT/Initiatives/Initiative TEMPLATE.md"
-  "CONTENT/People/People TEMPLATE.md"
-  "CONTENT/Skills/Skill TEMPLATE.md"
-  "CONTENT/Agents/domain-advisor TEMPLATE.md"
+  "Knowledge/Initiatives/Initiative TEMPLATE.md"
+  "Knowledge/People/People TEMPLATE.md"
+  "Knowledge/Skills/Skill TEMPLATE.md"
+  "Knowledge/Agents/domain-advisor TEMPLATE.md"
 )
 # ======================================================
 

@@ -11,7 +11,7 @@ set -uo pipefail
 cd "$(dirname "$0")/../.."   # vault root
 
 viol=0 checked=0
-for f in CONTENT/Initiatives/*.md; do
+for f in Knowledge/Initiatives/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
   status="$(awk '/^---$/{c++; next} c==1 && /^status:/{sub(/^status:[[:space:]]*/,""); sub(/[[:space:]]+#.*$/,""); print; exit} c==2{exit}' "$f")"

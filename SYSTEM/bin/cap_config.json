@@ -1,5 +1,5 @@
 {
-  "_doc": "Registered role digests for cap_check.py (SYSTEM/AGENTS.md). One cap vault-wide by design; a per-file `cap_words:` frontmatter key overrides. Register a new advisor role's digest here when the role is created. Empty on purpose in the starter — add paths as you create digest files.",
+  "_doc": "Registered role digests for cap_check.py (SYSTEM/SCHEMA.md). One cap vault-wide by design; a per-file `cap_words:` frontmatter key overrides. Register a new advisor role's digest here when the role is created. Empty on purpose in the starter — add paths as you create digest files.",
   "default_cap_words": 2000,
   "digests": []
 }

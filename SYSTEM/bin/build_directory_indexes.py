@@ -1,4 +1,4 @@
-"""Regenerate each CONTENT folder's own index.md — a small, folder-scoped map
+"""Regenerate each Knowledge folder's own index.md — a small, folder-scoped map
 so an agent (or a human) can orient to one folder without loading the whole
 vault-wide index. Run via `uv run python SYSTEM/bin/build_directory_indexes.py`.
 
@@ -22,23 +22,23 @@ END = "<!-- dir-index:auto:end -->"
 
 # folder -> (table columns as (Header, frontmatter key)) — "Note" is implicit.
 TABLE_TARGETS = {
-    "CONTENT/Concepts": [
+    "Knowledge/Concepts": [
         ("Description", "description"), ("Updated", "updated"),
         ("Status", "status"), ("Tags", "tags"),
     ],
-    "CONTENT/Initiatives": [
+    "Knowledge/Initiatives": [
         ("Description", "description"), ("Status", "status"),
         ("Updated", "updated"), ("Tags", "tags"),
     ],
-    "CONTENT/People": [
+    "Knowledge/People": [
         ("Role", "role"), ("Org", "org"), ("Status", "status"), ("Tags", "tags"),
     ],
-    "CONTENT/Agents": [
+    "Knowledge/Agents": [
         ("Description", "description"), ("Model", "model"),
         ("Status", "status"), ("Tags", "tags"),
     ],
 }
-LISTING_TARGETS = ["CONTENT/raw", "CONTENT/Excalidraw"]
+LISTING_TARGETS = ["Knowledge/raw", "Knowledge/Excalidraw"]
 
 MAX_CELL = 80  # keep long descriptions from blowing the table apart
 

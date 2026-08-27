@@ -34,7 +34,7 @@ while IFS=: read -r file line text; do
   [ -n "$created" ] || { printf '  skip (no git history): %s:%s\n' "$file" "$line"; continue; }
   printf '%s\t%s\t%s\t%s\n' "$file" "$line" "$created" "$text" >> "$plan"
   echo "$created" >> "$dates"
-done < <(grep -rnE '^[[:space:]]*- \[ \] .*#action' --include='*.md' CONTENT index.md 2>/dev/null \
+done < <(grep -rnE '^[[:space:]]*- \[ \] .*#action' --include='*.md' Knowledge index.md 2>/dev/null \
            | grep -v 'TEMPLATE' \
            | sed -E 's/^([^:]+):([0-9]+):[[:space:]]*- \[ \][[:space:]]*/\1:\2:/')
 

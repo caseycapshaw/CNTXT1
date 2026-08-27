@@ -41,7 +41,7 @@ jobs:
             Review this pull request to the CNTXT1 starter kit. CNTXT1 is a
             PUBLIC template for private personal knowledge bases — it ships a
             framework (schema, templates, runbooks, scripts) and must contain
-            ZERO personal or instance-specific content. Read SYSTEM/AGENTS.md
+            ZERO personal or instance-specific content. Read SYSTEM/SCHEMA.md
             ("Privacy & content separation") first — it is the constitution.
 
             Review the diff for, in priority order:
@@ -49,17 +49,17 @@ jobs:
             1. PRIVACY (blocking): any content that looks personal or
                instance-specific rather than framework-generic — real names,
                family/household details, employers, addresses, emails, IPs,
-               device/host names, populated CONTENT/People/CONTENT/raw/daily/Initiatives
+               device/host names, populated Knowledge/People/Knowledge/raw/daily/Initiatives
                content, an owner: field with a real name, placeholders
                ({{NAME}}, {{PERSONAL_IDENTIFIERS}}, etc.) replaced with real
                values, or personal specifics leaking through examples. The
                deterministic gate catches known patterns; you catch what
                patterns miss. When in doubt, it's personal — flag it.
 
-            2. SCHEMA CONSISTENCY: changes must conform to SYSTEM/AGENTS.md —
-               new Skills at CONTENT/Skills/<TYPE>/ (DO|CHECK|FORMAT|RULE) with
+            2. SCHEMA CONSISTENCY: changes must conform to SYSTEM/SCHEMA.md —
+               new Skills at Knowledge/Skills/<TYPE>/ (DO|CHECK|FORMAT|RULE) with
                matching type: frontmatter and owner: {{NAME}}, indexed in
-               CONTENT/Concepts/skills.md;
+               Knowledge/Concepts/skills.md;
                concepts carry frontmatter (type/updated/status/tags); the
                link map regenerated when link targets change; index.md stays
                a pure map (no change history); root gains no new permanent

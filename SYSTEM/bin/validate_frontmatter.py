@@ -1,4 +1,4 @@
-"""Validate the YAML frontmatter of every CONTENT/Concepts/Initiatives/People/
+"""Validate the YAML frontmatter of every Knowledge/Concepts/Initiatives/People/
 Skills note against its Pydantic schema. Run via
 `uv run python SYSTEM/bin/validate_frontmatter.py`, wired into
 SYSTEM/bin/lint.sh.
@@ -24,14 +24,14 @@ from SYSTEM.schemas.models import (  # noqa: E402
 )
 
 TARGETS = [
-    ("CONTENT/Agents", AgentFrontmatter),
-    ("CONTENT/Concepts", ConceptFrontmatter),
-    ("CONTENT/Initiatives", InitiativeFrontmatter),
-    ("CONTENT/People", PersonFrontmatter),
-    ("CONTENT/Skills/DO", DoFrontmatter),
-    ("CONTENT/Skills/CHECK", CheckFrontmatter),
-    ("CONTENT/Skills/FORMAT", FormatFrontmatter),
-    ("CONTENT/Skills/RULE", RuleFrontmatter),
+    ("Knowledge/Agents", AgentFrontmatter),
+    ("Knowledge/Concepts", ConceptFrontmatter),
+    ("Knowledge/Initiatives", InitiativeFrontmatter),
+    ("Knowledge/People", PersonFrontmatter),
+    ("Knowledge/Skills/DO", DoFrontmatter),
+    ("Knowledge/Skills/CHECK", CheckFrontmatter),
+    ("Knowledge/Skills/FORMAT", FormatFrontmatter),
+    ("Knowledge/Skills/RULE", RuleFrontmatter),
 ]
 
 

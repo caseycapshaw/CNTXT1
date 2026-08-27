@@ -14,7 +14,7 @@ from SYSTEM.schemas.base_models import (
 
 
 class AgentFrontmatter(BaseModel):
-    """Frontmatter schema for CONTENT/Agents/*.md — real Claude Code subagent
+    """Frontmatter schema for Knowledge/Agents/*.md — real Claude Code subagent
     definitions, symlinked into ~/.claude/agents/ for direct use, and also
     launchable as CMUX pane-worker system prompts (--append-system-prompt).
 

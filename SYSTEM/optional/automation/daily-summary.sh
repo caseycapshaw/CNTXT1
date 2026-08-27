@@ -2,7 +2,7 @@
 # daily-summary.sh — end-of-day companion to daily-plan.sh.
 #
 # Invoked by launchd at 18:00 (com.example.daily-summary). Two jobs in one pass:
-#   1. Runs a full KB lint (per SYSTEM/AGENTS.md health checks).
+#   1. Runs a full KB lint (per SYSTEM/SCHEMA.md health checks).
 #   2. Appends a succinct, human-readable "What we did today" summary to the
 #      day's note (daily/<DATE>.md).
 #
@@ -41,7 +41,7 @@ mkdir -p "$daily_dir" "$HOME/.claude/cache"
 
 # ---------------------------------------------------------------------------
 # 0) Upstream framework check — if the vault has a fetch-only `upstream`
-#    remote (see CONTENT/Skills/DO/Pull Framework Updates from CNTXT1.md), look for kit
+#    remote (see Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md), look for kit
 #    commits not yet adopted. If any: write/refresh an "Upstream kit updates
 #    (pending).md" note in the root inbox (+ a macOS notification the first
 #    time a new tip appears) so the next interactive session interviews you
@@ -152,7 +152,7 @@ PRESCAN
 # ---------------------------------------------------------------------------
 read -r -d '' prompt <<EOF
 You are writing the END-OF-DAY summary for ${NAME}'s Obsidian knowledge base at
-$vault. Read $vault/SYSTEM/AGENTS.md if you need the conventions. TODAY is $today.
+$vault. Read $vault/SYSTEM/SCHEMA.md if you need the conventions. TODAY is $today.
 
 You have TWO jobs. Do the lint first (it may surface something worth a bullet),
 then write the summary. Use ONLY the signals below plus, if you must verify a

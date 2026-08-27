@@ -29,11 +29,11 @@ Usage:
     python3 SYSTEM/bin/excalidraw.py --list          # list defined diagrams
 
 Add a diagram: append a spec dict to DIAGRAMS (see the example below), re-run.
-Runbook: CONTENT/Skills/FORMAT/Create an Excalidraw Diagram.md.
+Runbook: Knowledge/Skills/FORMAT/Create an Excalidraw Diagram.md.
 """
 import json, os, sys
 
-OUT = os.path.join(os.path.dirname(__file__), "..", "..", "CONTENT", "Excalidraw")
+OUT = os.path.join(os.path.dirname(__file__), "..", "..", "Knowledge", "Excalidraw")
 UPDATED = 1720400000000
 
 # palette: (fill, stroke)
@@ -204,8 +204,8 @@ class Diagram:
 def example():
     d = Diagram("Example — the KB's own data flow  ·  inbox → raw → compile → index → log")
     d.node("inbox", 0, 0, "New note lands at\nvault root = INBOX", "read")
-    d.node("raw", 1, 0, "Triage → CONTENT/raw/\nYYYY-MM-DD-topic.md\n(append-only)", "write")
-    d.node("concepts", 2, 0, "Compile facts →\nCONTENT/Concepts/\nbump updated: frontmatter", "write")
+    d.node("raw", 1, 0, "Triage → Knowledge/raw/\nYYYY-MM-DD-topic.md\n(append-only)", "write")
+    d.node("concepts", 2, 0, "Compile facts →\nKnowledge/Concepts/\nbump updated: frontmatter", "write")
     d.node("index", 3, 0, "Update index.md\nQuick map", "write")
     d.node("log", 4, 0, "Append SYSTEM/log.md\n(one line)", "write")
     for a, b in [("inbox", "raw"), ("raw", "concepts"), ("concepts", "index"), ("index", "log")]:

@@ -11,8 +11,10 @@ script for *Claude*. The fastest path is to let Claude run it.
 
 ## ▶ How to set up (the easy way)
 
-1. Copy this whole `kb-starter/` folder to wherever you want your KB to live, and
-   rename it (e.g. `~/my-kb`, `~/work-brain`).
+1. Get the repo: either `git clone` it and use it directly (your personal content in
+   `Knowledge/`, `daily/`, and `attachments/` stays untracked — `git pull` brings
+   framework updates), or copy the folder into your own private repo with this one as
+   a fetch-only `upstream` (rename it however you like, e.g. `~/my-kb`).
 2. Open it in **Claude Code** (`cd` into the folder, run `claude`).
 3. Say: **`follow setup.md`**
 
@@ -33,9 +35,9 @@ first lesson in how the KB works, so narrate lightly as you go. Do not dump all
 questions at once.
 
 **First, read these so you operate the way this KB expects:**
-- `SYSTEM/AGENTS.md` — the schema (compiler analogy, data flow, conventions, health checks).
-- `CLAUDE.md` — the project instructions (note the `{{placeholders}}` you'll fill).
-- `CONTENT/Concepts/karpathy-method.md` — why this design works (so you can explain it).
+- `SYSTEM/SCHEMA.md` — the schema (compiler analogy, data flow, conventions, health checks).
+- `AGENTS.md` — the cross-vendor project instructions (note the `{{placeholders}}` you'll fill; `CLAUDE.md` just imports it).
+- `Knowledge/Concepts/karpathy-method.md` — why this design works (so you can explain it).
 
 ### Phase 1 — Interview
 
@@ -43,7 +45,7 @@ Ask the user, a few at a time (skip anything that doesn't apply):
 
 1. **Name** — how the KB should address them.
 2. **Role / title** and **org / team**.
-3. **Who they report to / key people** (3–5 names + one-line roles) — these become their first `CONTENT/People/` notes and seed `CONTENT/Concepts/contacts.md`.
+3. **Who they report to / key people** (3–5 names + one-line roles) — these become their first `Knowledge/People/` notes and seed `Knowledge/Concepts/contacts.md`.
 4. **The domain this KB is *about*** — the role, project, system, or transition they're building memory around. Get them to say it in a sentence.
 5. **What they're ramping on right now** — current priorities, the things they keep having to re-learn. This seeds the first concepts and actions.
 
@@ -51,7 +53,7 @@ Keep it light. You're collecting enough to personalize the scaffolding, not writ
 
 ### Phase 2 — Fill the templates
 
-In `CLAUDE.md`, replace the placeholders from the interview:
+In `AGENTS.md`, replace the placeholders from the interview:
 - `{{NAME}}`, `{{ROLE}}`, `{{ORG}}`.
 - `{{REPORTS_TO}}` → e.g. `, reporting to <Name>` — or delete it entirely if not relevant.
 - `{{CONTEXT_SHORTCUTS}}` → leave just the method shortcut for now; add concept shortcuts as they get created.
@@ -59,23 +61,23 @@ In `CLAUDE.md`, replace the placeholders from the interview:
 Then update the header lines of `index.md` and `README.md` to name the user and
 their domain (replace the `{{...}}` placeholders there too).
 
-Two placeholders live outside `CLAUDE.md`:
-- `owner: "{{NAME}}"` in each `CONTENT/Skills/<TYPE>/*.md` skill → the user's name.
-- `{{PERSONAL_IDENTIFIERS}}` in `CONTENT/Skills/DO/Sync an Improvement to CNTXT1.md` → a
+Two placeholders live outside `AGENTS.md`:
+- `owner: "{{NAME}}"` in each `Knowledge/Skills/<TYPE>/*.md` skill → the user's name.
+- `{{PERSONAL_IDENTIFIERS}}` in `Knowledge/Skills/DO/Sync an Improvement to CNTXT1.md` → a
   `|`-separated grep pattern of the user's personal identifiers (full name,
   family members, employer, email domain — from the interview). **State the
   privacy rule out loud while doing this:** this vault is private; personal
   content never leaves it; only re-templated framework improvements flow out,
-  through that skill's grep gate (`SYSTEM/AGENTS.md` § Privacy & content
+  through that skill's grep gate (`SYSTEM/SCHEMA.md` § Privacy & content
   separation).
 
 ### Phase 3 — Run one real loop (the important part)
 
 Don't leave them with empty folders. Do one full pass so the method is demonstrated:
 
-1. **Capture.** Pick the richest thing from the interview (often "what they're ramping on" or the people list). Brain-dump it with the user into a dated raw note: `CONTENT/raw/YYYY-MM-DD-<topic>.md` (use today's date), with a one-line provenance header (e.g. `_Source: setup interview, <date>._`).
-2. **Compile.** Extract the durable facts into a concept article in `CONTENT/Concepts/` (e.g. `CONTENT/Concepts/the-role.md` or `CONTENT/Concepts/<system>.md`). Use `[[wikilinks]]`. If a real to-do surfaced, write it inline as `- [ ] … #action`.
-3. **Seed CONTENT/People/.** For each key person from Phase 1, create `CONTENT/People/<Full Name>.md` from `CONTENT/People/People TEMPLATE.md` and add a row to `CONTENT/Concepts/contacts.md`. Even stubs (name + role + one-liner) are better than nothing — they can flesh them out later.
+1. **Capture.** Pick the richest thing from the interview (often "what they're ramping on" or the people list). Brain-dump it with the user into a dated raw note: `Knowledge/raw/YYYY-MM-DD-<topic>.md` (use today's date), with a one-line provenance header (e.g. `_Source: setup interview, <date>._`).
+2. **Compile.** Extract the durable facts into a concept article in `Knowledge/Concepts/` (e.g. `Knowledge/Concepts/the-role.md` or `Knowledge/Concepts/<system>.md`). Use `[[wikilinks]]`. If a real to-do surfaced, write it inline as `- [ ] … #action`.
+3. **Seed Knowledge/People/.** For each key person from Phase 1, create `Knowledge/People/<Full Name>.md` from `Knowledge/People/People TEMPLATE.md` and add a row to `Knowledge/Concepts/contacts.md`. Even stubs (name + role + one-liner) are better than nothing — they can flesh them out later.
 4. **Index.** Add the new concept (and the raw note) to `index.md` with a one-line summary. Confirm the People section reflects the new person notes.
 5. **Log.** Append one line to `SYSTEM/log.md` (start it with today's date).
 
@@ -116,7 +118,7 @@ them is a fine answer (the core loop needs none of this). Full install detail:
 | 3 | **8am daily plan** (launchd) | writes `daily/YYYY-MM-DD.md`: schedule + live `#action` query + priorities | headless `claude -p` working; calendar/Gmail optional |
 | 4 | **Gmail digest in the daily plan** | a grouped "From the inbox" section from the last 2 days of email (read-only) | `gws`; **privacy note: mail headers/snippets land in daily notes** — say this out loud |
 | 5 | **6pm summary + git snapshot** (launchd) | evening lint, "what we did today" recap, then a nightly commit (+push if a remote exists) | git repo; remote optional |
-| 6 | **Claude Desktop MCP server** | lets the Claude Desktop chat app read the vault (index/read/search/actions) and capture new facts to `CONTENT/raw/` — the "prioritize the KB" rule rides into every chat as server instructions | Claude Desktop + `python3` (stdlib only) |
+| 6 | **Claude Desktop MCP server** | lets the Claude Desktop chat app read the vault (index/read/search/actions) and capture new facts to `Knowledge/raw/` — the "prioritize the KB" rule rides into every chat as server instructions | Claude Desktop + `python3` (stdlib only) |
 
 For whichever they accept:
 
@@ -146,12 +148,12 @@ equivalents but don't set them up unless asked.
 ### Phase 6 — Clean up & hand off
 
 1. Offer to delete the **example files** now that real ones exist:
-   - `CONTENT/raw/2026-01-01-example-capture.md` (clearly-labeled example).
+   - `Knowledge/raw/2026-01-01-example-capture.md` (clearly-labeled example).
    - `.github/` (the starter kit's own CI: PR privacy gate + contributor docs — they guard the *public template repo*, and the gate will fail on a personalized vault; a private instance doesn't need them).
-   - Keep `CONTENT/Concepts/karpathy-method.md` — it explains the method; suggest they keep it.
-2. Remove any remaining `{{placeholders}}` and the placeholder note at the top of `CLAUDE.md`.
-3. Run the **health checks** from `SYSTEM/AGENTS.md` once and report a clean bill (no broken wikilinks, index lists every file, inbox clean).
-4. Tell them the everyday loop in one breath: *drop notes at the root → ask me to "file the inbox" → I triage to `CONTENT/raw/`, compile to `CONTENT/Concepts/`, update `index.md`, log it.* And that they can ask you to **"run the knowledge health check"** anytime.
+   - Keep `Knowledge/Concepts/karpathy-method.md` — it explains the method; suggest they keep it.
+2. Remove any remaining `{{placeholders}}` and the placeholder note at the top of `AGENTS.md`.
+3. Run the **health checks** from `SYSTEM/SCHEMA.md` once and report a clean bill (no broken wikilinks, index lists every file, inbox clean).
+4. Tell them the everyday loop in one breath: *drop notes at the root → ask me to "file the inbox" → I triage to `Knowledge/raw/`, compile to `Knowledge/Concepts/`, update `index.md`, log it.* And that they can ask you to **"run the knowledge health check"** anytime.
 
 That's it — stop here and let them start using it.
 
@@ -161,7 +163,7 @@ That's it — stop here and let them start using it.
 
 ```
 your-kb/
-├── CLAUDE.md         ← personalized; Claude reads it every session
+├── AGENTS.md         ← personalized cross-vendor instructions (CLAUDE.md imports it)
 ├── index.md          ← the map, seeded with your first concept
 ├── Actions.md        ← live #action dashboard
 ├── README.md         ← your hub
@@ -172,11 +174,11 @@ your-kb/
 │   ├── link-map.md   ← generated [[wikilink]] → path index
 │   └── bin/          ← lint.sh + lint-delta.sh + cap_check.py + build-link-map.sh + kb-mcp-server.py (KB tooling)
 │   └── optional/     ← opt-in automation bundle (offered during setup, Phase 5)
-├── CONTENT/raw/              ← your first dated capture
-├── CONTENT/Concepts/         ← karpathy-method + contacts + skills + your first concept (all carry frontmatter)
-├── CONTENT/Initiatives/      ← one note per goal-directed workstream (+ its template)
-├── CONTENT/People/           ← one note per person (single source of truth for per-person detail)
-├── CONTENT/Skills/           ← runbooks for recurring tasks, filed by type: DO / CHECK / FORMAT / RULE (KB-meta ones ship, including Close a Session + Keep Machinery Vendor-Portable)
+├── Knowledge/raw/              ← your first dated capture
+├── Knowledge/Concepts/         ← karpathy-method + contacts + skills + your first concept (all carry frontmatter)
+├── Knowledge/Initiatives/      ← one note per goal-directed workstream (+ its template)
+├── Knowledge/People/           ← one note per person (single source of truth for per-person detail)
+├── Knowledge/Skills/           ← runbooks for recurring tasks, filed by type: DO / CHECK / FORMAT / RULE (KB-meta ones ship, including Close a Session + Keep Machinery Vendor-Portable)
 ```
 
 ## The daily habit
@@ -186,7 +188,7 @@ your-kb/
 - Ask questions; good answers get **filed back** as new concepts, so the base compounds.
 - Run **"the knowledge health check"** every week or two.
 
-Read `CONTENT/Concepts/karpathy-method.md` once — it explains *why* this beats throwing
+Read `Knowledge/Concepts/karpathy-method.md` once — it explains *why* this beats throwing
 files at a chatbot, and the one real risk (a wrong fact can propagate, which is
 why the health check matters).
 
@@ -202,7 +204,7 @@ CLI, read-only), and a **6pm end-of-day job** that runs the KB health check, app
 a "What we did today" recap, and commits a nightly git snapshot — so the lint and
 the backup run automatically every evening. There's also a **Claude Desktop MCP
 server** (`SYSTEM/bin/kb-mcp-server.py`, stdlib-only python) that gives the chat
-app read access to the vault plus capture-to-`CONTENT/raw/` — registration snippet in
+app read access to the vault plus capture-to-`Knowledge/raw/` — registration snippet in
 the script's docstring.
 Not required to start — see `SYSTEM/optional/automation/README.md` when you're ready.
 
@@ -212,11 +214,11 @@ Not required to start — see `SYSTEM/optional/automation/README.md` when you're
 
 If you'd rather not use the agent:
 
-1. Copy & rename the folder; open it in your editor.
-2. In `CLAUDE.md`, `index.md`, and `README.md`, replace every `{{placeholder}}` with your details (delete `{{REPORTS_TO}}` / `{{CONTEXT_SHORTCUTS}}` if unused).
-3. Delete `CONTENT/raw/2026-01-01-example-capture.md`. Keep `CONTENT/Concepts/karpathy-method.md`.
-4. Write your first real capture in `CONTENT/raw/YYYY-MM-DD-topic.md`, compile a concept into `CONTENT/Concepts/`, add both to `index.md`, and log a line in `SYSTEM/log.md`.
+1. Get the repo (clone it directly, or copy into your own private repo — see the easy-way step 1); open it in your editor.
+2. In `AGENTS.md`, `index.md`, and `README.md`, replace every `{{placeholder}}` with your details (delete `{{REPORTS_TO}}` / `{{CONTEXT_SHORTCUTS}}` if unused).
+3. Delete `Knowledge/raw/2026-01-01-example-capture.md`. Keep `Knowledge/Concepts/karpathy-method.md`.
+4. Write your first real capture in `Knowledge/raw/YYYY-MM-DD-topic.md`, compile a concept into `Knowledge/Concepts/`, add both to `index.md`, and log a line in `SYSTEM/log.md`.
 5. (Optional, for the `Actions.md` dashboard) install the Obsidian **Tasks** plugin and point Obsidian at the folder.
 6. (Optional) adopt any of the automation pieces by hand — `SYSTEM/optional/automation/README.md` is the full walkthrough.
 
-The conventions you're following are all in `SYSTEM/AGENTS.md`.
+The conventions you're following are all in `SYSTEM/SCHEMA.md`.
