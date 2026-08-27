@@ -182,6 +182,20 @@ else
   printf '%s\n' "$capout" | grep '^FAIL' | while IFS= read -r w; do note "$w"; done
 fi
 
+# ---- .claude canonical <-> visible mirrors in sync (only once migrated) ----
+# Truth direction (2026-08-27): instances that adopt the standard .claude
+# configuration keep canonical skills/agents in .claude/ and generate the
+# visible CONTENT/Skills + CONTENT/Agents notes with
+# SYSTEM/bin/build_claude_mirrors.py. Skipped until .claude/skills/ exists.
+if [ -d .claude/skills ]; then
+  if mirrout=$(uv run python SYSTEM/bin/build_claude_mirrors.py --check 2>&1); then
+    ok ".claude canonical and visible mirrors in sync"
+  else
+    bad ".claude/visible mirror drift (run: uv run python SYSTEM/bin/build_claude_mirrors.py):"
+    printf '%s\n' "$mirrout" | grep '^FAIL' | while IFS= read -r w; do note "$w"; done
+  fi
+fi
+
 rm -f "$valid" "$broken"
 echo
 if [ "$fail" = 0 ]; then echo "LINT: green (mechanical checks)"; else echo "LINT: problems found"; fi

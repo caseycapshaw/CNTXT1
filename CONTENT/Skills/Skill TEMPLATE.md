@@ -47,7 +47,15 @@ CONVENTIONS (delete in real skills)
   concept note keeps the *why/context/principles* and links here.
 • Voice = agent-executable: imperative, tool-specific, no fluff.
 • `summary:` is what index tables show — one stable sentence, no trailing "use when …".
-• Index every skill in CONTENT/Concepts/skills.md; regenerate the link map
-  (SYSTEM/bin/build-link-map.sh) after adding/renaming one.
+• CANONICAL HOME (standard Claude/Grok configuration, 2026-08-27): author the skill
+  at .claude/skills/<kebab-slug>/SKILL.md — top-level `name:` + `description:` (the
+  "Use when…" trigger text), then this template's org-schema keys indented under
+  `metadata:` plus `metadata.title:` (the Imperative Title). Claude Code, Grok
+  Build, and other SKILL.md-standard agents auto-discover it there.
+• The visible CONTENT/Skills/<TYPE>/<Imperative Title>.md note is a GENERATED
+  MIRROR — never write it by hand. After adding/renaming a skill run:
+  uv run python SYSTEM/bin/build_claude_mirrors.py && uv run python
+  SYSTEM/bin/build_skills_indexes.py && SYSTEM/bin/build-link-map.sh
+• Index every skill in CONTENT/Concepts/skills.md.
 • CONTENT/Skills/ is a STRUCTURAL folder, not the inbox (like CONTENT/People/, daily/).
 -->
