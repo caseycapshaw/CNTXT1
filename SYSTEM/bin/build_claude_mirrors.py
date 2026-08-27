@@ -129,6 +129,15 @@ def build_expected():
             role = meta.get("role") or meta.get("name")
             if not role:
                 fail(f"{agent}: metadata needs role: or name:")
+            # Lift harness-enforced top-level keys (tools:/model:) into the
+            # mirror — single-sourced from the canonical file, skipped if
+            # metadata already carries the key.
+            lifted = "".join(
+                f"{ln}\n"
+                for ln in fm_lines.split("\n")
+                if re.match(r"^(tools|model): ", ln)
+                and f"\n{ln.split(':')[0]}:" not in f"\n{meta_raw}"
+            )
             banner = (
                 f"> _Generated from `.claude/agents/{agent.name}` by "
                 f"`SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, "
@@ -136,7 +145,7 @@ def build_expected():
             )
             rel = f"Knowledge/Agents/{role}.md"
             expected[rel] = (
-                f"---\n{meta_raw}\nauthor_type: script\n---\n\n{banner}\n\n{body}"
+                f"---\n{meta_raw}\n{lifted}author_type: script\n---\n\n{banner}\n\n{body}"
             )
     return expected
 

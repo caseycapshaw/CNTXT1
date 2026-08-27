@@ -171,24 +171,29 @@ unusable — which is exactly why explicit, lean pane workers are the reliable
 path. Entirely optional — skip it if you're not running a multi-agent terminal
 tool.
 
-Optionally, give workers a **named identity** instead of a blank agent:
-`Knowledge/Agents/` holds one **real Claude Code subagent definition** per role
-(a starter set — `research`, `compile`, `lint`, `initiative-worker` — maps
-onto this KB's own raw→compile→index→lint verbs and its
-initiative-delegation model, not a generic app-build split). Each file is the
-same format as a file under `~/.claude/agents/` — YAML frontmatter
-(`name`/`description`/`version`/`model`/`tools`/`color`/`status`/`tags`/`updated`, validated
-against `AgentFrontmatter` in `SYSTEM/schemas/models.py`) followed by a
-plain-English system prompt — so the identical file works two ways:
-**symlink it into `~/.claude/agents/`** to make it directly invocable as a
-native subagent from any Claude Code session, and/or pass it via your agent
-CLI's system-prompt flag when launching a CMUX pane worker (e.g.
-`--append-system-prompt <vault>/Knowledge/Agents/<role>.md`, with an
-**absolute path** — a worker's cwd may not be your vault). The frontmatter's
-`tools:` list keeps a subagent lean (only the tools the role needs), which
-sidesteps the MCP-bloat problem above for the native subagent path too.
-`SYSTEM/bin/build_directory_indexes.py` regenerates the folder's `index.md`
-table straight from every agent's frontmatter.
+Optionally, give workers a **named identity** instead of a blank agent.
+**Agent Roles (one contract, three doors — adopted 2026-08-27):** every role is
+one canonical identity contract in `.claude/agents/<role>.md` (a starter set —
+`research`, `compile`, `lint`, `initiative-worker` — maps onto this KB's own
+raw→compile→index→lint verbs and its initiative-delegation model). Top-level
+frontmatter carries the **harness-enforced** fields — `name:`, `description:`,
+**`tools:`** (least-privilege list per role) and **`model:`** (workers
+`haiku`/`sonnet`, advisors `inherit`) — with the org keys (`kind: advisor |
+worker | classifier`, `version`, `status`, `updated`, …) under `metadata:`.
+Claude Code and Grok Build auto-discover these as native subagents. Three
+invocation doors, same contract: **dialogic** — an advisor's DO skill opens by
+reading and adopting the canonical role file in the main loop (full
+conversation; `tools:` does not bind this path — session permissions and the
+contract's own guardrails do); **delegated** — Task-tool subagent in an
+isolated context (`tools:`/`model:` harness-enforced; the lean list also
+sidesteps the MCP-bloat problem above); **external** — pass the **generated
+mirror** `Knowledge/Agents/<role>.md` via your agent CLI's system-prompt flag
+(e.g. `--append-system-prompt <vault>/Knowledge/Agents/<role>.md`, absolute
+path — a worker's cwd may not be your vault). Description policy by kind:
+advisors open "Explicit invocation only" (so they never fire uninvited);
+workers/classifiers say "Use when delegating <X>" so orchestration may route
+to them. `SYSTEM/bin/build_directory_indexes.py` regenerates the folder's
+`index.md` table straight from every mirror's frontmatter.
 
 **Domain-advisor roles** extend the same `Knowledge/Agents/` idea beyond
 orchestration: a *standing analyst* over one domain of the KB (finances,

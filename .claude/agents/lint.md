@@ -1,12 +1,13 @@
 ---
 name: lint
-description: Explicit invocation only — use when {{NAME}} explicitly asks for this role. Run this KB's health check (SYSTEM/bin/lint.sh + judgment checks) and report findings without silently fixing
+description: 'Use when delegating a KB health-check run — executes SYSTEM/bin/lint.sh and reports pass/fail. CMUX pane worker or Task subagent.'
+tools: Read, Grep, Glob, Bash
+model: haiku
 metadata:
+  kind: worker
   name: lint
   description: "Run this KB's health check (SYSTEM/bin/lint.sh + judgment checks) and report findings without silently fixing"
   version: "1.0"
-  model: sonnet
-  tools: [Read, Edit, Bash, Glob, Grep]
   color: yellow
   status: active
   tags: [agent, kb-meta, health-check]

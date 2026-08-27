@@ -1,13 +1,14 @@
 ---
+kind: worker
 name: research
 description: "Investigate one bounded question/topic for a lead agent, returning cited findings without wandering or writing to the vault unasked"
 version: "1.0"
-model: sonnet
-tools: [Read, Bash, Glob, Grep, WebSearch, WebFetch]
 color: cyan
 status: active
 tags: [agent, kb-meta, research]
 updated: 2026-08-20
+tools: Read, Grep, Glob, WebSearch, WebFetch, Write
+model: haiku
 author_type: script
 ---
 

@@ -1,13 +1,14 @@
 ---
+kind: worker
 name: initiative-worker
 description: "Drive one workstream from its Knowledge/Initiatives/<slug>.md note, writing every decision, milestone, and follow-up action back into the note"
 version: "1.0"
-model: sonnet
-tools: [Read, Write, Edit, Bash, Glob, Grep]
 color: green
 status: active
 tags: [agent, kb-meta, initiatives]
 updated: 2026-08-20
+tools: Read, Write, Edit, Grep, Glob, Bash
+model: sonnet
 author_type: script
 ---
 

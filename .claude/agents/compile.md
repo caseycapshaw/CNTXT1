@@ -1,12 +1,13 @@
 ---
 name: compile
-description: Explicit invocation only — use when {{NAME}} explicitly asks for this role. Compile a raw capture into (or update) a Knowledge/Concepts/ article, per this vault's compiler discipline
+description: 'Use when delegating compilation of Knowledge/raw/ captures into Knowledge/Concepts/ + index + log per the schema. CMUX pane worker or Task subagent.'
+tools: Read, Write, Edit, Grep, Glob, Bash
+model: sonnet
 metadata:
+  kind: worker
   name: compile
   description: "Compile a raw capture into (or update) a Knowledge/Concepts/ article, per this vault's compiler discipline"
   version: "1.0"
-  model: sonnet
-  tools: [Read, Write, Edit, Bash, Glob, Grep]
   color: blue
   status: active
   tags: [agent, kb-meta, compiler]

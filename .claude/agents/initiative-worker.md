@@ -1,12 +1,13 @@
 ---
 name: initiative-worker
-description: Explicit invocation only — use when {{NAME}} explicitly asks for this role. Drive one workstream from its Knowledge/Initiatives/<slug>.md note, writing every decision, milestone, and follow-up action back into the note
+description: 'Use when delegating one Knowledge/Initiatives/ workstream end-to-end in its own context (CMUX workspace or Task subagent).'
+tools: Read, Write, Edit, Grep, Glob, Bash
+model: sonnet
 metadata:
+  kind: worker
   name: initiative-worker
   description: "Drive one workstream from its Knowledge/Initiatives/<slug>.md note, writing every decision, milestone, and follow-up action back into the note"
   version: "1.0"
-  model: sonnet
-  tools: [Read, Write, Edit, Bash, Glob, Grep]
   color: green
   status: active
   tags: [agent, kb-meta, initiatives]

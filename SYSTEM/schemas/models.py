@@ -26,7 +26,7 @@ class AgentFrontmatter(BaseModel):
     description: str
     version: Optional[str] = None
     model: Literal["sonnet", "opus", "haiku", "inherit"] | None = None
-    tools: list[str] | None = None
+    tools: list[str] | str | None = None  # str = the harness subagent format (comma-separated)
     color: Literal["red", "green", "yellow", "cyan", "pink", "blue", "purple", "orange"] | None = None
     status: Literal["active", "draft", "deprecated"] = "active"
     tags: list[str] = Field(default_factory=list)

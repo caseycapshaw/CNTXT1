@@ -1,12 +1,13 @@
 ---
 name: research
-description: Explicit invocation only — use when {{NAME}} explicitly asks for this role. Investigate one bounded question/topic for a lead agent, returning cited findings without wandering or writing to the vault unasked
+description: 'Use when delegating external research for a named question — gathers, digests, returns findings (writes only Knowledge/raw/ captures). CMUX pane worker or Task subagent.'
+tools: Read, Grep, Glob, WebSearch, WebFetch, Write
+model: haiku
 metadata:
+  kind: worker
   name: research
   description: "Investigate one bounded question/topic for a lead agent, returning cited findings without wandering or writing to the vault unasked"
   version: "1.0"
-  model: sonnet
-  tools: [Read, Bash, Glob, Grep, WebSearch, WebFetch]
   color: cyan
   status: active
   tags: [agent, kb-meta, research]

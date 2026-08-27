@@ -1,13 +1,14 @@
 ---
+kind: worker
 name: compile
 description: "Compile a raw capture into (or update) a Knowledge/Concepts/ article, per this vault's compiler discipline"
 version: "1.0"
-model: sonnet
-tools: [Read, Write, Edit, Bash, Glob, Grep]
 color: blue
 status: active
 tags: [agent, kb-meta, compiler]
 updated: 2026-08-20
+tools: Read, Write, Edit, Grep, Glob, Bash
+model: sonnet
 author_type: script
 ---
 

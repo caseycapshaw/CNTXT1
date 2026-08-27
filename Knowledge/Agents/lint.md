@@ -1,13 +1,14 @@
 ---
+kind: worker
 name: lint
 description: "Run this KB's health check (SYSTEM/bin/lint.sh + judgment checks) and report findings without silently fixing"
 version: "1.0"
-model: sonnet
-tools: [Read, Edit, Bash, Glob, Grep]
 color: yellow
 status: active
 tags: [agent, kb-meta, health-check]
 updated: 2026-08-20
+tools: Read, Grep, Glob, Bash
+model: haiku
 author_type: script
 ---
 

@@ -8,6 +8,6 @@ own frontmatter — **do not hand-edit the table below**.
 | :-- | :-- | :-- | :-- | :-- |
 | [[compile]] | Compile a raw capture into (or update) a Knowledge/Concepts/ article, per this... | sonnet | active | agent, kb-meta, compiler |
 | [[initiative-worker]] | Drive one workstream from its Knowledge/Initiatives/<slug>.md note, writing eve... | sonnet | active | agent, kb-meta, initiatives |
-| [[lint]] | Run this KB's health check (SYSTEM/bin/lint.sh + judgment checks) and report fi... | sonnet | active | agent, kb-meta, health-check |
-| [[research]] | Investigate one bounded question/topic for a lead agent, returning cited findin... | sonnet | active | agent, kb-meta, research |
+| [[lint]] | Run this KB's health check (SYSTEM/bin/lint.sh + judgment checks) and report fi... | haiku | active | agent, kb-meta, health-check |
+| [[research]] | Investigate one bounded question/topic for a lead agent, returning cited findin... | haiku | active | agent, kb-meta, research |
 <!-- dir-index:auto:end -->
