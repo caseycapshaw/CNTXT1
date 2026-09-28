@@ -8,6 +8,7 @@ them one at a time.
 | :-- | :-- | :-- |
 | [`automation/`](automation/README.md) | your Mac (+ Claude Code) | session-start loader, daily plan/summary, calendar cache, close-ritual hook (launchd) |
 | [`core-jobs/`](core-jobs/README.md) | always-on Linux host | systemd timers + `jobwrap` (lock, timeout, dead-man's-switch, alerts), git checkpoints, backups, `LoadCredential` secrets |
+| [`gardener/`](gardener/README.md) | always-on Linux host (or any machine) | nightly unattended KB maintainer in an isolated worktree; hard guardrails; propose-mode first |
 
 Conventions shared by the Linux add-ons: templates carry `{{TOKENS}}` rendered at
 install time; host config is `/etc/cntxt1/core.env`; secrets are systemd credentials

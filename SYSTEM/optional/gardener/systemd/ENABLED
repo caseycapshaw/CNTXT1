@@ -1,0 +1,5 @@
+# Units the installer enables --now for this add-on (see core-jobs/install.sh).
+# The timer is the schedule. The .path unit additionally runs the gardener on any
+# change under $VAULT/raw — enable it (uncomment) only after you trust the output.
+cntxt1-gardener.timer
+# cntxt1-gardener.path

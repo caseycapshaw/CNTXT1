@@ -1,0 +1,10 @@
+[Unit]
+Description=cntxt1: gardener timer (18:45 {{TZ}})
+
+[Timer]
+OnCalendar=*-*-* 18:45:00 {{TZ}}
+Persistent=true
+RandomizedDelaySec=60
+
+[Install]
+WantedBy=timers.target

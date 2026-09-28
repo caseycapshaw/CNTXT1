@@ -14,6 +14,12 @@ in the core method depends on it.
   `backup` to any S3-compatible store, shared `lib/env.{sh,py}` (required
   `VAULT`, `secret_load`), rendered systemd units + `install.sh`, `set-secret`
   (systemd `LoadCredential` / `/etc/credstore`), Makefile. Tests run in CI.
+- **`gardener/`** — nightly autonomous maintainer: isolated worktree + checkpoint +
+  merge-back, drives the kit's own `regen-all.sh` / `lint.sh`, `claude -p` compile of
+  orphan `raw/` captures (30-min settle), inbox filing, capped action date-stamping,
+  daily-note digest. Guardrails in code: `raw/` append-only (+ `raw/index.md`), `> [!human]`,
+  decisions ledger, journals, AGENTS/SCHEMA/`.claude`/`.obsidian`, no deletions, checked-off
+  actions. Ships in propose-mode. Tests (fake `claude`) run in CI.
 
 ## 2026-09-28 — numbered GTD layout
 

@@ -160,6 +160,7 @@ say yes — it needs a VM, a healthchecks.io project and comfort with a terminal
 | Add-on | What it does |
 | :-- | :-- |
 | `SYSTEM/optional/core-jobs/` | systemd timers on the core host: `jobwrap` (lock, hard timeout, dead-man's-switch ping, failure alert), 15-minute `git-checkpoint`, nightly upstream/daily rollup, restic `backup` to any S3-compatible store |
+| `SYSTEM/optional/gardener/` | nightly unattended maintainer (regen, lint fixes, compile raw captures, file the inbox, stamp action dates) in an isolated worktree with hard guardrails; ships in **propose-mode** — review its branch before enabling `apply` |
 
 Walk them through the add-on's own README; every step there is one they run
 (you don't handle credentials — `set-secret` prompts them directly).
