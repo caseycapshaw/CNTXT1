@@ -3,16 +3,18 @@ type: do
 domain: kb-meta
 trigger: "{{NAME}} says \"close\", \"close session\", \"wrap up\", or an equivalent end signal"
 frequency: ad-hoc
-tools: [SYSTEM/log.md, SYSTEM/decisions.md, SYSTEM/bin/cap_check.py, git]
+tools: [SYSTEM/log.md, SYSTEM/decisions.md, SYSTEM/skill-impact.md, SYSTEM/bin/cap_check.py, git]
 owner: "{{NAME}}"
+version: "1.1"
 status: active
 tags: [do, kb-meta]
 aliases: [Close a Session, close-a-session, close ritual]
-summary: The single-door session close — one feedback question, then record (log, decisions, digests), then review (route learnings by scope).
+summary: The single-door session close — one feedback question, then record (log, decisions, digests), then review (route learnings by scope; skill proposals → skill-impact ledger).
+updated: 2026-09-28
 author_type: script
 ---
 
-> _Generated from `.claude/skills/close-a-session/SKILL.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-08-27_
+> _Generated from `.claude/skills/close-a-session/SKILL.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-09-28_
 
 # Skill — Close a Session
 
@@ -34,7 +36,7 @@ author_type: script
    d. If an initiative session: update its "Now & next" + `updated:`; append a `## Trail` line if the note keeps one.
    e. {{NAME}}'s step-1 feedback, verbatim, goes wherever the session's record lives (log line suffix, session note, or journal).
 
-3. **Review — route learnings by scope.** From the session (corrections {{NAME}} made rank highest, then step-1 feedback, then observed friction): a learning that binds *one role* → propose an edit to that `Knowledge/Agents/<role>.md` (show the diff; bump its version on adoption). One that binds *a skill* → same, in the skill. One that binds *the system* (`SYSTEM/SCHEMA.md`, templates, `CLAUDE.md`) → **draft, never apply** — present for {{NAME}}'s yes or park it in the relevant note's Open questions. "No friction = no findings" — the door costs nothing extra.
+3. **Review — route learnings by scope.** From the session (corrections {{NAME}} made rank highest, then step-1 feedback, then observed friction): a learning that binds *one role* → propose an edit to that `Knowledge/Agents/<role>.md` (show the diff; bump its version on adoption). One that binds *a skill* → same, in the skill — **and every skill proposal, whatever its fate, gets one line in `SYSTEM/skill-impact.md`** (`- YYYY-MM-DD — [[Skill Title]] — ADOPTED|REJECTED|PARKED — change — reason — pointer`); on ADOPTED bump the skill's `metadata.version` + `updated:` and rebuild mirrors. The REJECTED lines are the point — they stop the same proposal resurfacing next session. One that binds *the system* (`SYSTEM/SCHEMA.md`, templates, `CLAUDE.md`) → **draft, never apply** — present for {{NAME}}'s yes or park it in the relevant note's Open questions. "No friction = no findings" — the door costs nothing extra.
 
 4. **Sweep what the session's edits made stale.** If the session amended a rule surface (AGENTS.md, a template, a RULE skill): grep for prose restating the amended text and fix companions **now** — staleness is generated at write time. If it renamed anything: link-map regen.
 
@@ -50,8 +52,9 @@ author_type: script
 
 - [ ] Log line appended; decisions ledger checked (and appended only on {{NAME}}'s word).
 - [ ] Digest/initiative state current; cap check green or exception declared.
+- [ ] Every skill proposal ledgered in `SYSTEM/skill-impact.md` (adopted ones version-bumped, mirrors rebuilt).
 - [ ] Learnings routed (or "no findings" stated); nothing needing {{NAME}}'s word left unsurfaced.
 
 ## Related
 
-[[SCHEMA]] · [[Run the KB Health Check]] · [[Keep Machinery Vendor-Portable]] · `SYSTEM/decisions.md`.
+[[SCHEMA]] · [[Run the KB Health Check]] · [[Keep Machinery Vendor-Portable]] · `SYSTEM/decisions.md` · `SYSTEM/skill-impact.md`.

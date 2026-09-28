@@ -5,15 +5,16 @@ trigger: "any file a script rewrites, any new data feed, any 'always current' re
 frequency: ad-hoc
 tools: ["<!-- generated --> marker", "per-domain generator scripts", "launchd/cron"]
 owner: "{{NAME}}"
+version: "1.0"
 status: active
 tags: [rule, kb-meta]
 aliases: [Maintain Generated Sections, maintain-generated-sections, generated-sections]
 summary: The standing convention for machine-maintained file sections — config above a marker, generated content below, fail loud, never hand-edit below the line.
-updated: 2026-08-14
+updated: 2026-09-28
 author_type: script
 ---
 
-> _Generated from `.claude/skills/maintain-generated-sections/SKILL.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-08-27_
+> _Generated from `.claude/skills/maintain-generated-sections/SKILL.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-09-28_
 
 # Skill — Maintain Generated Sections
 

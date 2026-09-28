@@ -9,10 +9,12 @@ metadata:
   frequency: monthly
   tools: ["Read", "Grep", "Edit"]
   owner: "{{NAME}}"
+  version: "1.0"
   status: active
   tags: [check, kb-meta]
   aliases: ["Audit state freshness", "state freshness audit", "second brain audit", "audit-state-freshness"]
   summary: Audits the always-loaded surfaces for stale state-shaped claims and fixes drift in place.
+  updated: 2026-09-28
 ---
 
 

@@ -1,87 +1,128 @@
 ---
 name: optimize-the-knowledge-base
-description: Keeps the KB fast for the LLM (lean injected map, resolvable links) and accurate (fresh frontmatter, green lint) via a measured efficiency pass. Use when monthly, or when the KB feels slow/bloated to navigate.
+description: Measure the KB the way you'd profile an operating system — boot cost per session, hot/cold paging, the action scheduler, log growth, compile debt, hook parity across machines — then cut only what a number justifies. Use monthly, when the KB feels slow/bloated, or when {{NAME}} asks for a performance/organization step-back.
 metadata:
   title: Optimize the Knowledge Base
   type: check
   domain: kb-meta
-  trigger: monthly, or when the KB feels slow/bloated to navigate
+  trigger: "monthly, when the KB feels slow/bloated to navigate, or when {{NAME}} asks for a Claude+KB performance / organization step-back"
   frequency: monthly
-  tools: ["bash (wc/grep/head)", "SYSTEM/bin/lint.sh", "SYSTEM/bin/build-link-map.sh"]
+  tools: "bash (wc/awk/grep/rg), ssh <other-machine> (if you run more than one), SYSTEM/bin/lint.sh, SYSTEM/bin/build-link-map.sh, SYSTEM/bin/cap_check.py"
   owner: "{{NAME}}"
   status: active
+  version: "1.0"
   tags: [check, kb-meta]
-  aliases: ["Optimize the knowledge base", "Optimize the KB", "KB efficiency pass", "Tune the knowledge base", "optimize-the-knowledge-base"]
-  summary: Keeps the KB fast for the LLM (lean injected map, resolvable links) and accurate (fresh frontmatter, green lint) via a measured efficiency pass.
+  aliases: [Optimize the knowledge base, Optimize the KB, KB efficiency pass, Tune the knowledge base, KB kernel pass, optimize-the-knowledge-base]
+  summary: Profile the KB like an OS (boot cost, paging, scheduler, log, GC, hook parity), record the gauges, then cut only what a number justifies.
+  updated: 2026-09-28
 ---
 
 
 # Skill — Optimize the knowledge base
 
-> **When:** monthly, or whenever the KB feels slow/bloated to navigate · **Frequency:** monthly / ad-hoc · **Tools:** `bash`, `SYSTEM/bin/lint.sh`, `SYSTEM/bin/build-link-map.sh`
-> **Outcome:** the KB stays *fast for the LLM* (lean injected map, resolvable links) and *accurate* (fresh frontmatter, green lint). Distinct from [[Run the KB health check]], which checks **correctness**; this checks **efficiency/structure**.
+> **When:** monthly, whenever the KB feels slow/bloated, or when {{NAME}} asks for a step-back on Claude+KB performance/organization · **Frequency:** monthly / ad-hoc · **Tools:** `bash`, `ssh` to the other machine, `SYSTEM/bin/lint.sh`, `SYSTEM/bin/build-link-map.sh`, `SYSTEM/bin/cap_check.py`
+> **Outcome:** a dated gauge table (the "before"), a ranked set of cuts each traceable to a gauge, and — if the cuts are more than an evening — an initiative. Distinct from [[Run the KB health check]] (correctness) and [[Audit the KB System]] (architecture); this is **performance and organization**, measured.
 
-## When to run this
-A KB grows every session, and growth quietly degrades what the LLM pays for: the **session-start context** (if you use the optional SessionStart hook, it inlines `head -c 8000` of `index.md` — outgrow that and the tail is silently dropped) and **link/lookup cost**. Run this monthly, or any time the map feels bloated, a concept has ballooned, or `index.md` has started accreting a changelog. **Measure before changing** — don't optimize on a hunch.
+## The lens
+
+Treat Claude+KB as an **operating system for information work**. The filesystem
+(schema, up-links, lint, link map) is usually fine; what degrades is the
+**kernel** — and each kernel part has a gauge:
+
+| OS part | KB surface | Gauge |
+| :-- | :-- | :-- |
+| Boot sequence | SessionStart hook + "read at start" files | tokens loaded before the first word of work; is the map loaded twice? |
+| Hardware detection | hook output | does the session know which machine it's on? |
+| Memory paging | Now & next vs. Milestones/Trail in the same file | bytes per section of the biggest notes |
+| Process scheduler | open `#action` lines | count · age · per-home · machine-made share |
+| Syslog | `SYSTEM/log.md` | size, lines/month |
+| Garbage collection | `Knowledge/raw/` captures never compiled | orphan count (zero inbound links) |
+| Telemetry | none unless built | is any of this measured automatically? |
+
+**Measure before changing.** Every cut in step 5 must point at a row in the
+table from steps 1–4.
 
 ## Steps
 
-1. **Measure the cost surface first.**
+1. **Boot cost — what every session pays.** Bytes ÷ 4 ≈ tokens.
    ```bash
    cd <vault>
-   wc -l CLAUDE.md SYSTEM/SCHEMA.md index.md Actions.md      # session-load files
-   wc -l Knowledge/Concepts/*.md | sort -rn | head                   # biggest concepts (prune/split candidates)
-   wc -l Knowledge/raw/*.md      | sort -rn | head                   # biggest raw captures
+   for f in AGENTS.md SYSTEM/SCHEMA.md index.md Actions.md SYSTEM/link-map.md SYSTEM/log.md SYSTEM/decisions.md; do
+     printf "%-24s %7d bytes ~%5d tok %4d lines\n" "$f" $(wc -c <"$f") $(( $(wc -c <"$f")/4 )) $(wc -l <"$f"); done
+   head -c 8000 index.md | grep -c '^## '        # Quick-map skeleton inside the injection window?
    ```
+   Add up what `AGENTS.md` tells a session to read *plus* what the hook injects.
+   Double-loading (hook injects the index head **and** the session is told to
+   read `index.md`) is the classic leak.
 
-2. **Check the injection budget** (if you run the SessionStart hook). The whole Quick-map skeleton must land inside the injected window, or startup context is partial.
+2. **Hook parity + machine identity — on EVERY machine that opens the vault.**
+   A second machine can share the vault path yet run different hooks (or none).
    ```bash
-   head -c 8000 index.md | grep -c '## Concepts'           # expect 1 (skeleton + heading both inside budget)
+   hostname; ls ~/.claude/hooks/; python3 -c "import json;print(json.load(open('$HOME/.claude/settings.json')).get('hooks',{}).get('SessionStart'))"
+   ssh <other-machine> 'hostname; ls ~/.claude/hooks/'
    ```
-   If it no longer fits: **tighten the Quick map** (shorter glosses) first; only raise `head -c 8000` in the hook as a last resort (bigger injection = more tokens every session).
+   Different hooks per machine, or a hook that never announces `hostname`,
+   is a finding. (Single-machine setups: skip the `ssh` line.)
 
-3. **Keep `index.md` a pure map.** No changelog, no dated narrative — those belong in `SYSTEM/log.md`.
+3. **Paging — where the bytes live inside the big notes.**
    ```bash
-   grep -nE '^_(Prior|Last updated|Status)' index.md       # expect no changelog blocks (a single _Last updated_ footer is fine)
+   find "Knowledge/Initiatives" "Knowledge/Concepts" -maxdepth 2 -name "*.md" -exec wc -c {} + | sort -rn | head -8
+   awk '/^## /{if(h)printf "%7d  %s\n",n,h;h=$0;n=0;next}{n+=length($0)+1}END{printf "%7d  %s\n",n,h}' "Knowledge/Initiatives/<biggest>.md" | sort -rn | head
+   grep -h '^updated:' Knowledge/Concepts/*.md | awk '{print substr($2,1,7)}' | sort | uniq -c   # concept freshness by month
    ```
-   Move any narrative history to `SYSTEM/log.md`. Keep the Raw listing condensed (grouped one-liners, not a paragraph per file).
+   A `## Now & next` or `## Milestones` measured in tens of KB is history
+   living in a hot file. Check `SYSTEM/bin/cap_check.py` covers it; if not,
+   that's the cut.
 
-4. **Audit concept frontmatter + staleness.** Every concept carries `type/updated/status/tags`; `updated:` is the staleness signal.
+4. **Scheduler, syslog, GC — the counts.**
    ```bash
-   for f in Knowledge/Concepts/*.md; do [ "$(head -1 "$f")" = "---" ] || echo "NO FM: $f"; done
-   grep -H '^updated:' Knowledge/Concepts/*.md | sort -t: -k3         # oldest first — eyeball for outdated truth
+   grep -rcE '^\s*- \[ \] .*#action' --include='*.md' . | grep -v ':0$' | sort -t: -k2 -rn | head -12   # open actions by home
+   grep -rhoE '^\s*- \[ \] .*#action' --include='*.md' . | wc -l                                        # total
+   grep -oE '^- [0-9]{4}-[0-9]{2}' SYSTEM/log.md | sort | uniq -c                                            # log lines / month
+   for r in Knowledge/raw/20*.md; do b=$(basename "$r" .md); grep -rqlF "raw/$b" --include='*.md' --exclude-dir=raw --exclude-dir=SYSTEM . || echo "$b"; done | wc -l   # orphan raw
+   ( time bash SYSTEM/bin/lint.sh >/dev/null ) 2>&1 | grep real
    ```
-   For any concept whose `updated:` predates work that changed its truth: rewrite in place + bump `updated:`, or set `status: stale`/`superseded`.
+   Look for **action inflation from automation** (one machine-fed note
+   holding a large share of all open actions) — machine-made actions
+   dilute the human next-action signal and want their own tag/queue.
 
-5. **Refresh the link-map.**
-   ```bash
-   ./SYSTEM/bin/build-link-map.sh        # overwrites SYSTEM/link-map.md
-   ```
+5. **Write the gauge table, then rank the cuts by leverage.** Save the
+   numbers as a dated `Knowledge/raw/YYYY-MM-DD-kb-performance-assessment.md` (or append to
+   the existing initiative's Baseline table). Rank: per-session costs (boot)
+   beat per-open costs (note bloat) beat per-month costs (log, GC). Give
+   credit for what is already good — the gauges that are fine are part of
+   the picture.
 
-6. **Run the mechanical lint — must be green**, then do the judgment pass it can't.
-   ```bash
-   ./SYSTEM/bin/lint.sh                  # inbox · wikilinks · index · frontmatter
-   ```
-   Judgment layer: resolved open questions, `#action`s that should be checked off, dated items now overdue.
+6. **Cut only what a number justifies — or open an initiative.** One-evening
+   fixes (tighten the Quick map, rotate the log, add a lint WARN) go now;
+   anything structural (new hook, new generated section, cap extension)
+   becomes `#action`s in a dedicated initiative note. Regenerate
+   `SYSTEM/bin/build-link-map.sh`; `SYSTEM/bin/lint.sh` must be green.
 
-7. **Large-file review.** For any concept much longer than its peers (step 1): decide whether it's genuinely dense reference (fine) or is carrying `Knowledge/raw/`-capture detail that should be pruned back to the source. Concepts are the *compiled* layer; long-tail detail lives in `Knowledge/raw/`.
+7. **Judgment pass lint can't do:** resolved open questions, actions that
+   should be checked off, dated items now overdue, `index.md` entries that
+   duplicate a note's Now & next (the [[Audit state freshness]] symptom).
 
-8. **Document + log.** If you changed a *convention* (not just content), update `SYSTEM/SCHEMA.md` + `CLAUDE.md`. Append a one-line `SYSTEM/log.md` entry.
+8. **Document + log.** Convention changes → `SYSTEM/SCHEMA.md` + `AGENTS.md`.
+   One line in `SYSTEM/log.md`. Re-measure next run and put the delta in the
+   log line — the point of the table is the trend.
 
 ## Gotchas / rules
-- **Measure first, then cut** — every change should trace to a number from step 1–2.
-- **`index.md` is a map, never a log** — the most common regression is changelog narrative creeping back into the index. Step 3 catches it.
-- **The injection cap is invisible** — nothing errors when the map outgrows it; the tail just silently never reaches the LLM. Step 2 is the only signal.
-- **`updated:` only helps if you bump it** — stamping frontmatter once and never maintaining it makes staleness *look* solved while rotting.
-- **Don't hand-edit generated artifacts** — `SYSTEM/link-map.md` is built by its script.
-- **Efficiency ≠ correctness** — a green [[Run the KB health check]] doesn't mean the KB is lean; that's why this job is separate.
+- **Measure first, then cut** — every change traces to a gauge row.
+- **Count tokens, not lines** — `wc -l` hides a 16KB paragraph; bytes ÷ 4 doesn't.
+- **Every machine, every time** — the machine you're on is not necessarily the one {{NAME}} uses most; verify with `hostname` before any machine-specific action.
+- **Bare `grep`/`rg` may be Claude Code shell wrappers** — for benchmarks use full paths (`/usr/bin/grep`, `/opt/homebrew/bin/rg`); `rg` skips `.claude/` unless `--hidden` .
+- **`index.md` is a map, never a log** — narrative status creeping into it is duplicated state that will go stale.
+- **The injection cap is invisible** — nothing errors when the Quick map outgrows `head -c 8000`; the tail silently never reaches the LLM.
+- **Don't hand-edit generated artifacts** — link map, mirrors, serves lists, any `<!-- generated -->` block ([[maintain-generated-sections]]).
+- **Efficiency ≠ correctness** — a green health check doesn't mean the KB is lean; that's why this job is separate.
 
 ## Done when
-- [ ] Step 1–2 numbers captured; Quick-map skeleton fits the injection budget.
-- [ ] `index.md` is a pure map; Raw listing condensed.
-- [ ] All concepts have frontmatter; stale ones rewritten or marked.
-- [ ] `SYSTEM/link-map.md` regenerated; `SYSTEM/bin/lint.sh` exits green.
-- [ ] Any new convention documented; `SYSTEM/log.md` entry appended.
+- [ ] Gauge table captured (boot cost, hook parity, biggest sections, actions, log, orphan raw, lint time) and saved dated in `Knowledge/raw/`.
+- [ ] Cuts ranked by leverage; each points at a gauge.
+- [ ] One-evening cuts applied; structural ones filed as `#action`s in an initiative note.
+- [ ] `SYSTEM/link-map.md` regenerated; `SYSTEM/bin/lint.sh` green.
+- [ ] `SYSTEM/log.md` entry with the delta vs. the last run.
 
 ## Related
-- [[Run the KB health check]] (sibling — correctness lint vs. this efficiency pass) · [[karpathy-method]] (the architecture being optimized) · [[SCHEMA]] (the conventions this enforces)
+- [[Run the KB health check]] (correctness sibling) · [[Audit the KB System]] (architecture sibling) · [[Audit state freshness]] (duplicated-state symptom) · [[keep-machinery-vendor-portable]] (script-measured, never model-estimated) · [[karpathy-method]] · [[SCHEMA]]

@@ -35,6 +35,8 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Create Excalidraw]]` | `Knowledge/Skills/FORMAT/Create an Excalidraw Diagram.md` |
 | `[[create-an-excalidraw-diagram]]` | `Knowledge/Skills/FORMAT/Create an Excalidraw Diagram.md` |
 | `[[create-directory-dashboard]]` | `Knowledge/Skills/FORMAT/Create Directory Dashboard.md` |
+| `[[DARE pass]]` | `Knowledge/Skills/DO/Run a DARE Pass.md` |
+| `[[dare]]` | `Knowledge/Skills/DO/Run a DARE Pass.md` |
 | `[[Delegate an Initiative to a CMUX Workspace]]` | `Knowledge/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
 | `[[Delegate an initiative to a CMUX workspace]]` | `Knowledge/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
 | `[[Delegate an initiative]]` | `Knowledge/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
@@ -44,9 +46,11 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Example — KB data flow.excalidraw]]` | `Knowledge/Excalidraw/Example — KB data flow.excalidraw.md` |
 | `[[Excalidraw diagram]]` | `Knowledge/Skills/FORMAT/Create an Excalidraw Diagram.md` |
 | `[[Fan out subagents]]` | `Knowledge/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
+| `[[First principles pass]]` | `Knowledge/Skills/DO/Run a DARE Pass.md` |
 | `[[generated-sections]]` | `Knowledge/Skills/RULE/Maintain Generated Sections.md` |
 | `[[karpathy-method]]` | `Knowledge/Concepts/karpathy-method.md` |
 | `[[KB efficiency pass]]` | `Knowledge/Skills/CHECK/Optimize the Knowledge Base.md` |
+| `[[KB kernel pass]]` | `Knowledge/Skills/CHECK/Optimize the Knowledge Base.md` |
 | `[[Keep Machinery Vendor-Portable]]` | `Knowledge/Skills/RULE/Keep Machinery Vendor-Portable.md` |
 | `[[keep-machinery-vendor-portable]]` | `Knowledge/Skills/RULE/Keep Machinery Vendor-Portable.md` |
 | `[[Maintain Generated Sections]]` | `Knowledge/Skills/RULE/Maintain Generated Sections.md` |
@@ -64,10 +68,12 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Pull framework updates]]` | `Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md` |
 | `[[Pull from upstream CNTXT1]]` | `Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md` |
 | `[[pull-framework-updates-from-cntxt1]]` | `Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md` |
+| `[[Run a DARE Pass]]` | `Knowledge/Skills/DO/Run a DARE Pass.md` |
 | `[[Run an Initiative]]` | `Knowledge/Skills/DO/Run an Initiative.md` |
 | `[[Run an initiative]]` | `Knowledge/Skills/DO/Run an Initiative.md` |
 | `[[Run the KB Health Check]]` | `Knowledge/Skills/CHECK/Run the KB Health Check.md` |
 | `[[Run the KB health check]]` | `Knowledge/Skills/CHECK/Run the KB Health Check.md` |
+| `[[run-a-dare-pass]]` | `Knowledge/Skills/DO/Run a DARE Pass.md` |
 | `[[run-an-initiative]]` | `Knowledge/Skills/DO/Run an Initiative.md` |
 | `[[run-the-kb-health-check]]` | `Knowledge/Skills/CHECK/Run the KB Health Check.md` |
 | `[[second brain audit]]` | `Knowledge/Skills/CHECK/Audit State Freshness.md` |

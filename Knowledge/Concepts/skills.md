@@ -25,9 +25,10 @@ Skills for maintaining the knowledge base itself — always useful, ship with th
 | Skill | Trigger | Notes |
 | :-- | :-- | :-- |
 | [[Add a person to the KB]] | a new person appears | copy People template → note → index in [[contacts]] |
-| [[Close a Session]] | "{{NAME}} says close / wrap up" | single-door session close: one feedback question → record (log, decisions, digests) → review (route learnings by scope) |
+| [[Close a Session]] | "{{NAME}} says close / wrap up" | single-door session close: one feedback question → record (log, decisions, digests) → review (route learnings by scope; skill proposals → `SYSTEM/skill-impact.md`) |
 | [[Capture a meeting or conversation into the KB]] | new durable knowledge | inbox→`Knowledge/raw/`→compile→`index.md`→`SYSTEM/log.md` |
 | [[Capture a YouTube video into the KB]] | a YouTube link worth keeping | `yt-dlp` metadata + transcript digest → `Knowledge/raw/` → compile; every note links the video + its description links |
+| [[Run a DARE Pass]] | a decision moment (initiative open, purchase, ruling, strategy) or "/dare" | first-principles chain — Decompose · Audit (fact/convention/unknown) · Recombine ×3 · Experiment (kill lines); the audit lands in the owning note |
 | [[Run an initiative]] | an outcome needs multiple actions over time | one note per initiative in `Knowledge/Initiatives/` (`type: initiative` + lifecycle); start / keep current / close |
 | [[Run the KB health check]] | lint (on request or automated at 6pm) | inbox clean · links resolve · index complete · actions current |
 | [[Optimize the knowledge base]] | monthly / when the KB feels bloated | efficiency pass: injection budget · index-as-map · frontmatter staleness · link-map · lint |

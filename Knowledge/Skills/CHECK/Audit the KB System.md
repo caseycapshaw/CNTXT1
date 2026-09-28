@@ -5,15 +5,16 @@ trigger: "you ask for a high-level / full-system / architectural audit of the KB
 frequency: quarterly
 tools: ["parallel read-only subagents", "Bash", "SYSTEM/bin/lint.sh"]
 owner: "{{NAME}}"
+version: "1.1"
 status: active
 tags: [check, kb-meta]
 aliases: [Audit the KB system, audit-the-kb-system, system audit]
 summary: Full-system architectural audit — parallel auditors over structure/UX, interlinking, consistency, and connected systems, producing a ranked report + phased fix plan executed phase-by-phase.
-updated: 2026-08-16
+updated: 2026-09-28
 author_type: script
 ---
 
-> _Generated from `.claude/skills/audit-the-kb-system/SKILL.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-08-27_
+> _Generated from `.claude/skills/audit-the-kb-system/SKILL.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-09-28_
 
 # Skill — Audit the KB System
 
@@ -48,13 +49,14 @@ When the KB "feels off" at the architecture level, after a major structural chan
      lifecycle (active-but-stale >3wks, done-but-unarchived, index Quick-map line vs
      real statuses); index one-liners vs `description:` fields; open `#action` reality
      check; log format; uncommitted git state; naming-convention drift.
-   - **Connected systems** — Skills notes ↔ any agent-CLI shims in sync; `SYSTEM/bin`
+   - **Connected systems** — canonical `.claude/` ↔ visible mirrors in sync
+     (`uv run python SYSTEM/bin/build_claude_mirrors.py --check`); `SYSTEM/bin`
      documented; scheduled jobs *actually loaded* vs documented (check the scheduler,
      e.g. `launchctl list`, not just the README — and note which machine owns which
      job if you run more than one); hook files/symlinks resolve; generated-section
      stamps fresh *and their generators actually succeeding* (read the job logs — a
      green stamp can hide a failing ingest); vault git remotes match your
-     privacy/content-separation policy; machinery write-target files draining.
+     privacy/content-separation policy (an `upstream` remote must have push `DISABLED`); machinery write-target files draining.
 3. **Verify the top findings yourself** before reporting — subagents trust surfaces
    that can themselves be stale (an index blurb can contradict the note it
    summarizes). Re-read the primary source for anything ranked critical.

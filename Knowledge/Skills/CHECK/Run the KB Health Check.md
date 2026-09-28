@@ -5,14 +5,16 @@ trigger: on request, or automatically at end of day if automated
 frequency: weekly manual / daily automated
 tools: ["Grep", "Glob", "Read"]
 owner: "{{NAME}}"
+version: "1.1"
 status: active
 tags: [check, kb-meta]
 aliases: ["Run the KB health check", "run-the-kb-health-check"]
 summary: Produces a green/issues verdict on KB mechanical health (broken links, stale actions, inbox pile-up).
+updated: 2026-09-28
 author_type: script
 ---
 
-> _Generated from `.claude/skills/run-the-kb-health-check/SKILL.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-08-27_
+> _Generated from `.claude/skills/run-the-kb-health-check/SKILL.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-09-28_
 
 # Skill — Run the KB health check
 
@@ -25,14 +27,18 @@ author_type: script
 - Any time you suspect the KB has drifted (broken links, stale actions, inbox pile-up).
 
 ## Steps
-1. **Mechanical half — run `SYSTEM/bin/lint.sh`.** Do NOT hand-re-derive its
+1. **Regenerate first — `SYSTEM/bin/regen-all.sh`.** Most red is a stale
+   generated view (mirrors, indexes, link map, caps), not a decision; regen
+   clears it mechanically. Under plain `lint.sh` those checks print **WARN**,
+   not FAIL; `LINT_STRICT=1` FAILs them again (the post-regen gate).
+2. **Mechanical half — run `SYSTEM/bin/lint.sh`.** Do NOT hand-re-derive its
    checks; the script is the single source of truth for what "mechanically
    sound" means (inbox clean incl. registered exceptions, wikilinks + aliases
    resolve, index complete, frontmatter present + Pydantic-valid,
    descriptions present, no stray non-`.md` files, Quick map within the
    SessionStart injection budget). Exit 0 = mechanical green; on failure the
    script names each offender.
-2. **Judgment half — the checks a script can't run:**
+3. **Judgment half — the checks a script can't run:**
    - **Stale facts:** any always-loaded claim (index one-liners, `CLAUDE.md`)
      contradicted by a fresher note? (Deep version: [[Audit State Freshness]].)
    - **Resolved open questions:** any note's Open questions actually answered
@@ -46,7 +52,7 @@ author_type: script
      cites is a soft warning, not a hard failure.
    - **Generated sections alive:** stamps within cadence AND the generating
      jobs' logs clean — a fresh stamp can hide a failing generator.
-3. **Report.** State: `green — <one clause>` or `issues — <sub-bullet per real
+4. **Report.** State: `green — <one clause>` or `issues — <sub-bullet per real
    problem>`. Log a one-line entry in `SYSTEM/log.md`.
 
 ## Gotchas / rules

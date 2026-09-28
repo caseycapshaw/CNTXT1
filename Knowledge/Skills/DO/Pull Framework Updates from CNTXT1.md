@@ -5,14 +5,16 @@ trigger: a framework improvement lands in the public CNTXT1 kit
 frequency: ad-hoc
 tools: ["git"]
 owner: "{{NAME}}"
+version: "1.1"
 status: active
 tags: [do, kb-meta]
 aliases: ["Pull framework updates from CNTXT1", "Pull framework updates", "Pull from upstream CNTXT1", "pull-framework-updates-from-cntxt1"]
 summary: Pulls a generic schema/script/runbook/template improvement from the public CNTXT1 starter kit into this vault via git, leaving personal content untouched.
+updated: 2026-09-28
 author_type: script
 ---
 
-> _Generated from `.claude/skills/pull-framework-updates-from-cntxt1/SKILL.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-08-27_
+> _Generated from `.claude/skills/pull-framework-updates-from-cntxt1/SKILL.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-09-28_
 
 # Skill — Pull Framework Updates from CNTXT1
 
@@ -40,6 +42,14 @@ One-time setup, from the vault root:
 git remote add upstream https://github.com/caseycapshaw/CNTXT1.git
 git remote set-url --push upstream DISABLED
 ```
+
+> **Shortcuts:** `SYSTEM/bin/sync-from-upstream.sh` previews (and, with
+> `--apply`, stages into the working tree — never commits) the path-stable
+> framework files. `SYSTEM/bin/sync-from-upstream.sh --reconcile` drains the
+> pending-updates queue: commits *you* authored from this vault (matched by
+> `git config user.email`, or by patch-id against your own history) are
+> already reflected here, so they are marked applied and only genuinely
+> foreign commits stay listed.
 
 ## Steps
 

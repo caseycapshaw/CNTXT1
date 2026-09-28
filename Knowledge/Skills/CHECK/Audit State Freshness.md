@@ -5,14 +5,16 @@ trigger: monthly with the optimize pass, when the index Quick map feels behind r
 frequency: monthly
 tools: ["Read", "Grep", "Edit"]
 owner: "{{NAME}}"
+version: "1.0"
 status: active
 tags: [check, kb-meta]
 aliases: ["Audit state freshness", "state freshness audit", "second brain audit", "audit-state-freshness"]
 summary: Audits the always-loaded surfaces for stale state-shaped claims and fixes drift in place.
+updated: 2026-09-28
 author_type: script
 ---
 
-> _Generated from `.claude/skills/audit-state-freshness/SKILL.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-08-27_
+> _Generated from `.claude/skills/audit-state-freshness/SKILL.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-09-28_
 
 # Skill — Audit state freshness
 
