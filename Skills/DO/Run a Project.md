@@ -6,9 +6,11 @@ frequency: ad-hoc
 tools: ["Write", "Edit", "Read"]
 owner: "{{NAME}}"
 status: active
+version: "1.0"
 tags: [do, kb-meta]
 aliases: ["Run a project", "Run an initiative", "Run an Initiative", "Start an initiative", "Start a project", "Close a project", "Open a project", "run-a-project"]
 summary: Opens, updates, or closes a 03 Projects/ note that carries a multi-action workstream from start to done.
+updated: 2026-09-28
 author_type: script
 ---
 
@@ -26,14 +28,17 @@ author_type: script
 ## Start
 
 1. Copy `03 Projects/Project TEMPLATE.md` → `03 Projects/<kebab-slug>.md`.
-2. Fill frontmatter (`status: active`, `started:` today) and the **Outcome**
-   line — if you can't state "done" in two lines, it isn't a project yet.
+2. Fill frontmatter (`status: active`, `started:` today, required `area:`)
+   and the **Outcome** line — if you can't state "done" in two lines, it
+   isn't a project yet. Optional `serves:` → a `type: goal` note when the
+   project clearly advances one H3 outcome (does not replace `area:`).
 3. Seed **Actions** with the first concrete `- [ ] … #action` (add
    `#priority` if it's a focus item).
 4. Index it: add the project to `index.md`'s **Projects (live)** Quick-map
    line *and* its Projects section (one-line summary).
-5. Regenerate the link map (`SYSTEM/bin/build-link-map.sh`); append one line to
-   `SYSTEM/log.md`.
+5. Regenerate the link map (`SYSTEM/bin/build-link-map.sh`). If `serves:`
+   was set, also `uv run python SYSTEM/bin/build_horizon_serves.py --write`.
+   Append one line to `SYSTEM/log.md`.
 
 ## Keep it current (whenever the workstream moves)
 
@@ -50,14 +55,18 @@ author_type: script
 2. Final **Milestones** entry stating the outcome; set `status: done`
    (or `paused` with a why, if shelved).
 3. Distill any durable knowledge into the relevant concept(s) if it isn't
-   already there. The project note **stays in place as the record** —
-   never delete it.
-4. Move its `index.md` entry from the live line/list to the section's Done
+   already there. The project note is the permanent record — never
+   delete it.
+4. **Archive it:** `git mv` the note to `03 Projects/archive/` (done
+   projects live there; live + paused ones stay at `03 Projects/` top
+   level), then regenerate the link map (`SYSTEM/bin/build-link-map.sh` —
+   wikilinks keep resolving, only the path changes).
+5. Move its `index.md` entry from the live line/list to the section's Done
    line. Log the close in `SYSTEM/log.md`.
 
 ## Gotchas / rules
 
-- **Not every project is a project** — a single action stays an `#action`
+- **Not everything is a project** — a single action stays an `#action`
   in its home note; a recurring procedure is a [[skills|Skill]], not a project.
 - **Actions live IN the project note** (they aggregate to `Actions.md` and
   group under the project's filename automatically) — never keep a separate

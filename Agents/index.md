@@ -8,8 +8,8 @@ _Generated: 2026-09-28 by SYSTEM/bin/build_directory_indexes.py.
 
 | Note | Description | Status | Updated |
 | :-- | :-- | :-- | :-- |
-| [[compile]] | Compile a raw capture into (or update) a 05 concepts/ article, per this vault's... | active | 2026-08-20 |
-| [[lint]] | Run this KB's health check (SYSTEM/bin/lint.sh + judgment checks) and report fi... | active | 2026-08-20 |
-| [[project-worker]] | Drive one workstream from its 03 Projects/<slug>.md note, writing every decisio... | active | 2026-08-20 |
-| [[research]] | Investigate one bounded question/topic for a lead agent, returning cited findin... | active | 2026-08-20 |
+| [[compile]] | Compile a raw capture into (or update) a 05 concepts/ article, per this vault's... | active | 2026-09-28 |
+| [[lint]] | Run this KB's health check (SYSTEM/bin/lint.sh + judgment checks) and report fi... | active | 2026-09-28 |
+| [[project-worker]] | Drive one workstream from its 03 Projects/<slug>.md note, writing every decisio... | active | 2026-09-28 |
+| [[research]] | Investigate one bounded question/topic for a lead agent, returning cited findin... | active | 2026-09-28 |
 <!-- dir-index:auto:end -->

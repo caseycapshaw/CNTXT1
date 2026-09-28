@@ -6,9 +6,11 @@ frequency: per-project
 tools: ["cmux", "Claude Code", "git"]
 owner: "{{NAME}}"
 status: active
+version: "1.0"
 tags: [do, kb-meta]
-aliases: ["Delegate a project to a CMUX workspace", "Delegate to a workspace", "Spin up a CMUX workspace", "Delegate a project", "delegate-a-project-to-a-cmux-workspace"]
+aliases: ["Delegate a project to a CMUX workspace", "Delegate to a workspace", "Spin up a CMUX workspace", "Delegate a project", "delegate-a-project-to-a-cmux-workspace", "Delegate an Initiative to a CMUX Workspace", "Delegate an initiative to a CMUX workspace", "Delegate an initiative"]
 summary: Hands a whole task/project to its own CMUX workspace (own repo/worktree, own agent) kicked off against the shared 03 Projects/ note.
+updated: 2026-09-28
 author_type: script
 ---
 

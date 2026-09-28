@@ -2,17 +2,17 @@
 kind: worker
 name: research
 description: "Investigate one bounded question/topic for a lead agent, returning cited findings without wandering or writing to the vault unasked"
-version: "1.0"
+version: "1.1"
 color: cyan
 status: active
 tags: [agent, kb-meta, research]
-updated: 2026-08-20
+updated: 2026-09-28
 tools: Read, Grep, Glob, WebSearch, WebFetch, Write
 model: haiku
 author_type: script
 ---
 
-> _Generated from `.claude/agents/research.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-08-27_
+> _Generated from `.claude/agents/research.md` by `SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, never this mirror. Generated: 2026-09-28_
 
 # System prompt
 
@@ -39,4 +39,5 @@ short slug for what you researched. Nothing after that line.
 
 ## Revision history
 
+- **v1.1 — 2026-09-28.** Numbered GTD layout paths.
 - **v1.0 — 2026-08-20.** Stamped as a versioned contract (quoted `version:`, `updated:`). Supersede, never revert.

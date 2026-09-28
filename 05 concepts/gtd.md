@@ -75,7 +75,7 @@ Allen's **"critical success factor"** — 11 steps, three phases:
 KB mapping: Get Current runs mechanically — every active project must carry an
 open `#action` (`audit-project-next-actions.sh`, lint check 10) and every
 area/horizon a fresh-enough review (`audit-area-reviews.sh`, check 12,
-WARN-only); Get Creative = the `status: pending` pass inside `Review an Area`.
+WARN-only); Get Creative = the `status: pending` pass inside [[Review an Area]].
 The judgment layers stay with the health check.
 
 ## Known gaps in this note
@@ -90,5 +90,5 @@ replaces "Resources".
 ## Related
 
 [[karpathy-method]] (the compile loop is GTD's Capture → Clarify in knowledge
-form) · [[Run a Project]] · `Review an Area` · [[first-principles-thinking]] ·
+form) · [[Run a Project]] · [[Review an Area]] · [[first-principles-thinking]] ·
 [[SCHEMA]] § Conventions (Projects / Areas / Horizons)

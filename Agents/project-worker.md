@@ -2,11 +2,11 @@
 kind: worker
 name: project-worker
 description: "Drive one workstream from its 03 Projects/<slug>.md note, writing every decision, milestone, and follow-up action back into the note"
-version: "1.0"
+version: "1.1"
 color: green
 status: active
 tags: [agent, kb-meta, projects]
-updated: 2026-08-20
+updated: 2026-09-28
 tools: Read, Write, Edit, Grep, Glob, Bash
 model: sonnet
 author_type: script
@@ -46,4 +46,5 @@ project's slug. Nothing after that line.
 
 ## Revision history
 
+- **v1.1 — 2026-09-28.** Renamed from initiative-worker (Initiative → Project, `03 Projects/` note is the shared record).
 - **v1.0 — 2026-08-20.** Stamped as a versioned contract (quoted `version:`, `updated:`). Supersede, never revert.

@@ -43,12 +43,17 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Delegate a Project to a CMUX Workspace]]` | `Skills/DO/Delegate a Project to a CMUX Workspace.md` |
 | `[[Delegate a project to a CMUX workspace]]` | `Skills/DO/Delegate a Project to a CMUX Workspace.md` |
 | `[[Delegate a project]]` | `Skills/DO/Delegate a Project to a CMUX Workspace.md` |
+| `[[Delegate an Initiative to a CMUX Workspace]]` | `Skills/DO/Delegate a Project to a CMUX Workspace.md` |
+| `[[Delegate an initiative to a CMUX workspace]]` | `Skills/DO/Delegate a Project to a CMUX Workspace.md` |
+| `[[Delegate an initiative]]` | `Skills/DO/Delegate a Project to a CMUX Workspace.md` |
 | `[[Delegate to a workspace]]` | `Skills/DO/Delegate a Project to a CMUX Workspace.md` |
 | `[[delegate-a-project-to-a-cmux-workspace]]` | `Skills/DO/Delegate a Project to a CMUX Workspace.md` |
 | `[[Directory dashboard]]` | `Skills/FORMAT/Create Directory Dashboard.md` |
 | `[[Example — KB data flow.excalidraw]]` | `excalidraw/Example — KB data flow.excalidraw.md` |
 | `[[Excalidraw diagram]]` | `Skills/FORMAT/Create an Excalidraw Diagram.md` |
 | `[[Fan out subagents]]` | `Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
+| `[[File a New Note]]` | `Skills/DO/File a New Note.md` |
+| `[[file-a-new-note]]` | `Skills/DO/File a New Note.md` |
 | `[[First principles pass]]` | `Skills/DO/Run a DARE Pass.md` |
 | `[[first-principles-thinking]]` | `05 concepts/first-principles-thinking.md` |
 | `[[generated-sections]]` | `Skills/RULE/Maintain Generated Sections.md` |
@@ -63,6 +68,7 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Maintain Generated Sections]]` | `Skills/RULE/Maintain Generated Sections.md` |
 | `[[maintain-generated-sections]]` | `Skills/RULE/Maintain Generated Sections.md` |
 | `[[Make an Excalidraw diagram]]` | `Skills/FORMAT/Create an Excalidraw Diagram.md` |
+| `[[new-note decision tree]]` | `Skills/DO/File a New Note.md` |
 | `[[Open a project]]` | `Skills/DO/Run a Project.md` |
 | `[[open-knowledge-format]]` | `05 concepts/open-knowledge-format.md` |
 | `[[Optimize the KB]]` | `Skills/CHECK/Optimize the Knowledge Base.md` |
@@ -76,6 +82,9 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Pull from upstream CNTXT1]]` | `Skills/DO/Pull Framework Updates from CNTXT1.md` |
 | `[[pull-framework-updates-from-cntxt1]]` | `Skills/DO/Pull Framework Updates from CNTXT1.md` |
 | `[[purpose-principles]]` | `01 Horizons/purpose-principles.md` |
+| `[[Review an Area]]` | `Skills/DO/Review an Area.md` |
+| `[[Review area]]` | `Skills/DO/Review an Area.md` |
+| `[[review-an-area]]` | `Skills/DO/Review an Area.md` |
 | `[[Run a DARE Pass]]` | `Skills/DO/Run a DARE Pass.md` |
 | `[[Run a Project]]` | `Skills/DO/Run a Project.md` |
 | `[[Run a project]]` | `Skills/DO/Run a Project.md` |

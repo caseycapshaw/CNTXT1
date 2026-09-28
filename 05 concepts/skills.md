@@ -29,7 +29,9 @@ Skills for maintaining the knowledge base itself — always useful, ship with th
 | [[Capture a meeting or conversation into the KB]] | new durable knowledge | inbox→`raw/`→compile→`index.md`→`SYSTEM/log.md` |
 | [[Capture a YouTube video into the KB]] | a YouTube link worth keeping | `yt-dlp` metadata + transcript digest → `raw/` → compile; every note links the video + its description links |
 | [[Run a DARE Pass]] | a decision moment (project open, purchase, ruling, strategy) or "/dare" | first-principles chain — Decompose · Audit (fact/convention/unknown) · Recombine ×3 · Experiment (kill lines); the audit lands in the owning note |
-| [[Run a project]] | an outcome needs multiple actions over time | one note per project in `03 Projects/` (`type: project` + lifecycle); start / keep current / close |
+| [[File a New Note]] | any new item entering the KB, or an inbox item to triage | the decision tree — capture to `raw/`, then person/org → project (endpoint test) → area → concept → skill → horizon picks the template; fall-throughs recorded, never forced |
+| [[Run a Project]] | an outcome needs multiple actions over time | one note per project in `03 Projects/` (`type: project`, required `area:` up-link + lifecycle); start / keep current / close & archive |
+| [[Review an Area]] | an area's `review:` cadence comes due (`audit-area-reviews.sh`) | check the Standard, walk its projects, spawn/retire work, bump `reviewed:` — the GTD hinge where projects are created and retired |
 | [[Run the KB health check]] | lint (on request or automated at 6pm) | inbox clean · links resolve · index complete · actions current |
 | [[Optimize the knowledge base]] | monthly / when the KB feels bloated | efficiency pass: injection budget · index-as-map · frontmatter staleness · link-map · lint |
 | [[Audit the KB System]] | quarterly, or after a major structural change | the wide audit: 4 parallel auditors (structure/UX · interlinking · consistency · connected systems) → ranked report + phased fix plan; recurring findings promoted to lint checks |
@@ -40,7 +42,7 @@ Skills for maintaining the knowledge base itself — always useful, ship with th
 | [[Keep Machinery Vendor-Portable]] | building or modifying lint, caps, rituals, hooks, or scheduled jobs | RULE — every enforced guarantee lives at a vendor-independent tier; harnesses accelerate, never solely carry; script failures are declared, never imitated |
 | [[Create an Excalidraw diagram]] | need a diagram / visual in the vault *(optional)* | zero-dep `SYSTEM/bin/excalidraw.py` (spec→file) or Mermaid by hand; text ids ≤8 chars or the mirror breaks |
 | [[Create Directory Dashboard]] | a content folder needs a live frontmatter table in Obsidian *(optional)* | one `.base` file per folder (Obsidian Bases); self-relative filter, columns = schema fields; human counterpart to the generated `index.md` |
-| [[Delegate a project to a CMUX workspace]] | a project is ready to run in its own repo context *(optional, needs CMUX)* | workspace-level delegation; state round-trips through `03 Projects/<slug>.md`, not the runtime tool |
+| [[Delegate a Project to a CMUX Workspace]] | a project is ready to run in its own repo context *(optional, needs CMUX)* | workspace-level delegation; state round-trips through `03 Projects/<slug>.md`, not the runtime tool |
 | [[Spawn subagent panes in a CMUX workspace]] | one task fans out into concurrent sub-tasks *(optional, needs CMUX)* | pane-level fan-out; four-verb loop (send/send-key/read-screen/close-surface) + `DONE:` sentinel |
 
 ## 🛠️ Dev

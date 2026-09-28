@@ -7,8 +7,8 @@
 # headers and exit non-zero rather than write partial or silently-wrong
 # output").
 #
-# Order matters: link map and mirrors first (other generators may read
-# wikilink/skill state), then the content-derived indexes, then the action
+# Order matters: mirrors first (they create/rename Skills/ notes), then the link
+# map (which maps them), then the content-derived indexes, then the action
 # census last since it can reflect any #action lines the earlier steps touched.
 #
 # Every generator the starter ships is wired below.
@@ -34,8 +34,8 @@ step() {
 }
 skip() { echo "SKIP  $1"; echo; }
 
-step "link-map"              ./SYSTEM/bin/build-link-map.sh
 step ".claude mirrors"       uv run python SYSTEM/bin/build_claude_mirrors.py
+step "link-map"              ./SYSTEM/bin/build-link-map.sh   # after mirrors: it maps the Skills/ mirror files
 step "index Concepts/Areas"  uv run python SYSTEM/bin/build_index_lists.py
 step "index Projects"        uv run python SYSTEM/bin/build_index_projects.py
 step "contacts directory"    uv run python SYSTEM/bin/build_contacts_directory.py

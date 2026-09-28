@@ -42,7 +42,7 @@ _Generated 2026-09-28 by `SYSTEM/bin/build_index_projects.py` from each note's f
 <!-- projects:auto:end -->
 
 ## Areas (ongoing responsibilities — one note each in `02 Areas/`)
-Standing responsibilities maintained to a standard, never "done" — each carries a `## Standard` and a review cadence. Built from [`Area TEMPLATE.md`](02%20Areas/Area%20TEMPLATE.md); physical things live in `02 Areas/Assets/`.
+Standing responsibilities maintained to a standard, never "done" — each carries a `## Standard` and a review cadence ([[Review an Area]]). Built from [`Area TEMPLATE.md`](02%20Areas/Area%20TEMPLATE.md); physical things live in `02 Areas/Assets/`.
 
 <!-- areas:auto:start -->
 _Generated 2026-09-28 by `SYSTEM/bin/build_index_lists.py` from each note's `description:` frontmatter — do not hand-edit between the markers. To change an entry, edit that area note's `description:` and regenerate (SYSTEM/bin/regen-all.sh)._
@@ -71,7 +71,7 @@ _Add person notes here as you build the network._
 ## Skills (one agent-invocable runbook per recurring task — `Skills/`)
 Agent-executable runbooks for recurring "jobs to be done": canonical at `.claude/skills/<slug>/SKILL.md` (the **single source of truth for the *steps***, auto-discovered by Claude Code and Grok Build), mirrored by `SYSTEM/bin/build_claude_mirrors.py` into [`Skills/<TYPE>/`](Skills) (`DO` = performs a task · `CHECK` = verifies/audits · `FORMAT` = produces an artifact · `RULE` = standing convention) for Obsidian reading and wikilinks. Built from [`Skill TEMPLATE.md`](Skills/Skill%20TEMPLATE.md). `Skills/` is a **structural folder, not an inbox item**.
 
-Starter skills ship with the kit (KB-meta): [[Run a Project]] · [[Add a person to the KB]] · [[Capture a meeting or conversation into the KB]] · [[Run the KB health check]] · [[Optimize the knowledge base]] · and more — see [[skills]].
+Starter skills ship with the kit (KB-meta): [[File a New Note]] · [[Run a Project]] · [[Review an Area]] · [[Add a person to the KB]] · [[Capture a meeting or conversation into the KB]] · [[Run the KB health check]] · [[Optimize the knowledge base]] · and more — see [[skills]].
 
 ## Raw (source of truth — append-only)
 - [[raw/2026-01-01-example-capture]] — **example** showing the dated-capture format (provenance header, a fact, a `[[wikilink]]`, an `#action`). Delete once you have real captures.
