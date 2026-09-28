@@ -32,8 +32,9 @@ Non-negotiables for every model:
   compilation, and index maintenance route through the maintainer unless
   {{NAME}} re-rules.
 - **Privacy overrides tooling:** before working in this vault, disable any
-  outbound search/share tools your runtime auto-enables — vault content never
-  leaves the vault (§ Privacy rule below).
+  outbound search/share tools your runtime auto-enables (ones that post a
+  query to a public platform) — the same public-exposure risk the
+  § Privacy rule below guards against.
 - Follow the same schema (`SYSTEM/SCHEMA.md`), wikilink conventions, and lint
   discipline regardless of vendor; the visible `Knowledge/Skills/` and
   `Knowledge/Agents/` notes are generated mirrors — edit their `.claude/`
@@ -54,6 +55,7 @@ Non-negotiables for every model:
 | `SYSTEM/SCHEMA.md` | KB schema and operating rules |
 | `SYSTEM/log.md` | Append-only changelog — one line per meaningful update |
 | `SYSTEM/decisions.md` | Rulings ledger (index-not-record). Schema: `SYSTEM/SCHEMA.md`. |
+| `SYSTEM/skill-impact.md` | Skill-evolution ledger — one line per proposed skill change (ADOPTED/REJECTED/PARKED), written at session close. |
 | `SYSTEM/link-map.md` | Generated `[[wikilink]]` → file-path index (one-lookup link resolution). Rebuild: `SYSTEM/bin/build-link-map.sh` |
 | `SYSTEM/bin/` | KB tooling — `lint.sh` (mechanical health check), `lint-delta.sh` (scheduled delta), `build-link-map.sh` (regenerate the link map) |
 | `.claude/` | Agent machinery (cross-vendor): `skills/`, `agents/`, `commands/`, and project **hooks** in `settings.json`. Hook scripts live in `SYSTEM/optional/automation/`; this folder only registers them. |
@@ -77,8 +79,12 @@ Non-negotiables for every model:
 - **Initiatives:** a goal-directed workstream (multiple actions over time) = one note in `Knowledge/Initiatives/` with `type: initiative` frontmatter and lifecycle `status: active|paused|done`. Live ones sit on the index Quick map's Initiatives line; actions stay inline in the initiative note. Concept↔initiative conversions are a `git mv` + frontmatter swap + link-map regen. Skill: `Knowledge/Skills/DO/Run an Initiative.md`.
 - **Wikilink resolution:** `SYSTEM/link-map.md` maps every `[[target]]` (concept slug, People name+alias, Skill slug+alias) → its file path. Use it instead of grepping; regenerate with `SYSTEM/bin/build-link-map.sh` after adding/renaming any of those.
 - **Index is a pure map:** `index.md` opens with a **Quick map** skeleton (every concept/initiative/index, one line) so the structure fits the session-start injection; rich descriptions follow below. Change history lives in `SYSTEM/log.md`, **never** in `index.md`.
+- **Actions:** `- [ ] … #action` inline in the home note; `#priority` = focus. Machine-written lines must carry `#auto` (a job that omits it is a bug). Check off in the home note.
+- **Human text in mixed notes:** wrap in `> [!human]` — machines integrate around it, never edit the quoted text.
+- **Secret hygiene:** never print credential/config stores (`.env`, `~/.config/*` secrets, password-manager values) — inspect by key name or length only; a leak into session output means rotate. Rule: `SYSTEM/SCHEMA.md` § Privacy & content separation.
+- **Three ledgers:** `SYSTEM/log.md` (what changed — append after every meaningful update) · `SYSTEM/decisions.md` (what {{NAME}} ruled — only on their explicit word) · `SYSTEM/skill-impact.md` (how skills evolved).
 - **Dates:** always `YYYY-MM-DD`.
-- **Log:** append a one-line entry to `SYSTEM/log.md` after every meaningful KB update.
+- **Log:** append a one-line entry to `SYSTEM/log.md` after every meaningful KB update (skill changes also get a `SYSTEM/skill-impact.md` line at close).
 
 ---
 
@@ -93,18 +99,21 @@ is un-triaged — file it into `Knowledge/raw/` (then compile into `Knowledge/Co
 
 ## Privacy rule (non-negotiable)
 
-Everything in this vault is private: **personal content never leaves the
-vault** — never copy it into public or shared repos, external services, or
-anything destined to be published. The only sanctioned outward path is
-*generic framework improvements* (schema, templates, skills, scripts)
-flowing to the public **CNTXT1** starter kit via
+Everything in this vault is private: the non-negotiable line is
+**publication** — personal content never gets posted to a public website or
+committed/pushed to a public or shared repo. The only sanctioned outward path
+to a public audience is *generic framework improvements* (schema, templates,
+skills, scripts) flowing to the public **CNTXT1** starter kit via
 `Knowledge/Skills/DO/Sync an Improvement to CNTXT1.md` — always re-templated to
 `{{placeholders}}`, always through its grep gate. Never push from this
 vault to the public repo — the only sanctioned remote for it is a
 **fetch-only** `upstream` (push URL `DISABLED`) used to pull framework
 updates *inward* (`Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md`); author
-generic improvements upstream-first when possible. Full rules:
-`SYSTEM/SCHEMA.md` § Privacy & content separation. When in doubt, it's personal — it stays here.
+generic improvements upstream-first when possible. **Third-party LLM/tool API
+calls are not publication** — ordinary judgment applies, no case-by-case
+ruling required. **Never print secrets** (see Conventions). Full rules:
+`SYSTEM/SCHEMA.md` § Privacy & content separation. When in doubt, it's
+personal — it stays here.
 
 ---
 
@@ -123,6 +132,13 @@ inline: `[[wikilinks]]` + Related sections; substantial ones become concepts.
 - Every concept and initiative listed in `index.md`; every `Knowledge/Skills/` skill listed in `Knowledge/Concepts/skills.md`.
 - Every fact in a concept traces to a `Knowledge/raw/` capture.
 - All open `#action` checkboxes are real and still open; completed ones are checked, not deleted.
+
+Run `SYSTEM/bin/regen-all.sh` then `SYSTEM/bin/lint.sh` (exit 0 = green). Stale
+generated views and word-cap overruns **WARN** (a mechanical remedy exists);
+`LINT_STRICT=1` FAILs them; anything else (broken links, schema violations)
+FAILs plainly. Judgment checks (stale facts, resolved questions) stay a manual/LLM
+pass. An optional nightly "gardener" maintainer is described in
+`SYSTEM/SCHEMA.md` § Health checks.
 
 ---
 

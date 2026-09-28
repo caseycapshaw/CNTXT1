@@ -37,13 +37,35 @@ _All paths in this file are relative to the vault root, not to this `SYSTEM/` fo
 ## Privacy & content separation (non-negotiable)
 
 This vault is **private by definition**. Every note in it — people, finances,
-raw captures, daily notes, initiatives, logs — is personal content, and
-**personal content never leaves the vault**. Never copy, commit, push, or
-paste any of it into a public or shared repo, an external service, or anything
-destined to be published.
+raw captures, daily notes, initiatives, logs — is personal content, and the
+hard, non-negotiable line is **publication**: personal content never gets
+posted to a public website, committed or pushed to a public or shared repo,
+or otherwise put anywhere a public or shared audience could find it.
 
-The one sanctioned outward path is the **framework itself**: **CNTXT1**, the
-public shareable starter kit this vault is an instance of
+**Third-party LLM/tool API calls are not "publication."** Sending vault
+content to your agent itself, a headless `claude -p` job, or a third-party
+model/tool you have evaluated, as part of normal KB automation, does not
+require a case-by-case privacy ruling — ordinary judgment applies (send only
+what a call needs; prefer non-sensitive material when there's a choice). The
+concern this rule guards against is public/shared exposure, not private
+request/response calls to a service provider. Keep this stricter than that
+for **search/share tools that post a query to a public platform**: a query can
+surface in someone else's results, an API call can't — disable those before
+working in the vault.
+
+**Secret hygiene.** Agents never print credential or config stores — `.env`
+files, app config databases, `/etc/credstore`, `~/.config/*` secrets,
+password-manager item values. Inspect by **key name or length/prefix only**
+(`jq 'keys'`, `wc -c`, `${v:0:6}`). Secrets move **machine-to-machine** (ssh
+into a variable/file, never stdout) or via a **password manager CLI**; human
+entry uses a **hidden prompt on the target host** (`read -rs`) — never through
+chat. A leak into any session output (transcript, log, terminal scrollback) is
+treated as exposure: rotate the secret. (Why: a subagent that "just looked" at
+a config file with `sed` printed live API keys into its transcript, forcing a
+rotation — the harm is in the printing, not the intent.)
+
+The one sanctioned outward path to a **public** audience is the **framework
+itself**: **CNTXT1**, the public shareable starter kit this vault is an instance of
 ([caseycapshaw/CNTXT1](https://github.com/caseycapshaw/CNTXT1)), receives
 *generic* improvements only — schema, templates, `Knowledge/Skills/` skills,
 `SYSTEM/bin/` scripts — each **hand-copied and re-templated** (real values
@@ -83,7 +105,9 @@ Hard rules:
 - **Open questions** live at the bottom of the relevant concept article and are mirrored in `index.md`.
 - **Actions (to-dos)** are Markdown checkboxes tagged `#action` — `- [ ] … #action` (optional `📅 YYYY-MM-DD` due date) — written **inline in the note they belong to**, next to their context. They're aggregated into one live view at `Actions.md` (a pinned root anchor; Obsidian **Tasks** plugin). Keep *actions* (things you do) distinct from *open questions* (unknowns); when a question's resolution is a task you perform, write it as an `#action`. Check items off in their home note (or the dashboard) — never maintain a duplicate manual to-do list.
 - **`#priority` flags a focus action.** Add `#priority` to an action line (`- [ ] … #action #priority`) to mark it important. It's a plain importance flag; no due date required.
-- **Two ledgers, two grains:** `SYSTEM/log.md` = *what changed* (append-only changelog, every meaningful update). **`SYSTEM/decisions.md` = *what {{NAME}} ruled*** (index-not-record: date + title + 1–2 sentences + pointer to the fuller record). A decisions line lands **only on {{NAME}}'s explicit ruling-verb** ("decided", "adopted", "that's a decision"…) or their confirmation at a session close — unattended jobs propose, never append. The ledger is non-exhaustive by declaration; per-note `## Decisions` sections remain the records it points at.
+- **Three ledgers, three grains:** `SYSTEM/log.md` = *what changed* (append-only changelog, every meaningful update). **`SYSTEM/decisions.md` = *what {{NAME}} ruled*** (index-not-record: date + title + 1–2 sentences + pointer to the fuller record). A decisions line lands **only on {{NAME}}'s explicit ruling-verb** ("decided", "adopted", "that's a decision"…) or their confirmation at a session close — unattended jobs propose, never append. The ledger is non-exhaustive by declaration; per-note `## Decisions` sections remain the records it points at. **`SYSTEM/skill-impact.md` = *how the skills evolved*** (third ledger): one line per proposed change to a canonical skill, `ADOPTED|REJECTED|PARKED` + reason + pointer, written at the session close (step 3 of [[Close a Session]]) — rejections are recorded on purpose so they are never re-proposed; an ADOPTED line bumps the skill's `metadata.version`. Unattended jobs may write `PARKED` only. Three ledgers, three grains.
+- **`#auto` marks machine-written actions.** Any job or agent that appends an action on its own must add `#auto` (`- [ ] … #action #auto`) — a job that omits it is a bug. `#auto` lines are queues worked in their home note; the action census (`SYSTEM/bin/actions.py`) excludes them from "stale" unless they are also `#priority`. Human-written actions never carry it. Optionally stamp a created date (`➕ YYYY-MM-DD`) so aging can be measured; the census reports actions with **no** stamp as their own *unknown-age* count rather than folding them into "not stale".
+- **Inline human protection (`> [!human]`).** A note whose body is otherwise machine-editable but carries pockets of raw human-typed text — a daily note's `## Notes` section is the paradigm case, alongside automated sweeps in the same file — wraps that text in an Obsidian callout, `> [!human]`. This is the inline counterpart of the `author_type: human` rule below: **content inside a `[!human]` callout is read-only to machines.** Automated sweeps and AI sessions may *integrate around it* (append a strikethrough + completion link, add a reply, file a pointer) but must never edit, shorten, or delete the quoted text itself. Applies wherever human and machine text share a note.
 - **Authorship & write permission (optional, meaningful when present):** a note may carry `author:` + `author_type: human | assistant | script` in frontmatter — and `author_type` is a **write-permission switch, not credit**. `human` → the body is read-only to machines (propose changes, never edit in place — e.g. a human journal capture); `script` → producer-owned (fix the generator and re-run, never hand-edit — the file-level form of the generated-sections rule); `assistant` → machine-editable per normal rules. **Absence means normal editability — it is not a gap.** Stamp new notes only where ownership matters (agent working data, generated files, verbatim human captures).
 - **Session close ritual:** when {{NAME}} says "close", "wrap up", or equivalent, run [[Close a Session]] — one fixed order: threshold feedback pause (one question: "friction, misses, keepers — or 'nothing'"; proceed regardless) → **record** (log line; decisions-ledger check; digest/initiative updates) → **review** (route learnings by scope; schema changes are always proposals). The 6pm automated summary is the backstop for sessions that end without a close, not a replacement.
 - **Role digests:** each advisor role keeps one **digest** — current state only, in its working-data area (e.g. a domain-advisor's `current-state.md`, a generated status file, an initiative's "Now & next"). Digests are capped (~2,000 words), **measured by script, never by model estimate** — `SYSTEM/bin/cap_check.py` (config: `SYSTEM/bin/cap_config.json`). A genuine blocker declares a dated `cap_exception:` in frontmatter — declared, never silent. History stays in separate append-only files (journals, trails, session notes) so orientation reads structurally cannot over-read.
@@ -98,6 +122,8 @@ Hard rules:
 
 **Run the mechanical half with `SYSTEM/bin/lint.sh`** (exit 0 = green): it deterministically checks inbox-clean, wikilinks-resolve, index-complete, frontmatter-present, next-action coverage, and digest caps — faster and more reliably than reading every file by hand. It skips TEMPLATE files and ignores `[[links]]` inside inline-code spans. Scheduled runs should use `SYSTEM/bin/lint-delta.sh` (alarms on the finding-count delta, not the total). The **judgment** checks below (stale facts, resolved open questions, whether an `#action` is genuinely still open) aren't scriptable — they remain a manual/LLM pass on top. The optional 6pm `daily-summary.sh` runs `lint.sh` for the mechanical pass (plus `lint-delta.sh` as the scheduled alarm) and has the LLM do only the judgment layer.
 
+**Regenerate before you check.** Most red is a stale generated view, not a decision — run `SYSTEM/bin/regen-all.sh` first (every generator the kit ships, in order, fail-loud). Policy: **stale generated views and word-cap overruns are WARN, not FAIL, under plain `lint.sh`** — a mechanical remedy exists (`regen-all.sh`; `cap_overflow.py --write` for Milestones overflow), so it is not a human decision. `LINT_STRICT=1` FAILs them again (the gate a scheduled maintainer runs *after* regen). Everything else — broken links, missing frontmatter, schema violations, a next-action gap — still FAILs plainly: a human's call.
+
 - Every fact in a concept article traces back to a `Knowledge/raw/` capture or a conversation.
 - No `[[wikilink]]` points to a note that doesn't exist — including `[[Full Name]]` person-links (must resolve to a real `Knowledge/People/` note or registered alias).
 - `index.md` lists every concept and initiative file; `Knowledge/Concepts/skills.md` lists every skill in `Knowledge/Skills/`.
@@ -105,6 +131,8 @@ Hard rules:
 - Flag stale items and resolved open questions.
 - **Actions current:** every `- [ ] … #action` is real and still open; completed ones are checked off (not deleted). `Actions.md` is the single aggregated view.
 - **Initiatives current:** every `type: initiative` note with `status: active|paused` appears on the index Quick map's Initiatives line; a live initiative whose `updated:` is weeks old (or whose actions are all checked) probably needs a Now & next rewrite or a close. Every `status: active` initiative carries ≥1 open `#action` (enforced by `SYSTEM/bin/audit-initiative-next-actions.sh`).
+
+**The gardener (optional add-on)** is a nightly autonomous maintainer: unattended on its own schedule, it runs `regen-all.sh`, fixes what lint can fix mechanically, compiles unambiguous `Knowledge/raw/` captures, commits, and writes one digest to the day's `daily/` note. Start in **propose-mode** and auto-apply only once you have reviewed its output — and even then never past the same hard walls any session respects: `Knowledge/raw/` stays append-only, `> [!human]` text and `SYSTEM/decisions.md` stay yours alone. Its changes are logged through the digest + commits (not a per-edit `SYSTEM/log.md` line); revert like any commit. It is not shipped yet — it will land under `SYSTEM/optional/` as an opt-in; nothing in the core method depends on it.
 
 ## Scope note (the method's sweet spot)
 
