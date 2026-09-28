@@ -24,5 +24,10 @@ gone. Existing users: see [`MIGRATING.md`](MIGRATING.md) and the helper
 - Scripts renamed: `*-initiatives.sh` → `active-projects.sh`, `stale-projects.sh`,
   `audit-project-next-actions.sh`; new `audit-area-reviews.sh`.
 
+- **Boot bundle**: `SYSTEM/bin/build_boot_bundle.sh` — one generated orientation payload
+  emitted by the SessionStart hook (with the old inline loader kept as a fallback);
+  agents no longer re-read `index.md` at session start. New skills `file-a-new-note`
+  and `review-an-area`; `initiative-worker` role → `project-worker`.
+
 Earlier 2026-09-28 changes (rules, skills, layout-independent scripts) are listed in
 `SYSTEM/log.md`.

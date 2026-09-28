@@ -5,7 +5,7 @@ Measures the kernel gauges the Optimize-the-Knowledge-Base skill used to
 collect by hand, so they trend instead of being one-offs:
 
   boot      tokens the always-loaded files cost every session (+ the boot bundle,
-            if your instance has SYSTEM/bin/build_boot_bundle.sh)
+            from SYSTEM/bin/build_boot_bundle.sh)
   paging    project/area notes over their section caps (cap_check.py), the
             biggest Now & next / Milestones sections, biggest notes
   scheduler open #action count, #priority count, machine-made share
@@ -100,7 +100,7 @@ def gauge_boot() -> dict:
     out = {"bundle_bytes": None, "bundle_tokens": None,
            "hook_present": (VAULT / ".claude" / "settings.json").exists()
            or os.path.exists(os.path.expanduser("~/.claude/hooks/knowledge-context.sh"))}
-    bundle = BIN / "build_boot_bundle.sh"   # optional — not shipped in the base kit
+    bundle = BIN / "build_boot_bundle.sh"   # the boot bundle (SessionStart hook payload)
     if bundle.exists():
         try:
             r = subprocess.run([str(bundle), "--size"], capture_output=True, text=True, timeout=30)

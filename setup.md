@@ -115,7 +115,7 @@ them is a fine answer (the core loop needs none of this). Full install detail:
 
 | # | Option | What it does | Requires |
 | :-- | :-- | :-- | :-- |
-| 1 | **Session loader** (already registered) | project SessionStart hook in `.claude/settings.json` inlines the map + inbox + today's context when you work in this vault | nothing external; **trust project hooks** when prompted (`/hooks` to inspect). Say no → disable from `/hooks` or `"disableAllHooks": true` |
+| 1 | **Session loader** (already registered) | project SessionStart hook in `.claude/settings.json` emits the generated boot bundle (map + inbox + priorities + today's context; `SYSTEM/bin/build_boot_bundle.sh`) when you work in this vault | nothing external; **trust project hooks** when prompted (`/hooks` to inspect). Say no → disable from `/hooks` or `"disableAllHooks": true` |
 | 2 | **Google Calendar context** | today's events cached for the session loader + daily plan | `gws` CLI authenticated (see below) |
 | 3 | **8am daily plan** (launchd) | writes `00 daily/YYYY-MM-DD.md`: schedule + live `#action` query + priorities | headless `claude -p` working; calendar/Gmail optional |
 | 4 | **Gmail digest in the daily plan** | a grouped "From the inbox" section from the last 2 days of email (read-only) | `gws`; **privacy note: mail headers/snippets land in daily notes** — say this out loud |

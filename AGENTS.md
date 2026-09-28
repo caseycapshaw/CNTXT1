@@ -16,8 +16,14 @@ schema (how the KB works) is `SYSTEM/SCHEMA.md`. The map of all content is
 
 ## Start of every session
 
-1. Read `SYSTEM/SCHEMA.md` — the schema (how the KB works).
-2. Read `index.md` — the map (where everything lives).
+1. The SessionStart hook has already inlined the **boot bundle**
+   (`SYSTEM/bin/build_boot_bundle.sh`): which machine you are on, the `index.md`
+   Quick map, the inbox, open `#priority` actions, today's plan + calendar, and the
+   log tail. **Don't re-read `index.md` at start** — open it only to navigate to a
+   section. If no bundle appeared (hook not trusted/installed), run the builder
+   yourself: `SYSTEM/bin/build_boot_bundle.sh`.
+2. Read `SYSTEM/SCHEMA.md` when the task touches conventions, structure, or
+   compilation (schema changes, new note types, compile passes) — not by reflex.
 3. Check `Actions.md` for open to-dos if the task involves execution.
 
 ## Where a new fact goes

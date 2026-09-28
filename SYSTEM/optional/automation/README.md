@@ -16,7 +16,7 @@ there too.
 
 | Piece | File | What it does |
 | :-- | :-- | :-- |
-| **Session loader** | `sessionstart-hook.sh` | A **SessionStart hook** (registered in `.claude/settings.json`) that inlines your `index.md` map, the live inbox state, today's calendar, and a pointer to today's plan note — every time a session starts in this vault. As a user-global copy it still auto-skips `~/dev` (unless the vault *is* that tree) and any *other* folder with its own `CLAUDE.md`. |
+| **Session loader** | `sessionstart-hook.sh` | A **SessionStart hook** (registered in `.claude/settings.json`) that emits the generated **boot bundle** (`SYSTEM/bin/build_boot_bundle.sh`: host + scheduled jobs, your `index.md` Quick map, the live inbox, open `#priority` actions, today's calendar, a pointer to today's plan note, the log tail) — every time a session starts in this vault. Falls back to a simpler inline loader if the bundle script is missing. As a user-global copy it still auto-skips `~/dev` (unless the vault *is* that tree) and any *other* folder with its own `CLAUDE.md`. |
 | **Calendar cache** | `calendar-fetch.sh` | Pulls today's events from Google Calendar (via [`gws`](https://github.com/googleworkspace/cli), the primary calendar only) into a cache file. The hook only *reads* the cache, so startup stays instant. |
 | **Daily plan generator** | `daily-plan.sh` | Runs headless `claude -p` to write `00 daily/YYYY-MM-DD.md` — today's schedule + a **"From the inbox" Gmail digest** (via `gws`, read-only, last 2 days; auto-skipped if `gws` is absent) + a **live Tasks query** of focus actions + a priorities anchor. Idempotent, retries on network gaps, writes a fallback stub if the API is unreachable. |
 | **Morning scheduler** | `com.example.daily-plan.plist` | A launchd job that runs `daily-plan.sh` at 08:00 daily. |
@@ -54,7 +54,7 @@ The vault's `.claude/settings.json` already registers:
 
 No copy step. On first session, **trust the folder** when prompted (Grok: `/hooks-trust`). Confirm with `/hooks`. Usage overview: root `README.md` § Agent machinery.
 
-The SessionStart script needs `jq`. It resolves the vault from `$CLAUDE_PROJECT_DIR` (project hook) or its location under `SYSTEM/optional/automation/`.
+The SessionStart script needs `jq`. Its host block lists scheduled jobs whose launchd label starts with `KB_LAUNCHD_PREFIX` (default `com.example.` — match your plists' `Label` prefix) or systemd timers starting with `KB_TIMER_PREFIX` (default `kb-`), and only reads `~/.ssh/config` for the Host names you list in `KB_PEERS`; set these in your shell profile or the hook `command` if you want them (the bundle documents each). It resolves the vault from `$CLAUDE_PROJECT_DIR` (project hook) or its location under `SYSTEM/optional/automation/`.
 
 ## User-global SessionStart (optional)
 

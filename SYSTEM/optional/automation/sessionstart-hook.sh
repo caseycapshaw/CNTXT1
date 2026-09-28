@@ -7,10 +7,13 @@
 # settings.json) is only for wanting the loader *outside* this repo.
 # See this folder's README.md and the root README.md.
 #
-# Beyond a static pointer, this inlines the live vault map (index.md), a computed
-# inbox listing, today's calendar (from the cache), and a pointer to today's plan
-# note — so the map + inbox + day are in context at startup without relying on the
-# model remembering to read them.
+# Preferred path: emit the generated **boot bundle** (SYSTEM/bin/build_boot_bundle.sh
+# — host + jobs, vault pointer, today's plan + calendar, the index Quick-map
+# skeleton, inbox, open #priority actions, log tail; SYSTEM/SCHEMA.md § Boot bundle)
+# so the map + inbox + day are in context at startup without relying on the model
+# remembering to read them. If the bundle script is missing or fails, fall back to
+# the older inline loader below (map + inbox + calendar + plan pointer) — never regress
+# to nothing.
 #
 # Fail-safe: on any unexpected error, emit nothing rather than erroring the session.
 
@@ -58,6 +61,21 @@ done
 
 # 3) Bail quietly if the vault isn't present.
 [ -d "$VAULT" ] || exit 0
+
+# 4) Preferred: the generated boot bundle (single-sourced in SYSTEM/bin/, so this hook
+#    and any other surface — another agent's loader, a manual run — stay identical).
+#    Env knobs (KB_LAUNCHD_PREFIX, KB_TIMER_PREFIX, KB_PEERS) are documented in the script.
+bundle_script="$VAULT/SYSTEM/bin/build_boot_bundle.sh"
+if [ -x "$bundle_script" ]; then
+  bundle_ctx="$(VAULT="$VAULT" "$bundle_script" 2>/dev/null)"
+  if [ -n "$bundle_ctx" ]; then
+    jq -n --arg ctx "$bundle_ctx" \
+      '{hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $ctx}}'
+    exit 0
+  fi
+fi
+
+# --- Fallback inline loader (bundle script absent or empty) ---
 
 read -r -d '' pointer <<EOF
 A personal knowledge base (Karpathy "knowledge-base-as-compiler" method) lives at $VAULT — your durable project memory.

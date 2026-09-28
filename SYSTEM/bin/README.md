@@ -20,6 +20,7 @@ concept, project, person, or skill).
 | `rotate_log.sh` | Keep `SYSTEM/log.md` to the current month; older months move verbatim to `SYSTEM/log/YYYY-MM.md`. Idempotent; `--dry-run` previews. |
 | `build-link-map.sh` | Regenerate `SYSTEM/link-map.md` — every `[[target]]` (slugs + `aliases:`, inline or block-list form) → file path; fails on duplicate keys. |
 | `validate_frontmatter.py` | Pydantic validation of every concept / project / area / horizon / goal / person+org / skill / agent note against `SYSTEM/schemas` (run via `uv run`; lint check 9). |
+| `build_boot_bundle.sh` | The session **boot bundle** — one generated, ≤6k-token orientation payload (host + jobs, Quick map, inbox, `#priority` actions, plan + calendar, log tail) emitted by the SessionStart hook. `--size` checks the byte budget. Env knobs: `KB_LAUNCHD_PREFIX`, `KB_TIMER_PREFIX`, `KB_PEERS`, `CAL_CACHE`, `BUDGET_BYTES`. |
 | `build_index_projects.py` | Generate `index.md`'s `## Projects` section (Pending / Live / Done) between `<!-- projects:auto -->` markers from each project's frontmatter + first Now & next paragraph. `--check` = drift (lint check 15). |
 | `build_index_lists.py` | Generate `index.md`'s `## Concepts` and `## Areas` sections from each note's `description:` (lint check 15a). |
 | `build_contacts_directory.py` | Generate the vendor/service directory below the `<!-- generated -->` marker of `05 concepts/contacts.md` from `04 People/` frontmatter (`type: org` + operational `relation:` classes; lint check 15b). |

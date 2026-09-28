@@ -110,7 +110,7 @@ Shipped registrations (scripts live in `SYSTEM/optional/automation/`; this file 
 
 | Event | Script | What it does |
 | :-- | :-- | :-- |
-| `SessionStart` | `sessionstart-hook.sh` | Inlines `index.md` + the live inbox + today's calendar/plan. |
+| `SessionStart` | `sessionstart-hook.sh` | Emits the generated **boot bundle** (`SYSTEM/bin/build_boot_bundle.sh`): host + jobs, the `index.md` Quick map, the live inbox, `#priority` actions, today's calendar/plan, log tail. Falls back to an older inline loader if the script is absent. |
 | `Stop` | `close-ritual-stop-hook.sh` | Once per dirty-tree session, reminds you to say `"close"`. Never blocks. |
 | `PostToolUse` + `Stop` | `catch-porting-candidates.sh` | Nudges when generic/team files look like they belong downstream. **No-op** until you set `CNTXT1_CLONE` / `TEAMS_REPO` in the script. |
 
