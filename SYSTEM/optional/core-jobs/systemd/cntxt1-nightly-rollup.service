@@ -1,0 +1,13 @@
+[Unit]
+Description=cntxt1: nightly-rollup (upstream-kit check + daily-weeks rollup)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User={{USER}}
+EnvironmentFile=/etc/cntxt1/core.env
+Nice=10
+MemoryMax=384M
+TimeoutStartSec=360
+ExecStart={{OPTIONAL_DIR}}/core-jobs/bin/jobwrap nightly-rollup --timeout 300 -- {{OPTIONAL_DIR}}/core-jobs/bin/nightly-rollup

@@ -149,6 +149,21 @@ For whichever they accept:
 Non-macOS: the scripts and hook port; launchd doesn't — offer cron/systemd
 equivalents but don't set them up unless asked.
 
+### Phase 5b — Optional cloud core (advanced — offer once, never push)
+
+For users who want the KB to keep running while their laptop sleeps, the
+`SYSTEM/optional/` tree holds a set of **opt-in add-ons for an always-on Linux
+host** (the "cloud core"). Overview and architecture:
+`SYSTEM/optional/README.md`. Mention it in one sentence; only go further if they
+say yes — it needs a VM, a healthchecks.io project and comfort with a terminal.
+
+| Add-on | What it does |
+| :-- | :-- |
+| `SYSTEM/optional/core-jobs/` | systemd timers on the core host: `jobwrap` (lock, hard timeout, dead-man's-switch ping, failure alert), 15-minute `git-checkpoint`, nightly upstream/daily rollup, restic `backup` to any S3-compatible store |
+
+Walk them through the add-on's own README; every step there is one they run
+(you don't handle credentials — `set-secret` prompts them directly).
+
 ### Phase 6 — Clean up & hand off
 
 1. Offer to delete the **example files** now that real ones exist:

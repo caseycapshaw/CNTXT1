@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# git-checkpoint — every-15-minutes safety-net commit of the vault.
+# Runs on the cloud core (cntxt1-git-checkpoint.timer). Keeps the vault's git
+# history granular between the deliberate session-close commits Claude makes,
+# so a crash never loses more than ~15 minutes of edits.
+#
+# Reads VAULT from the environment (systemd EnvironmentFile=/etc/cntxt1/core.env);
+# required — no default. Pushing is OPT-IN (CHECKPOINT_PUSH=1): only enable it
+# if `origin` is a PRIVATE remote you control — the vault is personal content
+# and must never be pushed to a public or shared repo (SYSTEM/SCHEMA.md §
+# Privacy & content separation).
+set -euo pipefail
+
+VAULT="${VAULT:?VAULT must be set (see /etc/cntxt1/core.env)}"
+
+if [ ! -d "$VAULT/.git" ]; then
+  echo "git-checkpoint: $VAULT is not a git checkout — nothing to do." >&2
+  exit 1
+fi
+
+cd "$VAULT"
+
+if [ -n "$(git status --porcelain)" ]; then
+  ts="$(date '+%Y-%m-%d %H:%M:%S')"
+  git add -A
+  git commit -m "checkpoint: $ts" --quiet
+  echo "git-checkpoint: committed ($ts)."
+else
+  echo "git-checkpoint: working tree clean — no commit needed."
+fi
+
+# Push is opt-in, best-effort and bounded — checkpoints should never hang a
+# timer on a flaky/offline network. A push failure is not a job failure: the
+# commit is safe locally and goes out with the next successful push.
+if [ "${CHECKPOINT_PUSH:-0}" = "1" ]; then
+  if timeout 60 git push origin HEAD --quiet 2>/dev/null; then
+    echo "git-checkpoint: pushed."
+  else
+    echo "git-checkpoint: push failed or timed out (offline?) — commit is safe locally."
+  fi
+fi

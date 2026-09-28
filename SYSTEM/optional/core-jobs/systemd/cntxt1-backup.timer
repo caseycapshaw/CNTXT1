@@ -1,0 +1,10 @@
+[Unit]
+Description=cntxt1: backup timer (02:30 {{TZ}})
+
+[Timer]
+OnCalendar=*-*-* 02:30:00 {{TZ}}
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

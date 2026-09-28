@@ -1,0 +1,275 @@
+#!/usr/bin/env python3
+"""jobwrap -- single-instance lock + healthchecks.io-style ping + hard
+timeout + failure notification wrapper for scheduled jobs.
+
+Usage:
+    jobwrap <job-name> [--timeout SECS] [--no-hc] -- cmd args...
+
+Stdlib-only. Must run on Python 3.9+ on both Linux (the cloud core, systemd
+units) and macOS (a Mac, launchd/manual invocation for edge jobs).
+
+Behavior (see README.md for the full contract):
+  - Non-blocking flock on /run/cntxt1/<job>.lock (macOS: $TMPDIR-based
+    fallback since /run doesn't exist there). If already held, log and
+    exit 0 -- a job already running is not a failure.
+  - GET $HC_PING_BASE/<job-name>/start?create=1 before running (best effort).
+  - Run the command in its own process group. On timeout: SIGTERM the group,
+    wait up to 10s, then SIGKILL. Exit code 124 on timeout (matches `timeout(1)`).
+  - stdout/stderr of the child are streamed through unchanged (journald /
+    the caller's terminal captures them) while the last 10KB is buffered.
+  - POST $HC_PING_BASE/<job-name>/<exitcode> with the buffered tail as the
+    body, scrubbed of anything that looks like a secret.
+  - On nonzero exit (including timeout), POST a secret-free failure message
+    to $NTFY_URL with Priority: high.
+  - All network calls use a 10s timeout and are best-effort: a network
+    failure here never changes the job's exit code.
+"""
+import fcntl
+import os
+import re
+import signal
+import subprocess
+import sys
+import tempfile
+import threading
+import urllib.request
+
+TAIL_BYTES = 10 * 1024
+NET_TIMEOUT = 10
+GRACE_SECS = 10
+TIMEOUT_EXIT_CODE = 124
+
+# --- secret scrubbing --------------------------------------------------
+
+_TOKEN_PATTERNS = [
+    re.compile(r"Bearer\s+\S+", re.IGNORECASE),
+    # JWT-shaped: eyJ... . ... (one or two more dot-segments)
+    re.compile(r"eyJ[A-Za-z0-9_-]{8,}(?:\.[A-Za-z0-9_-]+){1,2}"),
+    # long hex or base64-ish runs (32+ chars) -- API keys, tokens, hashes
+    re.compile(r"\b[A-Fa-f0-9]{32,}\b"),
+    re.compile(r"\b[A-Za-z0-9+/]{32,}={0,2}\b"),
+]
+
+
+def scrub(text):
+    """Redact anything that looks like a secret from a blob of text."""
+    for pat in _TOKEN_PATTERNS:
+        text = pat.sub("[REDACTED]", text)
+    return text
+
+
+# --- locking -------------------------------------------------------------
+
+
+def lock_path(job):
+    run_dir = "/run/cntxt1"
+    try:
+        os.makedirs(run_dir, exist_ok=True)
+        probe = os.path.join(run_dir, f".probe-{os.getpid()}")
+        with open(probe, "w"):
+            pass
+        os.remove(probe)
+        return os.path.join(run_dir, f"{job}.lock")
+    except OSError:
+        tmpdir = os.environ.get("TMPDIR", tempfile.gettempdir())
+        return os.path.join(tmpdir, f"cntxt1-{job}.lock")
+
+
+def acquire_lock(job):
+    """Return an open file handle holding a non-blocking exclusive flock,
+    or None if another instance already holds it."""
+    path = lock_path(job)
+    fh = open(path, "a+")
+    try:
+        fcntl.flock(fh.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        fh.close()
+        return None
+    return fh
+
+
+# --- networking (best-effort, never raises) -------------------------------
+
+
+def _get(url):
+    try:
+        urllib.request.urlopen(url, timeout=NET_TIMEOUT)
+    except Exception as exc:  # noqa: BLE001 -- network is best-effort
+        sys.stderr.write(f"jobwrap: GET {url} failed: {exc}\n")
+
+
+def _post(url, data, headers=None):
+    try:
+        req = urllib.request.Request(
+            url, data=data, method="POST", headers=headers or {}
+        )
+        urllib.request.urlopen(req, timeout=NET_TIMEOUT)
+    except Exception as exc:  # noqa: BLE001
+        sys.stderr.write(f"jobwrap: POST {url} failed: {exc}\n")
+
+
+def hc_start(base, job):
+    if not base:
+        return
+    _get(f"{base.rstrip('/')}/{job}/start?create=1")
+
+
+def hc_end(base, job, exit_code, tail_bytes):
+    if not base:
+        return
+    body = scrub(tail_bytes.decode("utf-8", errors="replace")).encode("utf-8")
+    _post(f"{base.rstrip('/')}/{job}/{exit_code}", body)
+
+
+def ntfy_fail(url, host, job, exit_code):
+    if not url:
+        return
+    message = f"{host} {job} failed (exit {exit_code})"
+    _post(url, message.encode("utf-8"), headers={"Priority": "high"})
+
+
+# --- running the child -----------------------------------------------------
+
+
+def run_child(cmd, timeout):
+    """Run cmd in its own process group, streaming stdout/stderr through
+    while keeping the last TAIL_BYTES. Returns (exit_code, tail_bytes)."""
+    kwargs = {}
+    if hasattr(os, "setsid"):
+        kwargs["preexec_fn"] = os.setsid  # noqa: PLW1509 -- single-threaded at spawn
+    proc = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        bufsize=0,
+        **kwargs,
+    )
+
+    tail = bytearray()
+    tail_lock = threading.Lock()
+
+    def pump():
+        out = sys.stdout.buffer
+        while True:
+            chunk = proc.stdout.read(4096)
+            if not chunk:
+                break
+            out.write(chunk)
+            out.flush()
+            with tail_lock:
+                tail.extend(chunk)
+                if len(tail) > TAIL_BYTES:
+                    del tail[: len(tail) - TAIL_BYTES]
+
+    reader = threading.Thread(target=pump, daemon=True)
+    reader.start()
+
+    timed_out = False
+    try:
+        proc.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        timed_out = True
+        _terminate_group(proc, GRACE_SECS)
+
+    reader.join(timeout=5)
+    proc.stdout.close()
+    with tail_lock:
+        tail_bytes = bytes(tail)
+
+    exit_code = TIMEOUT_EXIT_CODE if timed_out else proc.returncode
+    return exit_code, tail_bytes
+
+
+def _terminate_group(proc, grace_secs):
+    pgid = proc.pid
+    _signal_group(pgid, signal.SIGTERM)
+    try:
+        proc.wait(timeout=grace_secs)
+        return
+    except subprocess.TimeoutExpired:
+        pass
+    _signal_group(pgid, signal.SIGKILL)
+    try:
+        proc.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        pass
+
+
+def _signal_group(pgid, sig):
+    try:
+        if hasattr(os, "killpg"):
+            os.killpg(pgid, sig)
+        else:
+            os.kill(pgid, sig)
+    except ProcessLookupError:
+        pass
+
+
+# --- CLI ---------------------------------------------------------------
+
+
+def parse_args(argv):
+    if not argv:
+        raise SystemExit(usage())
+    job = argv[0]
+    if job.startswith("-"):
+        raise SystemExit(usage())
+    rest = argv[1:]
+    timeout = None
+    no_hc = False
+    i = 0
+    while i < len(rest):
+        a = rest[i]
+        if a == "--timeout":
+            i += 1
+            if i >= len(rest):
+                raise SystemExit(usage())
+            timeout = float(rest[i])
+        elif a == "--no-hc":
+            no_hc = True
+        elif a == "--":
+            i += 1
+            break
+        else:
+            raise SystemExit(usage())
+        i += 1
+    cmd = rest[i:]
+    if not cmd:
+        raise SystemExit(usage())
+    return job, timeout, no_hc, cmd
+
+
+def usage():
+    return __doc__.strip().splitlines()[2]
+
+
+def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
+    job, timeout, no_hc, cmd = parse_args(argv)
+
+    hc_base = None if no_hc else os.environ.get("HC_PING_BASE")
+    ntfy_url = None if no_hc else os.environ.get("NTFY_URL")
+    host = os.environ.get("HOSTNAME") or os.uname().nodename
+
+    lock = acquire_lock(job)
+    if lock is None:
+        sys.stderr.write(f"jobwrap: {job} already running -- exiting\n")
+        return 0
+
+    try:
+        hc_start(hc_base, job)
+        exit_code, tail_bytes = run_child(cmd, timeout)
+        hc_end(hc_base, job, exit_code, tail_bytes)
+        if exit_code != 0:
+            ntfy_fail(ntfy_url, host, job, exit_code)
+        return exit_code
+    finally:
+        try:
+            fcntl.flock(lock.fileno(), fcntl.LOCK_UN)
+        except OSError:
+            pass
+        lock.close()
+
+
+if __name__ == "__main__":
+    sys.exit(main())

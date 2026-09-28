@@ -1,0 +1,10 @@
+[Unit]
+Description=cntxt1: git-checkpoint timer (every 15 minutes)
+
+[Timer]
+OnCalendar=*:0/15
+Persistent=true
+RandomizedDelaySec=15
+
+[Install]
+WantedBy=timers.target

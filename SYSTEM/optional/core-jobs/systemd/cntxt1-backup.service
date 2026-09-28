@@ -1,0 +1,18 @@
+[Unit]
+Description=cntxt1: backup (restic to an S3-compatible store)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Runs as root: it must read /etc/cntxt1 (and anything else 0600 you add to
+# BACKUP_EXTRA_PATHS). The repository is encrypted with the restic-password
+# credential — keep a copy of that passphrase OFF this host.
+EnvironmentFile=/etc/cntxt1/core.env
+LoadCredential=restic-password
+LoadCredential=backup-key-id
+LoadCredential=backup-secret-key
+Nice=15
+MemoryMax=1G
+TimeoutStartSec=3660
+ExecStart={{OPTIONAL_DIR}}/core-jobs/bin/jobwrap backup --timeout 3600 -- {{OPTIONAL_DIR}}/core-jobs/bin/backup

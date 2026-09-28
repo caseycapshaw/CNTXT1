@@ -3,6 +3,18 @@
 Notable framework changes to the CNTXT1 starter kit. Newest first. (Your instance's
 own history lives in its `SYSTEM/log.md`.)
 
+## 2026-09-28 — optional cloud-core add-ons
+
+New opt-in tree under `SYSTEM/optional/` (index: `SYSTEM/optional/README.md`); nothing
+in the core method depends on it.
+
+- **`core-jobs/`** — always-on Linux host running scheduled jobs: `jobwrap`
+  (single-instance lock, healthchecks.io dead-man's-switch ping, hard timeout,
+  ntfy on failure), `git-checkpoint` (opt-in push), `nightly-rollup`, restic
+  `backup` to any S3-compatible store, shared `lib/env.{sh,py}` (required
+  `VAULT`, `secret_load`), rendered systemd units + `install.sh`, `set-secret`
+  (systemd `LoadCredential` / `/etc/credstore`), Makefile. Tests run in CI.
+
 ## 2026-09-28 — numbered GTD layout
 
 **Breaking (layout).** The kit adopts a numbered GTD folder layout; `Knowledge/` is
