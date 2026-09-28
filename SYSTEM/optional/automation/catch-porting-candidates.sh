@@ -4,12 +4,8 @@
 # generic framework files → your public CNTXT1 clone; team-relevant content
 # → a shared Teams repo (if you keep one).
 #
-# Wire it in .claude/settings.json (both events point at this same script):
-#   "hooks": {
-#     "PostToolUse": [{"matcher": "Edit|Write|MultiEdit",
-#                      "hooks": [{"type": "command", "command": "SYSTEM/optional/automation/catch-porting-candidates.sh"}]}],
-#     "Stop":        [{"hooks": [{"type": "command", "command": "SYSTEM/optional/automation/catch-porting-candidates.sh"}]}]
-#   }
+# Already wired in `.claude/settings.json` (PostToolUse + Stop). Both events
+# point at this same script.
 #
 # No-op until configured: leave either variable blank to silence that half.
 set -uo pipefail

@@ -58,6 +58,46 @@ see anything else loose at the root, it's waiting to be filed** (ask Claude to
 
 ---
 
+## Agent machinery (`.claude/`)
+
+`.claude/` is the **project-level** agent surface — auto-discovered by Claude Code, Grok Build, and other SKILL.md-standard agents. Skills, agents, and commands are files in this folder. **Hooks are not:** `/hooks` is a slash-command UI over a `"hooks"` block in settings JSON, not a `.claude/hooks/` markdown folder.
+
+| Path | What |
+| :-- | :-- |
+| `skills/` | Canonical runbooks. Visible `Knowledge/Skills/` notes are generated mirrors — edit here, never the mirror. |
+| `agents/` | Named roles (`research`, `compile`, `lint`, `initiative-worker`). |
+| `commands/` | Project slash commands (e.g. `spawn`). |
+| `settings.json` | **Project hooks** (committed, shared with the repo). |
+| `settings.local.json` | Local permissions / personal hooks — gitignored, not shared. |
+
+### Project hooks (`/hooks`)
+
+Where you put a `"hooks"` block decides its scope:
+
+| File | Scope |
+| :-- | :-- |
+| `.claude/settings.json` | This vault only — **this is what the kit ships** |
+| `.claude/settings.local.json` | This vault, you only |
+| `~/.claude/settings.json` | Every project on your machine |
+
+Claude Code and Grok both read the project file. **First session:** trust the folder when prompted (Grok: `/hooks-trust`). Until then, project hooks are skipped. Inspect what's loaded with `/hooks`.
+
+Shipped registrations (scripts live in `SYSTEM/optional/automation/`; this file only *points at* them):
+
+| Event | Script | What it does |
+| :-- | :-- | :-- |
+| `SessionStart` | `sessionstart-hook.sh` | Inlines `index.md` + the live inbox + today's calendar/plan. |
+| `Stop` | `close-ritual-stop-hook.sh` | Once per dirty-tree session, reminds you to say `"close"`. Never blocks. |
+| `PostToolUse` + `Stop` | `catch-porting-candidates.sh` | Nudges when generic/team files look like they belong downstream. **No-op** until you set `CNTXT1_CLONE` / `TEAMS_REPO` in the script. |
+
+These are **accelerants**. `AGENTS.md` + `index.md` still orient a session without the loader; the Close a Session skill + the 6pm job still close one without the Stop reminder. Disable a single hook from `/hooks`, or set `"disableAllHooks": true` in a settings file.
+
+The SessionStart script needs `jq`. Calendar in that payload is read-only from a cache — it stays empty until you install the optional `gws` job.
+
+**Not project hooks** (still opt-in, still user-global / launchd): the 8am daily plan, 6pm summary, calendar fetch, Claude Desktop MCP. Those stay in [`SYSTEM/optional/automation/README.md`](SYSTEM/optional/automation/README.md). Copy the SessionStart script to `~/.claude/hooks/` only if you want the loader when you're *not* in this repo.
+
+---
+
 ## Staying in sync with the kit (your instance is *not* a fork)
 
 Your KB is a **private instance generated from this kit**, with its own

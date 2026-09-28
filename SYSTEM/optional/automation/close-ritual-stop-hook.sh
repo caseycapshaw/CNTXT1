@@ -6,16 +6,25 @@
 # daily-summary backstop, so removing this hook costs latency, never
 # correctness.
 #
-# Behavior: fires when Claude stops; reminds AT MOST ONCE PER SESSION, and
+# Default install: registered as a PROJECT Stop hook in `.claude/settings.json`.
+#
+# Behavior: fires when the agent stops; reminds AT MOST ONCE PER SESSION, and
 # only when the vault working tree is dirty (i.e. the session probably wrote
 # something worth closing over). Never blocks, never fails the stop.
 set -u
-vault="$(cd "$(dirname "$0")/../../.." && pwd)"
+if [ -n "${CLAUDE_PROJECT_DIR:-}" ] && [ -d "$CLAUDE_PROJECT_DIR/.git" ]; then
+  vault="$CLAUDE_PROJECT_DIR"
+else
+  vault="$(cd "$(dirname "$0")/../../.." && pwd)"
+fi
 
-# session_id from the hook's stdin JSON (stdlib python3 — no jq dependency)
+# session id from the hook's stdin JSON (Claude: session_id; Grok: sessionId)
 session_id="$(python3 -c 'import json,sys
-try: print(json.load(sys.stdin).get("session_id",""))
-except Exception: print("")' 2>/dev/null)"
+try:
+    d=json.load(sys.stdin)
+    print(d.get("session_id") or d.get("sessionId") or "")
+except Exception:
+    print("")' 2>/dev/null)"
 [ -z "$session_id" ] && exit 0
 
 sentinel="${TMPDIR:-/tmp}/close-ritual-reminded-${session_id}"

@@ -21,8 +21,10 @@ schema (how the KB works) is `SYSTEM/SCHEMA.md`. The map of all content is
 ## Multi-model rules (Claude, Grok, and any other agent reading this)
 
 This file is the cross-vendor entry (`CLAUDE.md` just imports it). The canonical
-agent machinery — skills, roles, commands — lives in `.claude/` and is
-auto-discovered by Claude Code, Grok Build, and other SKILL.md-standard agents.
+agent machinery — skills, roles, commands, and project hooks — lives in `.claude/`
+and is auto-discovered by Claude Code, Grok Build, and other SKILL.md-standard
+agents. Hook *scripts* stay in `SYSTEM/optional/automation/`; `.claude/settings.json`
+only registers them. Usage: `README.md` § Agent machinery.
 Non-negotiables for every model:
 
 - **One model is the KB's maintainer** (default: Claude Code). Other models are
@@ -54,6 +56,7 @@ Non-negotiables for every model:
 | `SYSTEM/decisions.md` | Rulings ledger (index-not-record). Schema: `SYSTEM/SCHEMA.md`. |
 | `SYSTEM/link-map.md` | Generated `[[wikilink]]` → file-path index (one-lookup link resolution). Rebuild: `SYSTEM/bin/build-link-map.sh` |
 | `SYSTEM/bin/` | KB tooling — `lint.sh` (mechanical health check), `lint-delta.sh` (scheduled delta), `build-link-map.sh` (regenerate the link map) |
+| `.claude/` | Agent machinery (cross-vendor): `skills/`, `agents/`, `commands/`, and project **hooks** in `settings.json`. Hook scripts live in `SYSTEM/optional/automation/`; this folder only registers them. |
 | `SYSTEM/Journal.md` | Wins & milestones brag doc — use for perf reviews |
 | `Actions.md` | Live to-do dashboard (pinned root anchor) |
 | `Knowledge/People/Full Name.md` | One note per person — single source of truth for per-person detail; built from `Knowledge/People/People TEMPLATE.md`, indexed by `Knowledge/Concepts/contacts.md`. **Structural folder — not the inbox.** |

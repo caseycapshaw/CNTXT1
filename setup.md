@@ -113,7 +113,7 @@ them is a fine answer (the core loop needs none of this). Full install detail:
 
 | # | Option | What it does | Requires |
 | :-- | :-- | :-- | :-- |
-| 1 | **Session loader** (SessionStart hook) | injects the map + inbox + today's context into every Claude Code session in the vault | nothing external |
+| 1 | **Session loader** (already registered) | project SessionStart hook in `.claude/settings.json` inlines the map + inbox + today's context when you work in this vault | nothing external; **trust project hooks** when prompted (`/hooks` to inspect). Say no → disable from `/hooks` or `"disableAllHooks": true` |
 | 2 | **Google Calendar context** | today's events cached for the session loader + daily plan | `gws` CLI authenticated (see below) |
 | 3 | **8am daily plan** (launchd) | writes `daily/YYYY-MM-DD.md`: schedule + live `#action` query + priorities | headless `claude -p` working; calendar/Gmail optional |
 | 4 | **Gmail digest in the daily plan** | a grouped "From the inbox" section from the last 2 days of email (read-only) | `gws`; **privacy note: mail headers/snippets land in daily notes** — say this out loud |
@@ -122,14 +122,16 @@ them is a fine answer (the core loop needs none of this). Full install detail:
 
 For whichever they accept:
 
-1. **`gws` first if 2 or 4 chosen:** `brew install googleworkspace-cli` — warn
+1. **Option 1 is already wired** — do not copy it to `~/.claude/hooks/` unless they want the loader *outside* this repo (then follow `SYSTEM/optional/automation/README.md` § User-global SessionStart). On first session, have them trust project hooks and confirm `/hooks` lists SessionStart + Stop.
+2. **`gws` first if 2 or 4 chosen:** `brew install googleworkspace-cli` — warn
    that the plain `gws` Homebrew formula is an **unrelated** git tool with a
    conflicting binary name. Then `gws auth setup` (needs `gcloud`:
    `brew install --cask google-cloud-sdk`) and `gws auth login` — the user does
    the interactive OAuth steps in the browser; verify with `gws auth status`.
-2. **Copy + configure the accepted scripts** per the README: into
+3. **Copy + configure the scheduled-job scripts** (options 2/3/5) per the README: into
    `~/.claude/hooks/`, set the CONFIG block (`VAULT`, `NAME`) in each.
-3. **Register the SessionStart hook** (option 1) in `~/.claude/settings.json`.
+   Calendar fetch and daily-plan/summary are *not* project hooks — they are
+   launchd/user-global jobs.
 4. **Install the launchd plists** (options 3/5): copy to `~/Library/LaunchAgents/`,
    personalize the `Label` and paths, `launchctl load` them.
 5. **Register the MCP server** (option 6): personalize the `INSTRUCTIONS`
@@ -195,9 +197,11 @@ why the health check matters).
 ## Optional: automation (macOS + Claude Code)
 
 Setup **Phase 5** offers these one by one — nothing installs without an explicit
-yes. Once the basic habit sticks, `SYSTEM/optional/automation/` adds the machinery that makes
+yes. Project hooks (SessionStart loader, close-ritual reminder) already live in
+`.claude/settings.json`; Phase 5 is whether to **trust** them and whether to add
+the launchd/calendar jobs. Once the basic habit sticks, `SYSTEM/optional/automation/` adds the machinery that makes
 the base feel alive: a **SessionStart hook** that inlines your map + inbox + today's
-calendar into every Claude Code session, an **8am daily-plan generator** that writes
+calendar into every session in this vault, an **8am daily-plan generator** that writes
 a `daily/YYYY-MM-DD.md` note (schedule + a "From the inbox" Gmail digest + live
 `#action` query + priorities — calendar and Gmail via the [`gws`](https://github.com/googleworkspace/cli)
 CLI, read-only), and a **6pm end-of-day job** that runs the KB health check, appends

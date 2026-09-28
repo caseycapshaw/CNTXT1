@@ -1,36 +1,54 @@
 #!/usr/bin/env bash
-# SessionStart hook — load your knowledge base into context at the start of every
-# Claude Code session, EXCEPT inside code projects: the ~/dev tree, or any directory
-# that has its own CLAUDE.md (a self-contained repo with its own context).
+# SessionStart hook — load your knowledge base into context at session start.
+#
+# Default install: registered as a PROJECT hook in `.claude/settings.json`
+# (this repo). Claude Code and Grok run it when a session starts in this vault.
+# Optional user-global copy (~/.claude/hooks/knowledge-context.sh + user
+# settings.json) is only for wanting the loader *outside* this repo.
+# See this folder's README.md and the root README.md.
 #
 # Beyond a static pointer, this inlines the live vault map (index.md), a computed
 # inbox listing, today's calendar (from the cache), and a pointer to today's plan
 # note — so the map + inbox + day are in context at startup without relying on the
 # model remembering to read them.
 #
-# Install as ~/.claude/hooks/knowledge-context.sh and register under SessionStart in
-# ~/.claude/settings.json. See this folder's README.md.
-#
 # Fail-safe: on any unexpected error, emit nothing rather than erroring the session.
 
-# ===== CONFIG — edit this =====
-VAULT="$HOME/my-kb"          # absolute path to your KB
-# ==============================
+# ===== CONFIG — only used if this file is copied to ~/.claude/hooks/ =====
+CONFIG_VAULT="$HOME/my-kb"
+# ========================================================================
+
+if [ -n "${CLAUDE_PROJECT_DIR:-}" ] && [ -d "$CLAUDE_PROJECT_DIR/SYSTEM" ]; then
+  VAULT="$CLAUDE_PROJECT_DIR"
+else
+  script_dir="$(cd "$(dirname "$0")" && pwd)"
+  maybe="$(cd "$script_dir/../../.." && pwd 2>/dev/null)" || maybe=""
+  if [ -n "$maybe" ] && [ -d "$maybe/SYSTEM" ] && [ -f "$maybe/index.md" ]; then
+    VAULT="$maybe"
+  else
+    VAULT="$CONFIG_VAULT"
+  fi
+fi
 
 payload="$(cat 2>/dev/null)"
 cwd="$(printf '%s' "$payload" | jq -r '.cwd // empty' 2>/dev/null)"
 [ -z "$cwd" ] && cwd="$PWD"
 
-# 1) Never inject inside the dev tree.
+# 1) Never inject inside the dev tree — unless the vault *is* that tree
+#    (project-level install of a KB that lives under ~/dev).
 case "$cwd" in
-  "$HOME"/dev | "$HOME"/dev/*) exit 0 ;;
+  "$HOME"/dev | "$HOME"/dev/*)
+    case "$cwd" in
+      "$VAULT" | "$VAULT"/*) ;;
+      *) exit 0 ;;
+    esac
+    ;;
 esac
 
 # 2) Never inject if the working tree is a self-contained project (own CLAUDE.md),
-#    walking from cwd up to $HOME. (Your KB's own CLAUDE.md is handled by Claude
-#    Code directly; this guard is for OTHER projects — so keep the vault out of
-#    ~/dev, or this hook will also skip it. If your KB lives somewhere with its own
-#    CLAUDE.md and you still want the inlining, remove this block.)
+#    walking from cwd up to $HOME. The vault's own CLAUDE.md is allowed (dir ==
+#    VAULT). This guard is for OTHER projects, and only matters for a user-global
+#    copy of this hook.
 dir="$cwd"
 while [ -n "$dir" ] && [ "$dir" != "/" ]; do
   [ -f "$dir/CLAUDE.md" ] && [ "$dir" != "$VAULT" ] && exit 0
@@ -46,7 +64,7 @@ A personal knowledge base (Karpathy "knowledge-base-as-compiler" method) lives a
 
 For any non-code / knowledge task, BEFORE answering: read $VAULT/SYSTEM/SCHEMA.md (how the base works). The map (index.md) and the live inbox state are inlined below — use them as your starting point. Keep the base current per AGENTS.md — capture new material to Knowledge/raw/, compile durable facts into Knowledge/Concepts/, update index.md, append SYSTEM/log.md, use Obsidian [[wikilinks]] for backlinks.
 
-The vault ROOT is the inbox: new notes/files land at the root, and anything there other than the pinned anchors (README.md, index.md, Actions.md, CLAUDE.md) is an un-triaged item — offer to file it into Knowledge/raw/ and compile.
+The vault ROOT is the inbox: new notes/files land at the root, and anything there other than the pinned anchors (README.md, index.md, Actions.md, CLAUDE.md, AGENTS.md) is an un-triaged item — offer to file it into Knowledge/raw/ and compile.
 
 Read and write $VAULT using absolute paths regardless of the current working directory.
 EOF
@@ -62,7 +80,7 @@ inbox_items=""
 while IFS= read -r entry; do
   name="$(basename "$entry")"
   case "$name" in
-    README.md|index.md|Actions.md|CLAUDE.md) continue ;;   # pinned anchors
+    README.md|index.md|Actions.md|CLAUDE.md|AGENTS.md) continue ;;   # pinned anchors
     Knowledge|SYSTEM|daily|attachments|docs|Writing) continue ;;  # structural folders — mirror of lint.sh check 1 `structural` (the single source of truth)
     setup.md|LICENSE) continue ;;                           # starter-kit artifacts (lint `template_extras`)
     pyproject.toml|uv.lock) continue ;;                     # Python tooling (lint `tooling`)
@@ -107,7 +125,7 @@ plan_note="$VAULT/daily/$today.md"
 if [ -f "$plan_note" ]; then
   if grep -q "daily-plan: STUB" "$plan_note" 2>/dev/null; then
     plan_block="
-Today's plan note ($plan_note) is a STUB — the 8am job reached the calendar but the API was unreachable, so open #actions + priorities aren't filled in. Offer to regenerate: ~/.claude/hooks/daily-plan.sh --force"
+Today's plan note ($plan_note) is a STUB — the 8am job reached the calendar but the API was unreachable, so open #actions + priorities aren't filled in. Offer to regenerate: $VAULT/SYSTEM/optional/automation/daily-plan.sh --force"
   else
     plan_block="
 Today's plan note: $plan_note — the day's schedule, open #actions, and priorities. Read it first."

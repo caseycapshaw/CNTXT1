@@ -90,7 +90,7 @@ Hard rules:
 - **Interaction contract (how agents report):** commit in one of three forms — "I am doing X now, will report back" / "Ready to do Y — say go" / "I need Z from you — tell me Z" (no status dumps trailing into unowned work). End turns that need {{NAME}}'s word with an explicit "**Need from you now:** …" block — and **nothing needing their word may first surface during or after a close** (a close that reveals a leftover means the prior turn misreported "done"). Rank options by what blocks and what delay costs (checkable facts), never by a causal story. Prefer {{NAME}}'s own phrase over a model-minted compound name.
 - **Unattended-session guardrails** (scheduled jobs, CMUX workers, background agents): (1) **scoped rulings** — a ruling {{NAME}} states about named cases ships scoped to those cases; generalizing it into default machinery is a *new proposal for their word*, not a build freedom. (2) **presence gates** — an instruction that names {{NAME}}'s presence ("show me before applying", "confirm with them") reaching a session where they are absent is a **hard stop**, not a reinterpretation surface; prepare up to the gate, state the need, and wait — that the write is reversible does not unlock it.
 - **Approval-queue checkbox marks** (any machine→human approval queue): `[ ]` pending · `[x]` approved (machinery may act) · `[-]` rejected — the line stays as its own tombstone, never re-presented · `[~]` snoozed (re-present next run) · `[p]` personal/out-of-scope (terminal, nothing files). Producers only ever flip `[~]` → `[ ]`; they never touch `[x]`, `[-]`, or `[p]`.
-- **Vendor portability:** every enforced guarantee lives at a vendor-independent tier (script/ritual or OS-scheduled job); a harness surface (hook, native skill/command discovery) may *accelerate* it but never solely carry it, and **a script failure is declared, never imitated** by model judgment. Full rule: `Knowledge/Skills/RULE/Keep Machinery Vendor-Portable.md`.
+- **Vendor portability:** every enforced guarantee lives at a vendor-independent tier (script/ritual or OS-scheduled job); a harness surface (hook, native skill/command discovery) may *accelerate* it but never solely carry it, and **a script failure is declared, never imitated** by model judgment. Project hooks are registered in `.claude/settings.json` and point at `SYSTEM/optional/automation/` scripts. Full rule: `Knowledge/Skills/RULE/Keep Machinery Vendor-Portable.md`.
 - Dates use `YYYY-MM-DD`.
 - **Rename/convention-change hygiene (anti-drift):** a rename or convention change isn't done when the primary artifact moves — it's done when **no prose still describes the old world**. Last step of any migration: grep the whole vault (including `Knowledge/Skills/` runbooks, READMEs, and this file) for the old name/pattern and fix every hit; keep old names resolvable via `aliases:`; regenerate the link map. Prefer **referencing** a single source (a script, a generated table) over copying its contents into prose — every copy is a future stale fact. Corollaries (**pointer-over-restatement**): a rule lives in exactly one home — a paraphrase elsewhere is a restatement that drifts, a pointer cannot; a rule that turns out to be stated in two role files or skills gets promoted to this file (one home) with pointers left behind; and **staleness is generated at write time** — the session that edits a rule greps for prose restating it *in the same session*, because that edit is what made the copies stale.
 
@@ -118,7 +118,8 @@ propagation risk (the reason the lint step is non-negotiable).
 
 The core method is just **raw → compile → index → log**. Teams layer on extras as
 needed — e.g. auto-generated daily planning notes, calendar capture, a SessionStart
-hook that inlines the map + inbox. These are deliberately
+hook that inlines the map + inbox (registered in `.claude/settings.json`; disable
+from `/hooks` if you don't want it). These are deliberately
 **not required**; add them once the base habit sticks. *"Pick what's useful, ignore
 what isn't."*
 
@@ -135,10 +136,13 @@ with a simple stage flow inside it (e.g. `IDEAS/ → DRAFTS/ → PUBLISH/`, plus
 structural folder (registered in `lint.sh`); the pipeline's skill lives in
 `Knowledge/Skills/` like any other skill.
 
-A ready-to-adopt bundle (macOS + Claude Code) ships in `SYSTEM/optional/automation/` — a
+A ready-to-adopt bundle (macOS + Claude Code / Grok) ships in `SYSTEM/optional/automation/` — a
 SessionStart loader, a Google Calendar cache + Gmail digest (via the `gws` CLI),
 an 8am daily-plan generator, a 6pm lint/recap/git-snapshot job, and the launchd
-jobs to schedule them. See `SYSTEM/optional/automation/README.md`.
+jobs to schedule them. **Project-level hooks** (SessionStart loader, close-ritual
+Stop reminder, porting-candidate nudge) are registered in `.claude/settings.json`
+and point at those scripts — trust the folder on first session (`/hooks` to
+inspect). Launchd jobs stay opt-in. See `SYSTEM/optional/automation/README.md`.
 
 **Visual diagrams** are another optional layer: `SYSTEM/bin/excalidraw.py` is a
 zero-dependency generator that emits native Obsidian-Excalidraw `.excalidraw.md`

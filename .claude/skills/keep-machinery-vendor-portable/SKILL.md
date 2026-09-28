@@ -29,7 +29,9 @@ Machinery guarantees live in **three tiers**:
 2. **Producer** — OS-scheduled (launchd on macOS). No AI vendor in the loop (8am plan, 6pm summary, nightly snapshot).
 3. **Harness accelerant** — vendor-specific surfaces: Claude Code hooks, skill shims, MCP servers. **Latency and convenience only.**
 
-**A vendor-specific surface may accelerate a guarantee but never solely carry it.** Every enforcement must exist at tier 1 or 2; removing every tier-3 accelerant may cost latency, never correctness. (The SessionStart hook accelerates orientation — but `CLAUDE.md` + `index.md` carry it. A Stop-hook close reminder accelerates the close ritual — but the [[Close a Session]] skill + the 6pm backstop carry it.)
+**A vendor-specific surface may accelerate a guarantee but never solely carry it.** Every enforcement must exist at tier 1 or 2; removing every tier-3 accelerant may cost latency, never correctness. (The SessionStart hook accelerates orientation — but `AGENTS.md` + `index.md` carry it. A Stop-hook close reminder accelerates the close ritual — but the [[Close a Session]] skill + the 6pm backstop carry it.)
+
+Project-level Claude/Grok hooks are registered in `.claude/settings.json` and **point at** scripts in `SYSTEM/optional/automation/` — the settings file is the harness surface, never the only copy of the guarantee.
 
 ## Corollaries
 
