@@ -1,0 +1,9 @@
+# capture-api dependencies
+#
+# Everything else is Python 3.12 stdlib (http.server, email, json, base64,
+# urllib). `cryptography` is the one real dependency: verifying an RS256 JWT
+# (Cloudflare Access's Cf-Access-Jwt-Assertion) needs RSA signature
+# verification, which stdlib has no support for.
+#
+# Install: python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt
+cryptography>=42.0

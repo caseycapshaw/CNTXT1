@@ -1,0 +1,28 @@
+[Unit]
+Description=cntxt1: mcp-remote (127.0.0.1:8711, public only via cloudflared)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User={{USER}}
+# Fails closed: the app refuses to start unless VAULT, ALLOWED_EMAIL,
+# PUBLIC_BASE_URL, CF_TEAM and CF_AUD_AUTHORIZE are set (core.env).
+EnvironmentFile=/etc/cntxt1/core.env
+Environment=MCP_PORT=8711
+Environment=MCP_OAUTH_DB={{HOME}}/.local/state/cntxt1/mcp-oauth.db
+Environment=MCP_DISABLED_PATH={{HOME}}/.local/state/cntxt1/mcp-disabled
+Environment=AUDIT_LOG_PATH=/var/log/cntxt1/mcp-remote-audit.jsonl
+LoadCredential=mcp-client-id
+LoadCredential=mcp-client-secret
+LogsDirectory=cntxt1
+LogsDirectoryMode=0750
+Restart=on-failure
+RestartSec=10
+MemoryMax=512M
+NoNewPrivileges=yes
+ProtectSystem=full
+ExecStart={{OPTIONAL_DIR}}/remote-access/mcp-remote/.venv/bin/python3 {{OPTIONAL_DIR}}/remote-access/mcp-remote/server.py
+
+[Install]
+WantedBy=multi-user.target

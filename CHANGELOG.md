@@ -20,6 +20,11 @@ in the core method depends on it.
   daily-note digest. Guardrails in code: `raw/` append-only (+ `raw/index.md`), `> [!human]`,
   decisions ledger, journals, AGENTS/SCHEMA/`.claude`/`.obsidian`, no deletions, checked-off
   actions. Ships in propose-mode. Tests (fake `claude`) run in CI.
+- **`remote-access/`** — `capture-api` (iOS Shortcut / script → `raw/`, Cloudflare Access service
+  token + JWT re-verification) and `mcp-remote` (the kit's `kb-mcp-server.py` over Streamable
+  HTTP with an embedded single-user OAuth server, Access on `/authorize` only; fails closed —
+  no default `ALLOWED_EMAIL` or vault). Tunnel + Access setup docs, iOS Shortcut build guide,
+  systemd units. Tests need `cryptography` (skip with a message otherwise; CI installs it).
 
 ## 2026-09-28 — numbered GTD layout
 

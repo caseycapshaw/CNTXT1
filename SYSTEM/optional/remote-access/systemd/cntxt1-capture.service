@@ -1,0 +1,26 @@
+[Unit]
+Description=cntxt1: capture-api (127.0.0.1:8710, public only via cloudflared)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User={{USER}}
+# VAULT, CF_TEAM and CF_AUD_CAPTURE come from core.env (no defaults in the app).
+EnvironmentFile=/etc/cntxt1/core.env
+Environment=CAPTURE_PORT=8710
+Environment=AUDIT_LOG_PATH=/var/log/cntxt1/capture-api-audit.jsonl
+LoadCredential=capture-token
+LogsDirectory=cntxt1
+LogsDirectoryMode=0750
+Restart=on-failure
+RestartSec=10
+MemoryMax=512M
+NoNewPrivileges=yes
+ProtectSystem=full
+# Binds loopback-only (hardcoded in the app); the venv holds `cryptography`
+# (create it with ../remote-access/setup-venvs.sh).
+ExecStart={{OPTIONAL_DIR}}/remote-access/capture-api/.venv/bin/python3 {{OPTIONAL_DIR}}/remote-access/capture-api/app.py
+
+[Install]
+WantedBy=multi-user.target

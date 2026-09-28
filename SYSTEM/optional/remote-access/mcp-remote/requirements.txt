@@ -1,0 +1,8 @@
+# mcp-remote dependencies
+#
+# sqlite3 and http.server are stdlib. `cryptography` is the one real
+# dependency: verifying an RS256 JWT (Cloudflare Access's
+# Cf-Access-Jwt-Assertion on /authorize) needs RSA signature verification.
+#
+# Install: python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt
+cryptography>=42.0

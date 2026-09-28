@@ -68,7 +68,7 @@ if [ "$RENDER_ONLY" = 0 ]; then
   install -d -m 0700 /etc/credstore
   if [ ! -f /etc/cntxt1/core.env ]; then
     render "$HERE/core.env.example" /etc/cntxt1/core.env
-    chmod 0644 /etc/cntxt1/core.env
+    chown "root:$USER_NAME" /etc/cntxt1/core.env; chmod 0640 /etc/cntxt1/core.env   # HC_PING_BASE embeds a semi-private key
     echo "install.sh: wrote /etc/cntxt1/core.env — edit it (HC_PING_BASE, NTFY_URL, RESTIC_REPOSITORY)."
   fi
 fi
