@@ -23,3 +23,10 @@ _(Write it in the present tense, concretely — a typical week, not a slogan.)_
 [[goals]] · [[purpose-principles]]
 
 <!-- generated -->
+
+_Generated: 2026-09-28 by build_horizon_serves.py — do not hand-edit below the marker._
+
+## Serving this horizon
+
+**Areas:** _(none)_
+**Projects:** _(none)_

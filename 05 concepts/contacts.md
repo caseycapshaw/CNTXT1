@@ -36,3 +36,19 @@ Add one row per person as you build out the network.
 ---
 
 _Start: run [[Add a person to the KB]] for each key person from your setup interview, then rebuild the go-to map above as you learn who owns what._
+
+<!-- generated -->
+
+## 🏢 Service directory (generated)
+
+_Generated: 2026-09-28 by SYSTEM/bin/build_contacts_directory.py — from 04 People/ frontmatter; edit the notes, not this block._
+
+### Orgs & vendors (`type: org`)
+
+| Org | Role | Location | Found by |
+| :-- | :-- | :-- | :-- |
+
+### Operational contacts (`relation:` service provider / tenant / school)
+
+| Person | Relation | Org |
+| :-- | :-- | :-- |

@@ -50,8 +50,10 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[Excalidraw diagram]]` | `Skills/FORMAT/Create an Excalidraw Diagram.md` |
 | `[[Fan out subagents]]` | `Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
 | `[[First principles pass]]` | `Skills/DO/Run a DARE Pass.md` |
+| `[[first-principles-thinking]]` | `05 concepts/first-principles-thinking.md` |
 | `[[generated-sections]]` | `Skills/RULE/Maintain Generated Sections.md` |
 | `[[goals]]` | `01 Horizons/Goals/index.md` |
+| `[[gtd]]` | `05 concepts/gtd.md` |
 | `[[karpathy-method]]` | `05 concepts/karpathy-method.md` |
 | `[[KB efficiency pass]]` | `Skills/CHECK/Optimize the Knowledge Base.md` |
 | `[[KB kernel pass]]` | `Skills/CHECK/Optimize the Knowledge Base.md` |

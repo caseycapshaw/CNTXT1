@@ -273,7 +273,48 @@ else
   printf '%s\n' "$mirrout" | grep '^FAIL' | while IFS= read -r w; do note "$w"; done
 fi
 
+# ---- 14. Horizon/goal serving lists match up-links ------------------------
+# Downward views on 01 Horizons/ (Goals/index.md, each goal note, vision,
+# purpose) are generated from serves: up-links. Drift = forgot to regen.
+if servesout=$(uv run python SYSTEM/bin/build_horizon_serves.py --check 2>&1); then
+  ok "horizon/goal serving lists match serves: up-links"
+else
+  staleFAIL "horizon/goal serving lists stale (run: uv run python SYSTEM/bin/build_horizon_serves.py --write):"
+  printf '%s\n' "$servesout" | grep '^FAIL' | while IFS= read -r w; do note "$w"; done
+fi
+
 rm -f "$valid" "$broken"
+# ---- 15. index.md Projects section generated + current ----------------------
+# The Pending/Live/Done lists between the
+# <!-- projects:auto --> markers are built from each project's frontmatter +
+# first Now & next paragraph (SYSTEM/bin/build_index_projects.py).
+if projout=$(uv run python SYSTEM/bin/build_index_projects.py --check 2>&1); then
+  ok "index.md Projects section current (generated)"
+else
+  staleFAIL "index.md Projects section stale (run: uv run python SYSTEM/bin/build_index_projects.py)"
+fi
+
+# ---- 15a. index.md Concepts + Areas sections generated + current ------------
+# The Concepts + Areas lists are generated 1:1 from each note's own
+# description: (SYSTEM/bin/build_index_lists.py).
+if listsout=$(uv run python SYSTEM/bin/build_index_lists.py --check 2>&1); then
+  ok "index.md Concepts + Areas sections current (generated)"
+else
+  staleFAIL "index.md Concepts/Areas sections stale (run: uv run python SYSTEM/bin/build_index_lists.py):"
+  printf '%s\n' "$listsout" | grep '^FAIL' | while IFS= read -r w; do note "$w"; done
+fi
+
+# ---- 15b. contacts.md service directory generated + current -----------------
+# Relations frontmatter: the block below the
+# <!-- generated --> marker in 05 concepts/contacts.md is built from 04 People/
+# frontmatter (type: org + operational relation: classes) so an un-indexed
+# vendor is mechanically visible.
+if contactsout=$(uv run python SYSTEM/bin/build_contacts_directory.py --check 2>&1); then
+  ok "contacts.md service directory current (generated)"
+else
+  staleFAIL "contacts.md service directory stale (run: uv run python SYSTEM/bin/build_contacts_directory.py)"
+fi
+
 # ---- 15c. Per-folder directory indexes generated + current -----------------
 # The folder-scoped index.md files (Concepts, Projects, Areas, Assets, People,
 # Agents, raw) carry a freshness stamp and are drift-checked here.

@@ -27,3 +27,10 @@ _(The few rules you want your decisions to survive.)_
 [[vision]] · [[goals]]
 
 <!-- generated -->
+
+_Generated: 2026-09-28 by build_horizon_serves.py — do not hand-edit below the marker._
+
+## Serving this horizon
+
+**Areas:** _(none)_
+**Projects:** _(none)_

@@ -1,7 +1,7 @@
 ---
 type: concept
 description: The LLM-maintained wiki architecture this KB is built on — raw→compile→index→lint, replacing RAG at personal scale.
-updated: 2026-07-02
+updated: 2026-09-28
 status: current
 tags: [concept, method]
 ---
@@ -82,3 +82,6 @@ The reframe is: **knowledge is source code; the LLM is a compiler.**
 - **Primary:** Karpathy, [LLM Wiki gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) (2026-04-04).
 - Cole Medin — [video](https://www.youtube.com/watch?v=7huCP6RkcY4) · [`coleam00/claude-memory-compiler`](https://github.com/coleam00/claude-memory-compiler).
 - [VentureBeat coverage](https://venturebeat.com/data/karpathy-shares-llm-knowledge-base-architecture-that-bypasses-rag-with-an) · MindStudio [compiler analogy](https://www.mindstudio.ai/blog/karpathy-llm-knowledge-base-compiler-analogy).
+
+## Related
+[[SCHEMA]] (this vault's schema — the method operationalized) · [[gtd]] (the work stack layered on the compile loop) · [[open-knowledge-format]] (interchange standard) · [[first-principles-thinking]] (DARE — the same distill-to-essentials instinct applied to decisions) · [[skills]] · [[contacts]]

@@ -22,6 +22,12 @@ Reviewing this horizon walks the goal notes below. Individual goal notes do
 not carry their own `review:`.
 
 ## Related
-[[vision]] · [[purpose-principles]]
+[[vision]] · [[purpose-principles]] · [[gtd]]
 
 <!-- generated -->
+
+_Generated: 2026-09-28 by build_horizon_serves.py — do not hand-edit below the marker._
+
+## Goals
+
+_Each goal note has the live serving list. This index is the H3 door._

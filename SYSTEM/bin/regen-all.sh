@@ -36,6 +36,10 @@ skip() { echo "SKIP  $1"; echo; }
 
 step "link-map"              ./SYSTEM/bin/build-link-map.sh
 step ".claude mirrors"       uv run python SYSTEM/bin/build_claude_mirrors.py
+step "index Concepts/Areas"  uv run python SYSTEM/bin/build_index_lists.py
+step "index Projects"        uv run python SYSTEM/bin/build_index_projects.py
+step "contacts directory"    uv run python SYSTEM/bin/build_contacts_directory.py
+step "horizon serves"        uv run python SYSTEM/bin/build_horizon_serves.py --write
 step "directory indexes"     uv run python SYSTEM/bin/build_directory_indexes.py --write
 step "skills indexes"        uv run python SYSTEM/bin/build_skills_indexes.py
 # The census needs the <!-- actions:auto:start/end --> marker pair in Actions.md
