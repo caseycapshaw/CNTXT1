@@ -159,6 +159,7 @@ say yes — it needs a VM, a healthchecks.io project and comfort with a terminal
 
 | Add-on | What it does |
 | :-- | :-- |
+| `SYSTEM/optional/cloud-core/` | the architecture README ("cloud core, home edge") and `vm-bootstrap.sh` — hardened Ubuntu LTS base (deny-inbound firewall, unattended upgrades, swap, credstore). Start here |
 | `SYSTEM/optional/core-jobs/` | systemd timers on the core host: `jobwrap` (lock, hard timeout, dead-man's-switch ping, failure alert), 15-minute `git-checkpoint`, nightly upstream/daily rollup, restic `backup` to any S3-compatible store |
 | `SYSTEM/optional/gardener/` | nightly unattended maintainer (regen, lint fixes, compile raw captures, file the inbox, stamp action dates) in an isolated worktree with hard guardrails; ships in **propose-mode** — review its branch before enabling `apply` |
 | `SYSTEM/optional/remote-access/` | Cloudflare-Tunnel doors into the vault with no open inbound ports: `capture-api` (iOS Shortcut → `raw/`) and `mcp-remote` (the KB as a claude.ai custom connector, single-user OAuth, Access-protected `/authorize`). Read-access to the whole vault — say so |

@@ -25,6 +25,11 @@ in the core method depends on it.
   HTTP with an embedded single-user OAuth server, Access on `/authorize` only; fails closed —
   no default `ALLOWED_EMAIL` or vault). Tunnel + Access setup docs, iOS Shortcut build guide,
   systemd units. Tests need `cryptography` (skip with a message otherwise; CI installs it).
+- **`cloud-core/`** — the "cloud core, home edge" architecture README tying the add-ons together
+  (design rules, the full-disk-encryption lesson, SSH-behind-a-private-network guidance) and
+  `vm-bootstrap.sh`: idempotent Ubuntu LTS bootstrap (required `--user` / `--vault-repo` /
+  `--services-repo`, codename-agnostic apt repos, `ufw` deny-inbound + optional `--allow-rule`,
+  unattended upgrades, swap, journald cap, `/etc/credstore`, optional `--path-parity-link`).
 
 ## 2026-09-28 — numbered GTD layout
 
