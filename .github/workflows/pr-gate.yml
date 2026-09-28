@@ -22,7 +22,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
 
       - name: KB lint (mechanical health)
-        run: ./SYSTEM/bin/lint.sh
+        run: LINT_STRICT=1 ./SYSTEM/bin/lint.sh
 
       - name: Privacy & consistency gate
         env:

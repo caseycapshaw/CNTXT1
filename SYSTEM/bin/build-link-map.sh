@@ -10,6 +10,39 @@ tmp="$(mktemp)"
 
 emit() { printf '| `[[%s]]` | `%s` |\n' "$1" "$2" >> "$tmp"; }
 
+# Emit one alias per line from a note's frontmatter. Understands both the
+# inline form `aliases: [a, b]` and YAML block lists (`aliases:\n  - a`). A
+# naive one-line grep would read a block list's bare `aliases:` key as an
+# empty alias set and silently drop every alias under it.
+extract_aliases() {
+  python3 - "$1" <<'PY'
+import re, sys
+try:
+    text = open(sys.argv[1], encoding="utf-8").read()
+except OSError:
+    sys.exit(0)
+if not text.startswith("---"):
+    sys.exit(0)
+parts = text.split("---", 2)
+if len(parts) < 3:
+    sys.exit(0)
+fm = parts[1]
+m = re.search(r"(?m)^aliases:\s*\[(.*?)\]\s*$", fm)
+if m:
+    for a in m.group(1).split(","):
+        a = a.strip().strip("'\"")
+        if a:
+            print(a)
+    sys.exit(0)
+m = re.search(r"(?m)^aliases:\s*\n((?:[ \t]+-[ \t]+.+\n?)*)", fm)
+if m:
+    for line in m.group(1).splitlines():
+        item = re.sub(r"^\s*-\s*", "", line).strip().strip("'\"")
+        if item:
+            print(item)
+PY
+}
+
 # Concepts / Initiatives: slug = filename (TEMPLATE files skipped), plus any
 # aliases: [a, b] in frontmatter (e.g. a renamed note keeps its old slug
 # resolvable — renames without aliases silently strand every inbound link).
@@ -19,12 +52,10 @@ collect_simple() {
     [ -e "$f" ] || continue
     case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
     emit "$(basename "$f" .md)" "$f"
-    local aliases; aliases="$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//' || true)"
-    [ -z "$aliases" ] && continue
-    local IFS=','; for a in $aliases; do
-      a="$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/^\"//; s/\"$//')"
+    local a
+    while IFS= read -r a; do
       [ -n "$a" ] && emit "$a" "$f"
-    done
+    done < <(extract_aliases "$f")
   done
 }
 
@@ -36,12 +67,10 @@ collect_with_aliases() {
     local name; name="$(basename "$f" .md)"
     case "$name" in *TEMPLATE*|index) continue ;; esac
     emit "$name" "$f"
-    local aliases; aliases="$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//' || true)"
-    [ -z "$aliases" ] && continue
-    local IFS=','; for a in $aliases; do
-      a="$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/^\"//; s/\"$//')"
+    local a
+    while IFS= read -r a; do
       [ -n "$a" ] && emit "$a" "$f"
-    done
+    done < <(extract_aliases "$f")
   done
 }
 
@@ -55,12 +84,10 @@ collect_skills() {
     case "$f" in *TEMPLATE*|*" Index.md"|*/index.md) continue ;; esac
     local name; name="$(basename "$f" .md)"
     emit "$name" "$f"
-    local aliases; aliases="$(grep -m1 '^aliases:' "$f" 2>/dev/null | sed -E 's/^aliases:[[:space:]]*\[//; s/\][[:space:]]*$//' || true)"
-    [ -z "$aliases" ] && continue
-    local IFS=','; for a in $aliases; do
-      a="$(printf '%s' "$a" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/^\"//; s/\"$//')"
+    local a
+    while IFS= read -r a; do
       [ -n "$a" ] && emit "$a" "$f"
-    done
+    done < <(extract_aliases "$f")
   done
 }
 
@@ -78,9 +105,19 @@ collect_skills() {
 collect_simple Knowledge/Concepts
 collect_simple Knowledge/Initiatives
 collect_simple Knowledge/Initiatives/archive
+collect_simple Knowledge/Initiatives/trails   # optional trail siblings (cap_overflow.py)
 collect_simple Knowledge/Excalidraw
 collect_with_aliases Knowledge/People
 collect_skills
+
+# System hubs lint already treats as valid wikilink targets — in the map so an
+# agent resolving via link-map.md (not grep) finds them.
+emit "log" "SYSTEM/log.md"
+emit "AGENTS" "AGENTS.md"
+emit "SCHEMA" "SYSTEM/SCHEMA.md"
+emit "decisions" "SYSTEM/decisions.md"
+emit "skill-impact" "SYSTEM/skill-impact.md"
+for a in Actions.md Knowledge/Actions.md; do [ -f "$a" ] && { emit "Actions" "$a"; break; }; done
 
 # sort the table rows (after the 8 header lines), keep header intact
 head -8 "$tmp" > "$out"
@@ -89,5 +126,14 @@ head -8 "$tmp" > "$out"
 # collapsing distinct targets that differ only by case.
 tail -n +9 "$tmp" | LC_ALL=C sort -u | LC_ALL=C sort -f >> "$out"
 rm -f "$tmp"
+
+# Two different targets claiming the same wikilink key = an ambiguous link.
+dups="$(awk -F'`' '/^\| `/ {print $2}' "$out" | sort | uniq -d)"
+if [ -n "$dups" ]; then
+  echo "FAIL  duplicate wikilink keys in $out:" >&2
+  printf '%s\n' "$dups" | sed 's/^/  /' >&2
+  echo "wrote $out with duplicates — fix the colliding aliases and regen" >&2
+  exit 1
+fi
 
 echo "wrote $out ($(($(wc -l < "$out") - 6)) link targets)"

@@ -6,8 +6,10 @@
 # description:, (6) no stray non-.md files in note folders, (7) index Quick
 # map fits the SessionStart injection budget, (8) Pydantic frontmatter
 # schema validation, (9) every active initiative has an open next action,
-# (10) registered role digests under their word cap (or a declared
-# cap_exception). Exit 0 = pass, 1 = problems.
+# (10) registered role digests + initiative section caps under their word cap
+# (or a declared cap_exception). Exit 0 = pass, 1 = problems. Stale generated
+# views and cap overruns WARN by default (fix: SYSTEM/bin/regen-all.sh); set
+# LINT_STRICT=1 to make them FAIL (CI).
 # Scheduled runs should use lint-delta.sh (alarms on the DELTA, not the
 # total — a permanently-red check is an invisible check).
 # The LLM lint keeps only the judgment checks (stale facts, resolved questions).
@@ -20,6 +22,23 @@ fail=0
 note() { printf '  %s\n' "$1"; }
 ok()   { printf 'PASS  %s\n' "$1"; }
 bad()  { printf 'FAIL  %s\n' "$1"; fail=1; }
+# Regenerate-then-check: a "stale generated view" is not a decision a human
+# needs to make — it's a `SYSTEM/bin/regen-all.sh` away. softFAIL routes a
+# generated-view or cap-overflow mismatch to WARN by default (still visible,
+# never blocks) and to FAIL only when the caller sets LINT_STRICT=1 (CI / a
+# scheduled maintainer's post-regen gate). Judgment-shaped checks (broken
+# links, missing frontmatter, schema violations) always use bad().
+: "${LINT_STRICT:=0}"
+softFAIL() {
+  # $1 = message, $2 = the remedy suffix appended only in WARN mode.
+  if [ "$LINT_STRICT" = 1 ]; then
+    bad "$1"
+  else
+    printf 'WARN  %s — %s\n' "$1" "$2"
+  fi
+}
+staleFAIL() { softFAIL "$1" "stale generated view — run SYSTEM/bin/regen-all.sh"; }
+capFAIL()   { softFAIL "$1" "over cap — run SYSTEM/bin/cap_overflow.py --write (Milestones) or rewrite the prose (Now & next)"; }
 
 # ---- 1. Root inbox clean -------------------------------------------------
 anchors="README.md index.md Actions.md CLAUDE.md AGENTS.md"
@@ -29,7 +48,7 @@ template_extras="setup.md LICENSE"
 # Python tooling files (schema validation layer, managed by uv).
 tooling="pyproject.toml uv.lock"
 # Standing root files (machinery write-targets, not inbox items) — one per line.
-standing=""
+standing="Upstream kit updates (pending).md"
 inbox=()
 for e in *; do
   case " $anchors $structural $template_extras $tooling " in *" $e "*) continue ;; esac
@@ -48,7 +67,7 @@ done
 
 # ---- valid wikilink-name set (canonical names + aliases + outside anchors) ----
 valid="$(mktemp)"
-for f in Knowledge/Concepts/*.md Knowledge/Initiatives/*.md Knowledge/Initiatives/archive/*.md Knowledge/Excalidraw/*.md; do
+for f in Knowledge/Concepts/*.md Knowledge/Initiatives/*.md Knowledge/Initiatives/archive/*.md Knowledge/Initiatives/trails/*.md Knowledge/Excalidraw/*.md; do
   [ -e "$f" ] || continue
   case "$f" in *TEMPLATE*|*/index.md) continue ;; esac
   basename "$f" .md >> "$valid"
@@ -178,7 +197,7 @@ if [ $? -eq 0 ]; then
     ok "role digests under cap"
   fi
 else
-  bad "role digest over cap without a declared exception:"
+  capFAIL "word cap exceeded without a declared exception:"
   printf '%s\n' "$capout" | grep '^FAIL' | while IFS= read -r w; do note "$w"; done
 fi
 
@@ -191,7 +210,7 @@ if [ -d .claude/skills ]; then
   if mirrout=$(uv run python SYSTEM/bin/build_claude_mirrors.py --check 2>&1); then
     ok ".claude canonical and visible mirrors in sync"
   else
-    bad ".claude/visible mirror drift (run: uv run python SYSTEM/bin/build_claude_mirrors.py):"
+    staleFAIL ".claude/visible mirror drift:"
     printf '%s\n' "$mirrout" | grep '^FAIL' | while IFS= read -r w; do note "$w"; done
   fi
 fi

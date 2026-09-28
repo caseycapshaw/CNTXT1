@@ -6,9 +6,11 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 
 | Wikilink | Path |
 | :-- | :-- |
+| `[[Actions]]` | `Knowledge/Actions.md` |
 | `[[Add a Person to the KB]]` | `Knowledge/Skills/DO/Add a Person to the KB.md` |
 | `[[Add a person to the KB]]` | `Knowledge/Skills/DO/Add a Person to the KB.md` |
 | `[[add-a-person-to-the-kb]]` | `Knowledge/Skills/DO/Add a Person to the KB.md` |
+| `[[AGENTS]]` | `AGENTS.md` |
 | `[[Audit State Freshness]]` | `Knowledge/Skills/CHECK/Audit State Freshness.md` |
 | `[[Audit state freshness]]` | `Knowledge/Skills/CHECK/Audit State Freshness.md` |
 | `[[Audit the KB System]]` | `Knowledge/Skills/CHECK/Audit the KB System.md` |
@@ -37,6 +39,7 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[create-directory-dashboard]]` | `Knowledge/Skills/FORMAT/Create Directory Dashboard.md` |
 | `[[DARE pass]]` | `Knowledge/Skills/DO/Run a DARE Pass.md` |
 | `[[dare]]` | `Knowledge/Skills/DO/Run a DARE Pass.md` |
+| `[[decisions]]` | `SYSTEM/decisions.md` |
 | `[[Delegate an Initiative to a CMUX Workspace]]` | `Knowledge/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
 | `[[Delegate an initiative to a CMUX workspace]]` | `Knowledge/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
 | `[[Delegate an initiative]]` | `Knowledge/Skills/DO/Delegate an Initiative to a CMUX Workspace.md` |
@@ -53,6 +56,7 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[KB kernel pass]]` | `Knowledge/Skills/CHECK/Optimize the Knowledge Base.md` |
 | `[[Keep Machinery Vendor-Portable]]` | `Knowledge/Skills/RULE/Keep Machinery Vendor-Portable.md` |
 | `[[keep-machinery-vendor-portable]]` | `Knowledge/Skills/RULE/Keep Machinery Vendor-Portable.md` |
+| `[[log]]` | `SYSTEM/log.md` |
 | `[[Maintain Generated Sections]]` | `Knowledge/Skills/RULE/Maintain Generated Sections.md` |
 | `[[maintain-generated-sections]]` | `Knowledge/Skills/RULE/Maintain Generated Sections.md` |
 | `[[Make an Excalidraw diagram]]` | `Knowledge/Skills/FORMAT/Create an Excalidraw Diagram.md` |
@@ -76,7 +80,9 @@ Resolves every `[[target]]` the KB uses (canonical names + registered `aliases:`
 | `[[run-a-dare-pass]]` | `Knowledge/Skills/DO/Run a DARE Pass.md` |
 | `[[run-an-initiative]]` | `Knowledge/Skills/DO/Run an Initiative.md` |
 | `[[run-the-kb-health-check]]` | `Knowledge/Skills/CHECK/Run the KB Health Check.md` |
+| `[[SCHEMA]]` | `SYSTEM/SCHEMA.md` |
 | `[[second brain audit]]` | `Knowledge/Skills/CHECK/Audit State Freshness.md` |
+| `[[skill-impact]]` | `SYSTEM/skill-impact.md` |
 | `[[skills]]` | `Knowledge/Concepts/skills.md` |
 | `[[Spawn Subagent Panes in a CMUX Workspace]]` | `Knowledge/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |
 | `[[Spawn subagent panes in a CMUX workspace]]` | `Knowledge/Skills/DO/Spawn Subagent Panes in a CMUX Workspace.md` |

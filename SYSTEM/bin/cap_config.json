@@ -1,5 +1,18 @@
 {
-  "_doc": "Registered role digests for cap_check.py (SYSTEM/SCHEMA.md). One cap vault-wide by design; a per-file `cap_words:` frontmatter key overrides. Register a new advisor role's digest here when the role is created. Empty on purpose in the starter — add paths as you create digest files.",
+  "_doc": "Registered FILE-shaped role digests for cap_check.py (SYSTEM/SCHEMA.md). One cap vault-wide by design; a per-file `cap_words:` frontmatter key overrides. Register a new advisor role's digest here when the role is created. Empty on purpose in the starter — add paths as you create digest files.",
   "default_cap_words": 2000,
-  "digests": []
+  "digests": [],
+  "_doc_sections": "Section caps: each entry caps one `## heading` in every note matching its globs. Orientation surfaces stay short; history moves verbatim to trails/<slug>-trail.md. Measured by script, never by model estimate. Over cap is a WARN under plain lint.sh (LINT_STRICT=1 FAILs); a dated `cap_exception:` frontmatter key declares an exception.",
+  "sections": [
+    {
+      "heading": "## Now & next",
+      "cap_words": 500,
+      "globs": ["Knowledge/Initiatives/*.md"]
+    },
+    {
+      "heading": "## Milestones",
+      "cap_words": 400,
+      "globs": ["Knowledge/Initiatives/*.md"]
+    }
+  ]
 }
