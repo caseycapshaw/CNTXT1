@@ -18,7 +18,7 @@ Semantics:
 Per-file `cap_words:` frontmatter overrides the default cap. Stdlib only.
 
 Section caps: cap_config.json `sections` entries cap ONE `## heading` inside
-every note matching a glob — the orientation surfaces of initiatives
+every note matching a glob — the orientation surfaces of projects
 (`## Now & next`, `## Milestones`). Over cap → move history verbatim to the
 note's `trails/<slug>-trail.md` sibling and rewrite the section as current
 state (SYSTEM/SCHEMA.md § Conventions, orientation caps). A dated

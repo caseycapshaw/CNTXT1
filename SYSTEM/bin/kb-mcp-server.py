@@ -23,7 +23,7 @@ script needs no configuration beyond the INSTRUCTIONS block. Wikilinks resolve
 through SYSTEM/link-map.md — the same one-lookup table the agents use.
 
 Read path: kb_index / kb_read / kb_search / kb_actions (read-only).
-Write path: kb_capture only — new dated file in Knowledge/raw/ + one SYSTEM/log.md line.
+Write path: kb_capture only — new dated file in raw/ + one SYSTEM/log.md line.
 Nothing else in the vault is writable from here by design (the compile →
 index → log pipeline stays in Claude Code, per SYSTEM/SCHEMA.md).
 
@@ -55,7 +55,7 @@ in what the notes say, naming the note used. If the KB doesn't cover it, say
 so — never guess about {{NAME}}'s life. Dates are YYYY-MM-DD.
 
 Durable new facts from the conversation: capture with kb_capture (lands in the
-Knowledge/raw/ inbox for later compilation). Never try to restructure the KB from here —
+raw/ inbox for later compilation). Never try to restructure the KB from here —
 compiling raw notes into concepts happens in Claude Code."""
 
 TOOLS = [
@@ -75,7 +75,7 @@ TOOLS = [
             "Read one note from the KB. Accepts a wikilink target exactly as it "
             "appears in other notes ('[[karpathy-method]]', '[[Full Name]]', a "
             "nickname — aliases resolve via the link map) or a vault-relative "
-            "path ('Knowledge/Concepts/karpathy-method.md', 'daily/2026-01-01.md')."
+            "path ('05 concepts/karpathy-method.md', '00 daily/2026-01-01.md')."
         ),
         "inputSchema": {
             "type": "object",
@@ -117,7 +117,7 @@ TOOLS = [
         "name": "kb_capture",
         "description": (
             "Capture durable new information from this conversation into the "
-            "KB inbox: writes a new append-only file Knowledge/raw/YYYY-MM-DD-<topic>.md "
+            "KB inbox: writes a new append-only file raw/YYYY-MM-DD-<topic>.md "
             "and appends one line to SYSTEM/log.md. Never overwrites anything. "
             "Use for facts worth keeping (decisions, new people, project "
             "updates) — not for chit-chat. Compilation into concepts happens "
@@ -148,7 +148,7 @@ RESOURCES = [
     {
         "uri": "cntxt://index.md",
         "name": "CNTXT index (the map)",
-        "description": "index.md — map of every concept, initiative, person, and runbook",
+        "description": "index.md — map of every concept, project, area, person, and runbook",
         "mimeType": "text/markdown",
     },
     {
@@ -274,9 +274,9 @@ def tool_kb_capture(args):
     if not content:
         raise ValueError("content is empty")
     today = datetime.date.today().isoformat()
-    dest, n = VAULT / "Knowledge" / "raw" / f"{today}-{topic}.md", 2
+    dest, n = VAULT / "raw" / f"{today}-{topic}.md", 2
     while dest.exists():
-        dest = VAULT / "Knowledge" / "raw" / f"{today}-{topic}-{n}.md"
+        dest = VAULT / "raw" / f"{today}-{topic}-{n}.md"
         n += 1
     rel = dest.relative_to(VAULT)
     body = (
@@ -292,7 +292,7 @@ def tool_kb_capture(args):
         )
     return (
         f"Captured to {rel} and logged in SYSTEM/log.md. It will be compiled "
-        f"into Knowledge/Concepts/ from Claude Code later — mention that it's waiting."
+        f"into 05 concepts/ from Claude Code later — mention that it's waiting."
     )
 
 

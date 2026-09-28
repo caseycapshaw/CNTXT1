@@ -40,7 +40,7 @@ vault — ever.
 
 Whenever a change made in *this* private vault is generic enough to help
 anyone running the CNTXT1 method — a schema tweak in `SYSTEM/SCHEMA.md`, a
-new/improved `Knowledge/Skills/` skill, a `SYSTEM/bin/` script fix, a template change.
+new/improved `Skills/` skill, a `SYSTEM/bin/` script fix, a template change.
 
 > **Prefer upstream-first.** If the improvement *isn't already implemented
 > in your vault*, don't build it privately and then run this runbook —
@@ -59,21 +59,21 @@ remote of this vault.
 
 1. **Classify the changed file(s):**
    - **Copy verbatim** (no personal content ever lives here): `setup.md`,
-     `SYSTEM/SCHEMA.md`, `SYSTEM/bin/*` scripts, `Knowledge/Concepts/karpathy-method.md`,
-     `Knowledge/Skills/Skill TEMPLATE.md`, `Knowledge/People/People TEMPLATE.md`,
-     `Knowledge/Initiatives/Initiative TEMPLATE.md`, `SYSTEM/optional/automation/*`
+     `SYSTEM/SCHEMA.md`, `SYSTEM/bin/*` scripts, `05 concepts/karpathy-method.md`,
+     `Skills/Skill TEMPLATE.md`, `04 People/People TEMPLATE.md`,
+     `03 Projects/Project TEMPLATE.md`, `SYSTEM/optional/automation/*`
      (already parameterized with `{{VAULT}}` / `{{NAME}}`).
-   - **Copy after checking frontmatter:** other `Knowledge/Skills/<TYPE>/*.md`
+   - **Copy after checking frontmatter:** other `Skills/<TYPE>/*.md`
      skills — the `owner:` field must read `{{NAME}}`, not a real name, in
      the public copy; strip any personal examples from the body.
    - **Copy only the skeleton, re-templated** — never the live rows/content:
-     `CLAUDE.md`, `index.md`, `README.md`, `Knowledge/Concepts/contacts.md`,
-     `Knowledge/Concepts/skills.md`. Diff for what changed *structurally* (a new
+     `CLAUDE.md`, `index.md`, `README.md`, `05 concepts/contacts.md`,
+     `05 concepts/skills.md`. Diff for what changed *structurally* (a new
      convention, a new section) and hand-apply just that structural change to
      the kit's own templated version — don't paste this vault's populated
      version over it.
-   - **Never copy:** anything in `Knowledge/People/` (except the template), personal
-     concepts and initiatives, `Knowledge/raw/`, `daily/`, `Actions.md`, `SYSTEM/log.md`,
+   - **Never copy:** anything in `04 People/` (except the template), personal
+     concepts and projects, `raw/`, `daily/`, `Actions.md`, `SYSTEM/log.md`,
      `SYSTEM/Journal.md`, `SYSTEM/link-map.md`, `.claude/`, `.obsidian/`. These
      are personal by definition or specific to this instance.
 2. **Apply the change** in the CNTXT1 working tree — write/edit the file

@@ -5,7 +5,7 @@
 #   1. Set a sane HOME/PATH (launchd's environment is sparse).
 #   2. Refresh today's calendar cache (calendar-fetch.sh, ~30s).
 #   3. Idempotency: if today's note already exists, do nothing (no clobber).
-#   4. Run headless `claude -p` to write <VAULT>/daily/<DATE>.md from the calendar
+#   4. Run headless `claude -p` to write <VAULT>/00 daily/<DATE>.md from the calendar
 #      + a live #action query + current priorities.
 #   5. Append a one-line entry to SYSTEM/log.md (or write a retry stub on failure).
 #
@@ -19,7 +19,7 @@ VAULT="$HOME/my-kb"          # absolute path to your KB
 NAME="your name"             # how the note addresses you
 # ==============================
 
-daily_dir="$VAULT/daily"
+daily_dir="$VAULT/00 daily"
 today="$(date +%F)"
 note="$daily_dir/$today.md"
 cache="$HOME/.claude/cache/calendar-today.txt"
@@ -92,7 +92,7 @@ Do the following, then WRITE the result to exactly this path: $note
    the anchor below — Grep $VAULT for "#priority" and for "📅" dates <= $today.
    But DO NOT copy any "#action" checkboxes into the note: the Focus section is a
    LIVE QUERY (step 3), and copying would duplicate tasks in the Actions dashboard.
-2. Skim $VAULT/index.md for the current Knowledge/Concepts/work to anchor the day.
+2. Skim $VAULT/index.md for the current 05 concepts/work to anchor the day.
 3. Write the note with EXACTLY these sections (skip "From the inbox" entirely if
    the email list above is "(no emails fetched)" or contains nothing noteworthy):
    # $today — Daily plan
@@ -159,7 +159,7 @@ done
 
 # 5) Log the run (only if the note was actually written); else write a retry stub.
 if [ -f "$note" ]; then
-  printf -- '- %s — auto-generated daily plan note `daily/%s.md` (launchd 8am).\n' \
+  printf -- '- %s — auto-generated daily plan note `00 daily/%s.md` (launchd 8am).\n' \
     "$today" "$today" >> "$VAULT/SYSTEM/log.md"
   echo "Wrote $note and logged it."
 else

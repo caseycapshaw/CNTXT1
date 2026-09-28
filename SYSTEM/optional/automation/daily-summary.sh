@@ -4,7 +4,7 @@
 # Invoked by launchd at 18:00 (com.example.daily-summary). Two jobs in one pass:
 #   1. Runs a full KB lint (per SYSTEM/SCHEMA.md health checks).
 #   2. Appends a succinct, human-readable "What we did today" summary to the
-#      day's note (daily/<DATE>.md).
+#      day's note (00 daily/<DATE>.md).
 #
 # Design for reliability + efficiency:
 #   * LOCAL-ONLY inputs — today's SYSTEM/log.md entries, files changed today, and
@@ -29,7 +29,7 @@ NAME="your name"             # how the summary addresses you
 # ==============================
 
 vault="$VAULT"
-daily_dir="$vault/daily"
+daily_dir="$vault/00 daily"
 today="$(date +%F)"
 note="$daily_dir/$today.md"
 
@@ -41,7 +41,7 @@ mkdir -p "$daily_dir" "$HOME/.claude/cache"
 
 # ---------------------------------------------------------------------------
 # 0) Upstream framework check — if the vault has a fetch-only `upstream`
-#    remote (see Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md), look for kit
+#    remote (see Skills/DO/Pull Framework Updates from CNTXT1.md), look for kit
 #    commits not yet adopted. If any: write/refresh an "Upstream kit updates
 #    (pending).md" note in the root inbox (+ a macOS notification the first
 #    time a new tip appears) so the next interactive session interviews you
@@ -106,7 +106,7 @@ today_log="$(grep -E "^- $today" "$vault/SYSTEM/log.md" 2>/dev/null \
   | grep -viE 'auto-generated daily plan|daily plan STUB|6pm auto:' )"
 [ -z "$today_log" ] && today_log="(no KB log entries dated $today)"
 
-# Files touched today (excludes daily/, log, and tooling dirs — those are noise).
+# Files touched today (excludes 00 daily/, log, and tooling dirs — those are noise).
 changed="$(find "$vault" -type f -name '*.md' -newermt "$today 00:00:00" \
   ! -path '*/.git/*' ! -path '*/.obsidian/*' ! -path "$daily_dir/*" \
   ! -path '*/SYSTEM/log.md' 2>/dev/null | sed "s|$vault/||" | sort)"
@@ -132,10 +132,10 @@ fi
 lint_out="$(bash "$vault/SYSTEM/bin/lint.sh" 2>&1)"; lint_rc=$?
 delta_out="$(bash "$vault/SYSTEM/bin/lint-delta.sh" 2>&1)"; delta_rc=$?
 
-# Action counts (excluding daily/) — context for the summary + the "is any
+# Action counts (excluding 00 daily/) — context for the summary + the "is any
 # #action now stale / should be closed" judgment the script can't make.
-open_actions="$(grep -rE '^\s*- \[ \].*#action' "$vault" --include='*.md' 2>/dev/null | grep -vc '/daily/')"
-done_actions="$(grep -rE '^\s*- \[x\].*#action' "$vault" --include='*.md' 2>/dev/null | grep -vc '/daily/')"
+open_actions="$(grep -rE '^\s*- \[ \].*#action' "$vault" --include='*.md' 2>/dev/null | grep -vc '/00 daily/')"
+done_actions="$(grep -rE '^\s*- \[x\].*#action' "$vault" --include='*.md' 2>/dev/null | grep -vc '/00 daily/')"
 
 read -r -d '' prescan <<PRESCAN
 MECHANICAL LINT — SYSTEM/bin/lint.sh (exit $lint_rc; 0 = green):
@@ -144,7 +144,7 @@ $lint_out
 LINT DELTA — SYSTEM/bin/lint-delta.sh (exit $delta_rc; 0 = flat/falling):
 $delta_out
 
-ACTION COUNTS (excluding daily/): open=$open_actions  done=$done_actions
+ACTION COUNTS (excluding 00 daily/): open=$open_actions  done=$done_actions
 PRESCAN
 
 # ---------------------------------------------------------------------------
@@ -262,9 +262,9 @@ mv "$tmp" "$note"
 verdict="$(printf '%s\n' "$block" | grep -m1 -E '^\*\*Lint:\*\*' | sed -E 's/^\*\*Lint:\*\* *//; s/[[:space:]—-]+$//')"
 case "$(printf '%s' "$verdict" | tr 'A-Z' 'a-z')" in
   *green*) : ;;
-  ""|issues*|*issue*) verdict="issues — see daily/$today.md" ;;
+  ""|issues*|*issue*) verdict="issues — see 00 daily/$today.md" ;;
 esac
-printf -- '- %s — 6pm auto: "What we did today" summary written to `daily/%s.md`; KB lint: %s\n' \
+printf -- '- %s — 6pm auto: "What we did today" summary written to `00 daily/%s.md`; KB lint: %s\n' \
   "$today" "$today" "$verdict" >> "$vault/SYSTEM/log.md"
 echo "Spliced summary into $note. Lint: $verdict"
 

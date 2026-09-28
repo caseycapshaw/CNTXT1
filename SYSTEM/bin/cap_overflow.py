@@ -7,7 +7,7 @@ default — but a WARN a human never has to act on is just
 noise, so this script is the mechanical remedy for the `## Milestones` half
 of that WARN: it moves the OLDEST bullet entries (top of the section — the
 convention is chronological, oldest first) out of the note and into
-`Knowledge/Initiatives/trails/<slug>-trail.md`,
+`03 Projects/trails/<slug>-trail.md` / `02 Areas/trails/<slug>-trail.md`,
 verbatim, exactly the move SYSTEM/SCHEMA.md already describes for a human
 doing it by hand — until the section is back under cap. A pointer line is
 left in its place. `## Now & next` is deliberately NOT touched here — that
@@ -124,7 +124,7 @@ def build_new_trail(note_path: Path, fm: str, moved: list[str]) -> str:
         f"updated: {today}\n"
         f"tags: {tags}\n"
         "---\n\n"
-        f"# Trail — {slug} (history moved from the initiative note)\n\n"
+        f"# Trail — {slug} (history moved from the project note)\n\n"
         f"Moved verbatim on {today} by `SYSTEM/bin/cap_overflow.py` "
         "(SYSTEM/SCHEMA.md caps: Milestones ≤400 words). Nothing edited. "
         f"Live state: `{rel}`.\n\n"

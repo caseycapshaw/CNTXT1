@@ -1,11 +1,11 @@
 ---
 name: dare
-description: Run the four-step DARE first-principles chain (Decompose, Audit assumptions, Recombine, Experiment) against a named problem or decision, writing the audit into the owning note. Use at decision moments — initiative open, big purchase, pending ruling, strategy refresh — or when {{NAME}} says "dare", "/dare", or "first-principles this".
+description: Run the four-step DARE first-principles chain (Decompose, Audit assumptions, Recombine, Experiment) against a named problem or decision, writing the audit into the owning note. Use at decision moments — project open, big purchase, pending ruling, strategy refresh — or when {{NAME}} says "dare", "/dare", or "first-principles this".
 metadata:
   title: Run a DARE Pass
   type: do
   domain: thinking
-  trigger: "a decision moment (initiative open, purchase, ruling, strategy) or {{NAME}} says 'dare' / '/dare' / 'first-principles this'"
+  trigger: "a decision moment (project open, purchase, ruling, strategy) or {{NAME}} says 'dare' / '/dare' / 'first-principles this'"
   frequency: ad-hoc
   tools: "Read, Grep, Edit, Write"
   owner: "{{NAME}}"
@@ -25,15 +25,15 @@ metadata:
 
 ## When to run this
 
-Decision-shaped moments only: opening an initiative, a significant purchase, a
+Decision-shaped moments only: opening a project, a significant purchase, a
 ruling {{NAME}} owes, a strategy-artifact refresh, or an explicit "/dare". Never
 on mechanical ops (captures, lint, triage) — there it's noise.
 
 ## Steps
 
 1. **Name the problem and its owning note.** One sentence, {{NAME}}'s words. The
-   owner is the initiative/concept note the decision lives in; if none
-   exists, a dated `Knowledge/raw/` capture will hold the record.
+   owner is the project/concept note the decision lives in; if none
+   exists, a dated `raw/` capture will hold the record.
 2. **D — Decompose (decomposition only).** Break the problem into its smallest
    useful parts and show the hierarchy (problem → components → elements), each
    with what it contains and how it connects. No advice, no solutions, no
@@ -54,9 +54,9 @@ on mechanical ops (captures, lint, triage) — there it's noise.
    out, what keeps it alive, what's learned either way — and which block to
    revisit if all tests fail. Kill lines are mandatory; a test nothing can
    fail is not a test.
-6. **Record.** Initiative owner → write/refresh its `## Assumptions` section
+6. **Record.** Project owner → write/refresh its `## Assumptions` section
    (numbered, most load-bearing first, labels inline) and drop the chosen
-   experiments as `#action` lines; non-initiative owner → the audit goes in the
+   experiments as `#action` lines; non-project owner → the audit goes in the
    note or a raw capture. Rulings follow the `SYSTEM/decisions.md` trigger rules
    ({{NAME}}'s explicit word only). One line in `SYSTEM/log.md`.
 
@@ -80,4 +80,4 @@ on mechanical ops (captures, lint, triage) — there it's noise.
 
 ## Related
 
-[[Run an Initiative]] · [[SCHEMA]] (decisions-ledger trigger rules).
+[[Run a Project]] · [[SCHEMA]] (decisions-ledger trigger rules).

@@ -1,4 +1,4 @@
-"""Regenerate every Knowledge/Skills/<TYPE>/"<TYPE> Index.md" table straight
+"""Regenerate every Skills/<TYPE>/"<TYPE> Index.md" table straight
 from each skill note's own frontmatter — nobody hand-writes index rows. Run
 via `uv run python SYSTEM/bin/build_skills_indexes.py`.
 
@@ -17,7 +17,7 @@ from pathlib import Path
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
-SKILLS_ROOT = REPO_ROOT / "Knowledge" / "Skills"
+SKILLS_ROOT = REPO_ROOT / "Skills"
 
 # TYPE -> extra columns between Skill and Notes, as (Header, frontmatter key).
 COLUMNS = {

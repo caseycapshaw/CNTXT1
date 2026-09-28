@@ -5,13 +5,80 @@
 __pycache__/
 SYSTEM/.cache/
 
-# --- User territory (design-repo model, 2026-08-27) -------------------------
-# Anyone using this repo directly keeps their personal content UNTRACKED:
-# git ignores everything new under these paths, so `git pull` always works and
-# nothing personal can be committed by accident. The framework's shipped
-# skeleton files (templates, indexes, generated skill/agent mirrors) were
-# added before this rule, so they stay tracked; framework contributors add
-# new files here with `git add -f` (see .github/CONTRIBUTING.md).
-Knowledge/**
-daily/**
-attachments/**
+# --- User territory (design-repo model) --------------------------------------
+# Anyone using this repo directly keeps their personal content UNTRACKED: git
+# ignores every user note in the numbered content folders below, so `git pull`
+# always works and nothing personal can be committed by accident. Negation
+# patterns keep the shipped scaffolding (templates, generated indexes,
+# .gitkeep placeholders, example/stub notes) tracked. .github/scripts/pr-gate.sh
+# enforces the same invariant on the whole tree.
+#
+# Adding a NEW shipped file that these patterns would ignore (a new shipped
+# concept, a new skill/agent mirror): `git add -f` it (see .github/CONTRIBUTING.md).
+
+00 daily/*
+!00 daily/.gitkeep
+
+01 Horizons/*
+!01 Horizons/Goals/
+!01 Horizons/vision.md
+!01 Horizons/purpose-principles.md
+01 Horizons/Goals/*
+!01 Horizons/Goals/Goal TEMPLATE.md
+!01 Horizons/Goals/index.md
+
+02 Areas/*
+!02 Areas/Area TEMPLATE.md
+!02 Areas/index.md
+!02 Areas/Assets/
+!02 Areas/trails/
+02 Areas/Assets/*
+!02 Areas/Assets/index.md
+02 Areas/trails/*
+!02 Areas/trails/.gitkeep
+
+03 Projects/*
+!03 Projects/Project TEMPLATE.md
+!03 Projects/index.md
+!03 Projects/archive/
+!03 Projects/trails/
+03 Projects/archive/*
+!03 Projects/archive/.gitkeep
+03 Projects/trails/*
+!03 Projects/trails/.gitkeep
+
+04 People/*
+!04 People/People TEMPLATE.md
+!04 People/index.md
+
+# Shipped concepts only; every other concept is yours.
+05 concepts/*
+!05 concepts/index.md
+!05 concepts/Concepts-Dashboard.base
+!05 concepts/contacts.md
+!05 concepts/first-principles-thinking.md
+!05 concepts/gtd.md
+!05 concepts/karpathy-method.md
+!05 concepts/open-knowledge-format.md
+!05 concepts/skills.md
+
+raw/*
+!raw/index.md
+!raw/2026-01-01-example-capture.md
+
+attachments/*
+
+excalidraw/*
+!excalidraw/index.md
+!excalidraw/Example*
+
+# Generated skill/agent mirrors: canonical sources live in .claude/ (tracked).
+# User-authored skill/agent mirrors stay untracked; shipped ones are added with -f.
+Skills/*/*
+!Skills/*/.gitkeep
+!Skills/*/* Index.md
+!Skills/*/*TEMPLATE*
+Agents/*.md
+!Agents/index.md
+!Agents/*TEMPLATE*
+Agents/*/

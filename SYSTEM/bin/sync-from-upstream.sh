@@ -38,7 +38,7 @@ cd "$(dirname "$0")/../.."   # vault root
 UPSTREAM_REMOTE="upstream"
 UPSTREAM_BRANCH="main"
 # Framework paths — instance-agnostic files that are safe to take verbatim.
-# Populated/personal surfaces (CLAUDE.md, index.md, Knowledge notes other than
+# Populated/personal surfaces (CLAUDE.md, index.md, content notes other than
 # templates) are deliberately NOT listed: port those by hand.
 FRAMEWORK_PATHS=(
   "SYSTEM/SCHEMA.md"
@@ -47,10 +47,12 @@ FRAMEWORK_PATHS=(
   "SYSTEM/optional"
   "pyproject.toml"
   "uv.lock"
-  "Knowledge/Initiatives/Initiative TEMPLATE.md"
-  "Knowledge/People/People TEMPLATE.md"
-  "Knowledge/Skills/Skill TEMPLATE.md"
-  "Knowledge/Agents/domain-advisor TEMPLATE.md"
+  "03 Projects/Project TEMPLATE.md"
+  "02 Areas/Area TEMPLATE.md"
+  "01 Horizons/Goals/Goal TEMPLATE.md"
+  "04 People/People TEMPLATE.md"
+  "Skills/Skill TEMPLATE.md"
+  "Agents/domain-advisor TEMPLATE.md"
 )
 # ======================================================
 

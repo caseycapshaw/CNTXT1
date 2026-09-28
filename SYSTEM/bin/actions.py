@@ -37,11 +37,11 @@ import sys
 from pathlib import Path
 
 VAULT = Path(__file__).resolve().parent.parent.parent
-# Actions.md is a root anchor in a live instance; the starter ships it at Knowledge/Actions.md.
-ACTIONS_MD = next((p for p in (VAULT / "Actions.md", VAULT / "Knowledge" / "Actions.md") if p.exists()), VAULT / "Actions.md")
+ACTIONS_MD = VAULT / "Actions.md"
 START, END = "<!-- actions:auto:start -->", "<!-- actions:auto:end -->"
-# ===== Folder names — edit here if your instance renames the content folders =====
-SCAN = ["Knowledge/Concepts", "Knowledge/Initiatives", "Knowledge/People", "Knowledge/Agents", "Knowledge/raw", "daily"]
+# Folder names come from SYSTEM/bin/kb-folders.json (single source).
+FOLDERS = json.loads((VAULT / "SYSTEM" / "bin" / "kb-folders.json").read_text())
+SCAN = [FOLDERS["concepts"], FOLDERS["projects"], FOLDERS["areas"], FOLDERS["people"], FOLDERS["horizons"], FOLDERS["daily"], "Agents", "raw"]
 # Root-level files outside SCAN that are registered #action homes in their own
 # right (AGENTS.md § Inbox rule): the upstream-kit-updates queue can carry a
 # real open #action, and root files are otherwise out of scope.

@@ -11,9 +11,7 @@
 # wikilink/skill state), then the content-derived indexes, then the action
 # census last since it can reflect any #action lines the earlier steps touched.
 #
-# Only generators the starter ships are wired. Others (e.g. index Projects/
-# Concepts/Areas lists, contacts directory, horizon serves) are listed as
-# comments — added by the GTD-layout batch — so the shape is visible.
+# Every generator the starter ships is wired below.
 #
 # Usage: SYSTEM/bin/regen-all.sh
 #   Exit 0 = every generator ran clean. Exit 1 = at least one failed (see the
@@ -36,23 +34,14 @@ step() {
 }
 skip() { echo "SKIP  $1"; echo; }
 
-step "link-map"           ./SYSTEM/bin/build-link-map.sh
-if [ -d .claude/skills ]; then
-  step ".claude mirrors"  uv run python SYSTEM/bin/build_claude_mirrors.py
-else
-  skip ".claude mirrors (no .claude/skills)"
-fi
-# --- added by GTD batch (not in the base kit yet) ---
-# step "index lists"         uv run python SYSTEM/bin/build_index_lists.py
-# step "index projects"      uv run python SYSTEM/bin/build_index_projects.py
-# step "contacts directory"  uv run python SYSTEM/bin/build_contacts_directory.py
-# step "horizon serves"      uv run python SYSTEM/bin/build_horizon_serves.py --write
-step "directory indexes"  uv run python SYSTEM/bin/build_directory_indexes.py
-step "skills indexes"     uv run python SYSTEM/bin/build_skills_indexes.py
+step "link-map"              ./SYSTEM/bin/build-link-map.sh
+step ".claude mirrors"       uv run python SYSTEM/bin/build_claude_mirrors.py
+step "directory indexes"     uv run python SYSTEM/bin/build_directory_indexes.py --write
+step "skills indexes"        uv run python SYSTEM/bin/build_skills_indexes.py
 # The census needs the <!-- actions:auto:start/end --> marker pair in Actions.md
 # (opt-in — see SYSTEM/bin/README.md); skip cleanly until you add it.
-if grep -qs 'actions:auto:start' Actions.md Knowledge/Actions.md 2>/dev/null; then
-  step "actions census"   python3 SYSTEM/bin/actions.py --write
+if grep -qs 'actions:auto:start' Actions.md; then
+  step "actions census"      python3 SYSTEM/bin/actions.py --write
 else
   skip "actions census (no actions:auto markers in Actions.md)"
 fi

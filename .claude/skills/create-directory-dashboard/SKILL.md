@@ -1,24 +1,24 @@
 ---
 name: create-directory-dashboard
-description: Produces an Obsidian Bases `.base` dashboard file that renders a live, filterable frontmatter table for one Knowledge/ folder. Use when a Knowledge/ folder needs a live, filterable frontmatter table viewable in Obsidian.
+description: Produces an Obsidian Bases `.base` dashboard file that renders a live, filterable frontmatter table for one content folder. Use when a content folder needs a live, filterable frontmatter table viewable in Obsidian.
 metadata:
   title: Create Directory Dashboard
   type: format
   domain: kb-meta
-  trigger: a Knowledge/ folder needs a live, filterable frontmatter table viewable in Obsidian
+  trigger: a content folder needs a live, filterable frontmatter table viewable in Obsidian
   frequency: ad-hoc
   tools: ["Obsidian Bases (core plugin)", "Read", "Write"]
   owner: "{{NAME}}"
   status: active
   tags: [format, kb-meta]
   aliases: ["Create a directory dashboard", "Directory dashboard", "Create a Bases dashboard", "create-directory-dashboard"]
-  summary: Produces an Obsidian Bases `.base` dashboard file that renders a live, filterable frontmatter table for one Knowledge/ folder.
+  summary: Produces an Obsidian Bases `.base` dashboard file that renders a live, filterable frontmatter table for one content folder.
 ---
 
 
 # Skill — Create Directory Dashboard
 
-> **When:** a `Knowledge/` folder (Concepts, Initiatives, People, Agents, a
+> **When:** a content folder (Concepts, Projects, People, Agents, a
 > Skills type…) would benefit from a live, sortable frontmatter table inside
 > Obsidian · **Frequency:** ad-hoc, once per folder
 > **Outcome:** a `<Folder>-Dashboard.base` file in the target folder that
@@ -43,11 +43,11 @@ folder in Obsidian and wanting to sort or filter by frontmatter fields.
    `SYSTEM/schemas/base_models.py` (or `models.py` for Agents) and choose the
    fields worth a column. Always lead with `file.name`; then the fields a
    human actually scans — e.g. for Concepts: `type`, `status`, `updated`,
-   `tags`, `resource`; for Initiatives: `type`, `status`, `updated`, `tags`;
+   `tags`, `resource`; for Projects: `type`, `status`, `updated`, `tags`;
    for Agents: `description`, `model`, `status`, `tags`.
-3. **Write the `.base` file** at `Knowledge/<Folder>/<Folder>-Dashboard.base`.
+3. **Write the `.base` file** at `<content folder>/<Folder>-Dashboard.base`.
    The canonical shape — a folder-scoped filter plus one table view — is the
-   existing `Knowledge/Concepts/Concepts-Dashboard.base`:
+   existing `05 concepts/Concepts-Dashboard.base`:
 
    ```yaml
    filters:
@@ -89,7 +89,7 @@ folder in Obsidian and wanting to sort or filter by frontmatter fields.
 
 ## Related
 
-- `Knowledge/Concepts/Concepts-Dashboard.base` — the reference instance.
+- `05 concepts/Concepts-Dashboard.base` — the reference instance.
 - `SYSTEM/bin/build_directory_indexes.py` — the agent-facing static
   counterpart.
 - [[karpathy-method]] — why folder-scoped orientation surfaces matter.

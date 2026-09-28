@@ -30,7 +30,7 @@ metadata:
 ## When to run this
 The work is **one task with concurrent legs that share a context** (e.g.
 research three sources at once; build + test in parallel), not a whole workstream
-needing its own repo (that's [[Delegate an initiative to a CMUX workspace]]).
+needing its own repo (that's [[Delegate a project to a CMUX workspace]]).
 You're the **lead** in an existing workspace. This is an **optional extension** —
 see `SYSTEM/SCHEMA.md` § Optional extensions for the model + why (the two-interface
 split, the four-verb loop, model policy). **The lead coordinates — it does not do
@@ -54,12 +54,12 @@ the heavy editing itself once workers exist.**
 4. **Launch an agent in each pane** (a cheaper/faster model for well-scoped legs).
    `send` the CLI line, then `send-key enter`, and give it a moment to boot. If
    your agent CLI supports a system-prompt flag, append one of the role files
-   in `Knowledge/Agents/` (`research`, `compile`, `lint`, `initiative-worker` —
+   in `Agents/` (`research`, `compile`, `lint`, `project-worker` —
    or your own) so the worker gets a named identity instead of a blank agent.
    Use an **absolute path** — the pane's cwd may not be your vault:
    ```bash
    for S in "$W1" "$W2" "$W3"; do
-     cmux send --surface "$S" "claude --model <model-id> --strict-mcp-config --mcp-config '{\"mcpServers\":{}}' --append-system-prompt <vault>/Knowledge/Agents/research.md"
+     cmux send --surface "$S" "claude --model <model-id> --strict-mcp-config --mcp-config '{\"mcpServers\":{}}' --append-system-prompt <vault>/Agents/research.md"
      cmux send-key --surface "$S" enter
    done
    sleep 4
@@ -93,7 +93,7 @@ the heavy editing itself once workers exist.**
    One event stream serves all workers for parallel dispatch. A wake can mean
    "needs input" — if so, `send` the answer + `send-key enter`, don't mark it done.
 7. **Integrate + write back.** The lead collects each worker's result and folds it
-   into the deliverable / the relevant vault note (concept, initiative, daily
+   into the deliverable / the relevant vault note (concept, project, daily
    note). Route any failure back to the responsible worker with a follow-up `send`.
 8. **Tear down** finished panes: `cmux close-surface --surface "$W1"` (repeat).
    Close a runaway the same way.
@@ -112,7 +112,7 @@ the heavy editing itself once workers exist.**
 - **Lead doesn't do the heavy lifting** once workers exist — it decomposes,
   dispatches, integrates, reports. Keep its own edits to integration.
 - **Panes share the workspace cwd/context** — if a leg needs a different repo, it's
-  a workspace-level delegation instead → [[Delegate an initiative to a CMUX workspace]].
+  a workspace-level delegation instead → [[Delegate a project to a CMUX workspace]].
 - **Claude Code's own Task/Agent subagents are in-process**, not CMUX panes. This
   runbook is the explicit-pane path (visible, drivable). Some CMUX versions can
   surface native subagents as panes automatically — untested; prefer explicit
@@ -124,7 +124,7 @@ the heavy editing itself once workers exist.**
 - [ ] Finished panes torn down with `close-surface`.
 
 ## Related
-- `SYSTEM/SCHEMA.md` § Optional extensions — the model + why (the four-verb loop, coordination patterns, model policy, `Knowledge/Agents/`).
-- [[Delegate an initiative to a CMUX workspace]] — sibling runbook for workspace-level (whole-task) delegation.
-- `Knowledge/Agents/` — the role-prompt files this runbook launches.
+- `SYSTEM/SCHEMA.md` § Optional extensions — the model + why (the four-verb loop, coordination patterns, model policy, `Agents/`).
+- [[Delegate a project to a CMUX workspace]] — sibling runbook for workspace-level (whole-task) delegation.
+- `Agents/` — the role-prompt files this runbook launches.
 - [[SCHEMA]]

@@ -39,8 +39,35 @@ def _validate_iso_date(value: object) -> str:
     raise ValueError(f"must be an ISO date (YYYY-MM-DD) or date, got {value!r}")
 
 
-class DoFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for Knowledge/Skills/DO/*.md — agent-executable runbooks
+def _require_wikilinks(v: object, field: str) -> object:
+    """serves:/horizon:/owner-style up-link values are wikilinks, or a list of them."""
+    if v is None:
+        return v
+    items = v if isinstance(v, list) else [v]
+    for item in items:
+        if not (isinstance(item, str) and item.startswith("[[") and item.endswith("]]")):
+            raise ValueError(f'{field}: entries must be wikilinks ("[[slug]]")')
+    return v
+
+
+class SkillMetaMixin(BaseModel):
+    """Optional skill bookkeeping. `version` (a QUOTED string) is the contract
+    version — bumped on every ADOPTED line in SYSTEM/skill-impact.md;
+    `updated` is the last-rewrite ISO date."""
+
+    version: Optional[str] = None
+    updated: Optional[str] = None
+
+    @field_validator("updated", mode="before")
+    @classmethod
+    def _check_skill_updated(cls, v: object) -> Optional[str]:
+        if v is None:
+            return None
+        return _validate_iso_date(v)
+
+
+class DoFrontmatter(SkillMetaMixin, AuthorshipMixin):
+    """Frontmatter schema for Skills/DO/*.md — agent-executable runbooks
     that perform a recurring task and produce an outcome."""
 
     type: Literal["do"] = "do"
@@ -56,8 +83,8 @@ class DoFrontmatter(AuthorshipMixin):
     summary: str
 
 
-class CheckFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for Knowledge/Skills/CHECK/*.md — agent-executable
+class CheckFrontmatter(SkillMetaMixin, AuthorshipMixin):
+    """Frontmatter schema for Skills/CHECK/*.md — agent-executable
     runbooks that verify or audit something and produce a verdict."""
 
     type: Literal["check"] = "check"
@@ -73,8 +100,8 @@ class CheckFrontmatter(AuthorshipMixin):
     summary: str
 
 
-class FormatFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for Knowledge/Skills/FORMAT/*.md — agent-executable
+class FormatFrontmatter(SkillMetaMixin, AuthorshipMixin):
+    """Frontmatter schema for Skills/FORMAT/*.md — agent-executable
     runbooks that produce or structure an artifact in a defined shape."""
 
     type: Literal["format"] = "format"
@@ -90,8 +117,8 @@ class FormatFrontmatter(AuthorshipMixin):
     summary: str
 
 
-class RuleFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for Knowledge/Skills/RULE/*.md — standing conventions
+class RuleFrontmatter(SkillMetaMixin, AuthorshipMixin):
+    """Frontmatter schema for Skills/RULE/*.md — standing conventions
     and policies an agent must always follow."""
 
     type: Literal["rule"] = "rule"
@@ -108,9 +135,10 @@ class RuleFrontmatter(AuthorshipMixin):
 
 
 class ConceptFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for Knowledge/Concepts/*.md — evergreen, rewritten in place."""
+    """Frontmatter schema for 05 concepts/*.md — evergreen, rewritten in place."""
 
     type: Literal["concept"] = "concept"
+    description: str  # one stable sentence — single-sources the index one-liner
     updated: str
     status: Literal["current", "stale"] = "current"
     tags: list[str] = Field(default_factory=lambda: ["concept"])
@@ -122,16 +150,23 @@ class ConceptFrontmatter(AuthorshipMixin):
         return _validate_iso_date(v)
 
 
-class InitiativeFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for Knowledge/Initiatives/*.md — goal-directed
-    workstreams with a lifecycle status."""
+class ProjectFrontmatter(AuthorshipMixin):
+    """Frontmatter schema for 03 Projects/*.md — GTD H1: goal-directed
+    workstreams with a genuine endpoint (the endpoint test) and a lifecycle
+    status. `pending` = the Someday/Maybe bucket (opened, waiting on a
+    trigger; exempt from the next-action audit like `paused`). Live projects
+    must carry an `area:` up-link — the 02 Areas/ note the project serves
+    ("[[<area-slug>]]"); `serves:` optionally points at a goal/horizon and
+    never replaces `area:`."""
 
-    type: Literal["initiative"] = "initiative"
+    type: Literal["project"] = "project"
     description: str
-    status: Literal["active", "paused", "done"] = "active"
+    status: Literal["pending", "active", "paused", "done"] = "active"
     started: Optional[str] = None
     updated: str
-    tags: list[str] = Field(default_factory=lambda: ["initiative"])
+    area: Optional[str] = None
+    serves: Optional[list[str] | str] = None
+    tags: list[str] = Field(default_factory=lambda: ["project"])
 
     @field_validator("started", "updated", mode="before")
     @classmethod
@@ -140,9 +175,22 @@ class InitiativeFrontmatter(AuthorshipMixin):
             return None
         return _validate_iso_date(v)
 
+    @field_validator("area")
+    @classmethod
+    def _area_required_when_live(cls, v, info):
+        # status is declared before area, so it is available in info.data
+        if info.data.get("status", "active") != "done" and not v:
+            raise ValueError('live projects must carry an area: up-link ("[[<area-slug>]]")')
+        return v
+
+    @field_validator("serves")
+    @classmethod
+    def _serves_wikilinks(cls, v):
+        return _require_wikilinks(v, "serves")
+
 
 class PersonFrontmatter(AuthorshipMixin):
-    """Frontmatter schema for Knowledge/People/*.md — one note per person,
+    """Frontmatter schema for 04 People/*.md — one note per person,
     the single source of truth for per-person detail."""
 
     model_config = {"populate_by_name": True}
@@ -154,5 +202,119 @@ class PersonFrontmatter(AuthorshipMixin):
     role: Optional[str] = None
     reports_to: Optional[str] = Field(default=None, alias="reports-to")
     location: Optional[str] = None
+    # Relationship to the KB owner — side-of-family in the value when it
+    # matters (e.g. "brother-in-law — {{spouse}}'s brother"). Relations
+    # frontmatter: seek relationships by rg over frontmatter first.
+    relation: Optional[str] = None
     tags: list[str] = Field(default_factory=lambda: ["person"])
     aliases: list[str] = Field(default_factory=list)
+
+
+class OrgFrontmatter(AuthorshipMixin):
+    """A business/vendor note living in 04 People/ beside the people
+    (relations frontmatter). `found-by:` is the up-link to the person who
+    brought the relationship into the household. Up-links only: the org
+    never lists its clients — assets point here via `serviced-by:`."""
+
+    model_config = {"populate_by_name": True}
+
+    type: Literal["org"] = "org"
+    status: Literal["active", "dormant"] = "active"
+    org: Optional[str] = None
+    role: Optional[str] = None
+    location: Optional[str] = None
+    found_by: Optional[str] = Field(default=None, alias="found-by")
+    tags: list[str] = Field(default_factory=lambda: ["org"])
+    aliases: list[str] = Field(default_factory=list)
+
+    @field_validator("found_by")
+    @classmethod
+    def _found_by_wikilink(cls, v):
+        return _require_wikilinks(v, "found-by")
+
+
+class AreaFrontmatter(AuthorshipMixin):
+    """GTD H2 — ongoing responsibilities (02 Areas/, sub-areas in
+    02 Areas/Assets/). Never `done`; maintained to a standard (`## Standard`)
+    and reviewed on cadence (`review:` + `reviewed:`). Sub-areas up-link a
+    parent via `area:`; areas may declare `serves:` (→ a goal note or a
+    horizon). Asset sub-areas may carry `owner:` (the owner's name |
+    household | "[[Full Name]]") and `serviced-by:` (→ a `type: org` note)."""
+
+    model_config = {"populate_by_name": True}
+
+    type: Literal["area"] = "area"
+    description: str
+    status: Literal["current"] = "current"
+    updated: str
+    review: Literal["weekly", "monthly", "quarterly"]
+    reviewed: str
+    area: Optional[str] = None
+    serves: Optional[list[str] | str] = None
+    owner: Optional[str] = None
+    serviced_by: Optional[list[str] | str] = Field(default=None, alias="serviced-by")
+    tags: list[str] = Field(default_factory=lambda: ["area"])
+    aliases: list[str] = Field(default_factory=list)
+
+    @field_validator("serviced_by")
+    @classmethod
+    def _serviced_by_wikilinks(cls, v):
+        return _require_wikilinks(v, "serviced-by")
+
+    @field_validator("updated", "reviewed", mode="before")
+    @classmethod
+    def _check_iso_date(cls, v: object) -> str:
+        return _validate_iso_date(v)
+
+    @field_validator("serves")
+    @classmethod
+    def _serves_wikilinks(cls, v):
+        return _require_wikilinks(v, "serves")
+
+
+class GoalFrontmatter(AuthorshipMixin):
+    """GTD H3 outcome — one note in 01 Horizons/Goals/<slug>.md. Up-links the
+    H3 index via `horizon: "[[goals]]"`. No review cadence of its own —
+    reviewing Goals/index.md walks these. Areas/projects point here with
+    an optional `serves:`."""
+
+    type: Literal["goal"] = "goal"
+    description: str
+    status: Literal["current"] = "current"
+    updated: str
+    horizon: str
+    order: int
+    tags: list[str] = Field(default_factory=lambda: ["goal"])
+
+    @field_validator("updated", mode="before")
+    @classmethod
+    def _check_iso_date(cls, v: object) -> str:
+        return _validate_iso_date(v)
+
+    @field_validator("horizon")
+    @classmethod
+    def _horizon_wikilink(cls, v: str) -> str:
+        if not (isinstance(v, str) and v.startswith("[[") and v.endswith("]]")):
+            raise ValueError('horizon: must be a wikilink ("[[goals]]")')
+        return v
+
+
+class HorizonFrontmatter(AuthorshipMixin):
+    """GTD H3–H5 orientation notes (01 Horizons/ — H3 is Goals/index.md with
+    aliases: [goals]; H4 vision.md; H5 purpose-principles.md). Reviewed on
+    cadence like areas; content is rewritten in place."""
+
+    type: Literal["horizon"] = "horizon"
+    level: Literal["H3", "H4", "H5"]
+    description: str
+    status: Literal["current"] = "current"
+    updated: str
+    review: Literal["quarterly", "yearly"]
+    reviewed: str
+    tags: list[str] = Field(default_factory=lambda: ["horizon"])
+    aliases: list[str] = Field(default_factory=list)
+
+    @field_validator("updated", "reviewed", mode="before")
+    @classmethod
+    def _check_iso_date(cls, v: object) -> str:
+        return _validate_iso_date(v)

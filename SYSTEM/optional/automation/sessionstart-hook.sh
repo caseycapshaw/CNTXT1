@@ -62,9 +62,9 @@ done
 read -r -d '' pointer <<EOF
 A personal knowledge base (Karpathy "knowledge-base-as-compiler" method) lives at $VAULT — your durable project memory.
 
-For any non-code / knowledge task, BEFORE answering: read $VAULT/SYSTEM/SCHEMA.md (how the base works). The map (index.md) and the live inbox state are inlined below — use them as your starting point. Keep the base current per AGENTS.md — capture new material to Knowledge/raw/, compile durable facts into Knowledge/Concepts/, update index.md, append SYSTEM/log.md, use Obsidian [[wikilinks]] for backlinks.
+For any non-code / knowledge task, BEFORE answering: read $VAULT/SYSTEM/SCHEMA.md (how the base works). The map (index.md) and the live inbox state are inlined below — use them as your starting point. Keep the base current per AGENTS.md — capture new material to raw/, compile durable facts into 05 concepts/, update index.md, append SYSTEM/log.md, use Obsidian [[wikilinks]] for backlinks.
 
-The vault ROOT is the inbox: new notes/files land at the root, and anything there other than the pinned anchors (README.md, index.md, Actions.md, CLAUDE.md, AGENTS.md) is an un-triaged item — offer to file it into Knowledge/raw/ and compile.
+The vault ROOT is the inbox: new notes/files land at the root, and anything there other than the pinned anchors (README.md, index.md, Actions.md, CLAUDE.md, AGENTS.md) is an un-triaged item — offer to file it into raw/ and compile.
 
 Read and write $VAULT using absolute paths regardless of the current working directory.
 EOF
@@ -81,8 +81,8 @@ while IFS= read -r entry; do
   name="$(basename "$entry")"
   case "$name" in
     README.md|index.md|Actions.md|CLAUDE.md|AGENTS.md) continue ;;   # pinned anchors
-    Knowledge|SYSTEM|daily|attachments|docs|Writing) continue ;;  # structural folders — mirror of lint.sh check 1 `structural` (the single source of truth)
-    setup.md|LICENSE) continue ;;                           # starter-kit artifacts (lint `template_extras`)
+    "00 daily"|"01 Horizons"|"02 Areas"|"03 Projects"|"04 People"|"05 concepts"|SYSTEM|Skills|Agents|raw|attachments|docs|excalidraw) continue ;;  # structural folders — mirror of lint.sh check 1 `structural` (the single source of truth)
+    setup.md|LICENSE|MIGRATING.md|CHANGELOG.md) continue ;;                           # starter-kit artifacts (lint `template_extras`)
     pyproject.toml|uv.lock) continue ;;                     # Python tooling (lint `tooling`)
     .*) continue ;;                                         # hidden (.obsidian, .DS_Store)
   esac
@@ -96,7 +96,7 @@ while IFS= read -r entry; do
 done < <(find "$VAULT" -maxdepth 1 -mindepth 1 2>/dev/null | sort)
 
 if [ -n "$inbox_items" ]; then
-  inbox="INBOX — un-triaged items at the vault root (offer to file into Knowledge/raw/ and compile):
+  inbox="INBOX — un-triaged items at the vault root (offer to file into raw/ and compile):
 ${inbox_items}"
 else
   inbox="INBOX — empty (root holds only the anchors + structural folders). Nothing to triage."
@@ -121,7 +121,7 @@ fi
 
 # --- Pointer to today's auto-generated daily plan note, if it exists. ---
 plan_block=""
-plan_note="$VAULT/daily/$today.md"
+plan_note="$VAULT/00 daily/$today.md"
 if [ -f "$plan_note" ]; then
   if grep -q "daily-plan: STUB" "$plan_note" 2>/dev/null; then
     plan_block="

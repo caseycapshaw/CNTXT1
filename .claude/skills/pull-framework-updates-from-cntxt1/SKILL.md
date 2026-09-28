@@ -68,9 +68,9 @@ git remote set-url --push upstream DISABLED
    git cherry-pick <sha>
    ```
    Files byte-identical across the repos (`SYSTEM/SCHEMA.md`, `SYSTEM/bin/*`,
-   most `Knowledge/Skills/`, templates) apply cleanly. Conflicts concentrate in the
+   most `Skills/`, templates) apply cleanly. Conflicts concentrate in the
    **populated-vs-skeleton files** (`CLAUDE.md`, `index.md`,
-   `Knowledge/Concepts/contacts.md`, `Knowledge/Concepts/skills.md`, `README.md`): resolve by
+   `05 concepts/contacts.md`, `05 concepts/skills.md`, `README.md`): resolve by
    keeping your vault's personal content and hand-applying only the
    *structural* change the kit commit made. `--strategy-option=ours` is
    usually wrong here — read the conflict.

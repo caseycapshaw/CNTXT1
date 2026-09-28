@@ -48,9 +48,9 @@ metadata:
    - **Actions real:** spot-check open `#action`s — genuinely still open?
      Completed ones checked, not deleted? (`SYSTEM/bin/aging-actions.sh`
      lists the old ones.)
-   - **Initiatives current:** `SYSTEM/bin/stale-initiatives.sh` — any active
+   - **Projects current:** `SYSTEM/bin/stale-projects.sh` — any active
      note weeks-stale, or done-in-substance but not archived?
-   - **Raw provenance (spot-check):** a concept with zero `[[Knowledge/raw/…]]`
+   - **Raw provenance (spot-check):** a concept with zero `[[raw/…]]`
      cites is a soft warning, not a hard failure.
    - **Generated sections alive:** stamps within cadence AND the generating
      jobs' logs clean — a fresh stamp can hide a failing generator.
@@ -62,13 +62,13 @@ metadata:
   stale the moment the script evolves. Reference the script; let it carry the
   details.
 - `daily/` notes are ephemeral working notes; judgment checks skip them.
-- A missing `Knowledge/raw/` citation is a soft warning, not a hard failure.
+- A missing `raw/` citation is a soft warning, not a hard failure.
 - If a *judgment* finding recurs, consider promoting it to a mechanical
   `lint.sh` check — that's the [[Audit the KB System]] feedback rule.
 
 ## Done when
 - [ ] `lint.sh` run and its verdict recorded.
-- [ ] Judgment layer done: stale facts, open questions, actions, initiatives,
+- [ ] Judgment layer done: stale facts, open questions, actions, projects,
       generated-section logs.
 - [ ] Verdict reported: `green` or `issues — <list>`.
 - [ ] One-line entry appended to `SYSTEM/log.md` with the verdict.

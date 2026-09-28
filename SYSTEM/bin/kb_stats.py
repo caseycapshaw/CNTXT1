@@ -6,12 +6,12 @@ collect by hand, so they trend instead of being one-offs:
 
   boot      tokens the always-loaded files cost every session (+ the boot bundle,
             if your instance has SYSTEM/bin/build_boot_bundle.sh)
-  paging    initiative notes over their section caps (cap_check.py), the
+  paging    project/area notes over their section caps (cap_check.py), the
             biggest Now & next / Milestones sections, biggest notes
   scheduler open #action count, #priority count, machine-made share
             (#auto), oldest embedded date, top homes
   syslog    SYSTEM/log.md bytes / lines / lines this month
-  gc        Knowledge/raw/ captures with zero inbound links (compile debt)
+  gc        raw/ captures with zero inbound links (compile debt)
   lint      SYSTEM/bin/lint.sh wall-clock + verdict
   corpus    file counts + bytes per content folder; index.md size
 
@@ -37,19 +37,21 @@ from pathlib import Path
 
 VAULT = Path(__file__).resolve().parent.parent.parent
 BIN = VAULT / "SYSTEM" / "bin"
-# ===== Folder names — edit here if your instance renames the content folders =====
-CONCEPTS = "Knowledge/Concepts"
-INITIATIVES = "Knowledge/Initiatives"
-PEOPLE = "Knowledge/People"
-RAW = "Knowledge/raw"
-DAILY = "daily"
-SKILLS_MIRROR = "Knowledge/Skills"
-# ==================================================================================
+# Folder names come from SYSTEM/bin/kb-folders.json (single source).
+FOLDERS = json.loads((BIN / "kb-folders.json").read_text())
+CONCEPTS = FOLDERS["concepts"]
+PROJECTS = FOLDERS["projects"]
+AREAS = FOLDERS["areas"]
+HORIZONS = FOLDERS["horizons"]
+PEOPLE = FOLDERS["people"]
+RAW = "raw"
+DAILY = FOLDERS["daily"]
+SKILLS_MIRROR = "Skills"
 STATS_DIR = VAULT / "SYSTEM" / "stats"
 JSONL = STATS_DIR / "kb-stats.jsonl"
 REPORT = VAULT / "SYSTEM" / "kb-stats.md"
 MARKER = "<!-- generated -->"
-CONTENT = [CONCEPTS, INITIATIVES, PEOPLE, RAW, DAILY, ".claude/skills"]
+CONTENT = [CONCEPTS, PROJECTS, AREAS, HORIZONS, PEOPLE, RAW, DAILY, ".claude/skills"]
 CHECKBOX_RE = re.compile(r"^\s*- \[ \] (.*)$")
 CONTINUATION_RE = re.compile(r"^\s+\S")  # indented, non-blank — a wrapped continuation line
 DATE_RE = re.compile(r"\b(20\d{2}-\d{2}-\d{2})\b")
@@ -130,7 +132,7 @@ def gauge_paging() -> dict:
     except Exception:
         pass
     notes = []
-    for folder in (INITIATIVES,):
+    for folder in (PROJECTS, AREAS):
         for p in (VAULT / folder).glob("**/*.md"):
             if "trails" in p.parts or "archive" in p.parts or p.name.endswith(" TEMPLATE.md") or p.name == "index.md":
                 continue
@@ -156,7 +158,7 @@ def gauge_actions() -> dict:
     dates: list[str] = []
     for p in md_files(VAULT):
         rel = str(p.relative_to(VAULT))
-        if rel.startswith(("SYSTEM/", SKILLS_MIRROR + "/", ".claude/", "docs/", "Knowledge/Excalidraw/")):
+        if rel.startswith(("SYSTEM/", SKILLS_MIRROR + "/", ".claude/", "docs/", "excalidraw/")):
             continue
         # Skip Actions.md's own example fences and *TEMPLATE.md placeholder
         # bullets — they are not real open actions (actions.py excludes both).

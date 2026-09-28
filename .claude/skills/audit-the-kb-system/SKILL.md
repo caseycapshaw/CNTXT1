@@ -21,7 +21,7 @@ metadata:
 # Skill — Audit the KB System
 
 > **When:** on request ("step back and audit the KB"), or ~quarterly · **Frequency:** quarterly
-> **Outcome:** a dated `Knowledge/raw/YYYY-MM-DD-kb-system-audit.md` report — architecture
+> **Outcome:** a dated `raw/YYYY-MM-DD-kb-system-audit.md` report — architecture
 > diagram, ranked findings, phased fix plan — then phases executed one at a time on your go.
 
 ## When to run this
@@ -47,7 +47,7 @@ When the KB "feels off" at the architecture level, after a major structural chan
      (zero outbound / no Related / no raw cite); link-map health (count, duplicates,
      stale aliases); raw→concept traceability sampling; plain-text people mentions
      that should be `[[Full Name]]`; whether `daily/` links into the graph.
-   - **Consistency/staleness** — `updated:` vs contradicting facts; initiative
+   - **Consistency/staleness** — `updated:` vs contradicting facts; project
      lifecycle (active-but-stale >3wks, done-but-unarchived, index Quick-map line vs
      real statuses); index one-liners vs `description:` fields; open `#action` reality
      check; log format; uncommitted git state; naming-convention drift.
@@ -62,7 +62,7 @@ When the KB "feels off" at the architecture level, after a major structural chan
 3. **Verify the top findings yourself** before reporting — subagents trust surfaces
    that can themselves be stale (an index blurb can contradict the note it
    summarizes). Re-read the primary source for anything ranked critical.
-4. **Write the report** to `Knowledge/raw/YYYY-MM-DD-kb-system-audit.md`: ASCII
+4. **Write the report** to `raw/YYYY-MM-DD-kb-system-audit.md`: ASCII
    architecture diagram (inputs → vault folders → connected systems), verdict line,
    findings ranked critical/high/medium + a "healthy (verified)" list, and a
    **phased fix plan** (Phase 1 = silent failures, then doc drift, then content
@@ -91,7 +91,7 @@ When the KB "feels off" at the architecture level, after a major structural chan
 
 ## Done when
 
-- [ ] Report exists in `Knowledge/raw/` with diagram, ranked findings, and a phased plan.
+- [ ] Report exists in `raw/` with diagram, ranked findings, and a phased plan.
 - [ ] All phases either executed (checked off in the report) or explicitly parked
       with an owner.
 - [ ] `lint.sh` green, including any new checks added by the audit.

@@ -1,6 +1,6 @@
 ---
 name: research
-description: 'Use when delegating external research for a named question — gathers, digests, returns findings (writes only Knowledge/raw/ captures). CMUX pane worker or Task subagent.'
+description: 'Use when delegating external research for a named question — gathers, digests, returns findings (writes only raw/ captures). CMUX pane worker or Task subagent.'
 tools: Read, Grep, Glob, WebSearch, WebFetch, Write
 model: haiku
 metadata:
@@ -27,7 +27,7 @@ Rules:
   way.
 - Don't write conclusions into the vault yourself unless the lead explicitly
   asked you to. Default to returning your findings as your final message —
-  the lead folds them into the right vault note (concept, initiative, raw
+  the lead folds them into the right vault note (concept, project, raw
   capture). If asked to write directly, follow the vault's own conventions
   (read `SYSTEM/SCHEMA.md` first) rather than inventing a new format.
 - Cite sources/paths for anything you assert as fact.

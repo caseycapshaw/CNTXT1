@@ -32,8 +32,8 @@ This is the **judgment layer** of lint that `SYSTEM/bin/lint.sh` can't do —
 adapted from Cole Medin's
 [second-brain-audit](https://github.com/coleam00/skills/tree/main/.claude/skills/second-brain-audit)
 skill. Core distinction: **state** (current values — replaced in place; here
-`Knowledge/Concepts/` and initiative "Now & next" sections) vs **events** (dated
-occurrences — append-only; here `Knowledge/raw/`, logs, Decisions/Milestones). Stale
+`05 concepts/` and project "Now & next" sections) vs **events** (dated
+occurrences — append-only; here `raw/`, logs, Decisions/Milestones). Stale
 *state* on an always-loaded surface poisons every session that starts from it.
 
 ## Steps
@@ -45,11 +45,11 @@ occurrences — append-only; here `Knowledge/raw/`, logs, Decisions/Milestones).
 2. **Extract every state-shaped claim** from those surfaces — balances,
    statuses (OPEN/DONE/ordered/pending), "next:" items, counts, dates that
    have since passed, "as of" figures. Events (dated milestones) are exempt.
-3. **Verify each claim against its source**: the owning concept/initiative
-   note first, then the freshest `Knowledge/raw/` capture or attachment. Sort into
+3. **Verify each claim against its source**: the owning concept/project
+   note first, then the freshest `raw/` capture or attachment. Sort into
    **confirmed / contradicted / unsupported**.
 4. **Sweep frontmatter staleness**: any note whose body carries entries newer
-   than its `updated:` stamp; any live initiative whose Quick-map one-liner
+   than its `updated:` stamp; any live project whose Quick-map one-liner
    predates its latest "Now & next".
 5. **Fix contradictions in place**: rewrite the stale Quick-map line or claim
    (don't append a correction under it — state gets *replaced*), bump

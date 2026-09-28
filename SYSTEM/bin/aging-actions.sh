@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # aging-actions.sh — list open `#action` checkboxes older than a threshold.
-# For each open action line found in Knowledge/ + index.md:
+# For each open action line found in the content folders + index.md:
 #   - an explicit "➕ YYYY-MM-DD" stamp on the line (see
 #     backfill-action-dates.sh) is the authoritative created date — its age
 #     is printed as "NNd".
@@ -15,9 +15,10 @@
 # Default threshold 14 days; override with --days N. Exit 0 always — this is
 # a signal, not a gate.
 set -uo pipefail
-cd "$(dirname "$0")/../.."   # vault root
-# ===== Folder names — edit here if your instance renames the content folders =====
-KB_CONTENT="Knowledge"
+_BIN="$(cd "$(dirname "$0")" && pwd)"
+cd "$_BIN/../.."   # vault root
+# shellcheck source=kb-folders.sh
+. "$_BIN/kb-folders.sh"
 
 days=14
 while [ $# -gt 0 ]; do
@@ -63,7 +64,7 @@ while IFS=: read -r file line text; do
   if [ "$age" -gt "$days" ]; then
     printf '~%3sd  %s:%s  %s\n' "$age" "$file" "$line" "$text"
   fi
-done < <(grep -rnE '^[[:space:]]*- \[ \] .*#action' --include='*.md' "$KB_CONTENT" index.md 2>/dev/null \
+done < <(grep -rnE '^[[:space:]]*- \[ \] .*#action' --include='*.md' "$KB_CONCEPTS" "$KB_PROJECTS" "$KB_AREAS" "$KB_HORIZONS" "$KB_PEOPLE" Skills Agents index.md 2>/dev/null \
            | grep -v 'TEMPLATE' \
            | sed -E 's/^([^:]+):([0-9]+):[[:space:]]*- \[ \][[:space:]]*/\1:\2:/')
 

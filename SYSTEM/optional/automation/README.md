@@ -18,21 +18,21 @@ there too.
 | :-- | :-- | :-- |
 | **Session loader** | `sessionstart-hook.sh` | A **SessionStart hook** (registered in `.claude/settings.json`) that inlines your `index.md` map, the live inbox state, today's calendar, and a pointer to today's plan note — every time a session starts in this vault. As a user-global copy it still auto-skips `~/dev` (unless the vault *is* that tree) and any *other* folder with its own `CLAUDE.md`. |
 | **Calendar cache** | `calendar-fetch.sh` | Pulls today's events from Google Calendar (via [`gws`](https://github.com/googleworkspace/cli), the primary calendar only) into a cache file. The hook only *reads* the cache, so startup stays instant. |
-| **Daily plan generator** | `daily-plan.sh` | Runs headless `claude -p` to write `daily/YYYY-MM-DD.md` — today's schedule + a **"From the inbox" Gmail digest** (via `gws`, read-only, last 2 days; auto-skipped if `gws` is absent) + a **live Tasks query** of focus actions + a priorities anchor. Idempotent, retries on network gaps, writes a fallback stub if the API is unreachable. |
+| **Daily plan generator** | `daily-plan.sh` | Runs headless `claude -p` to write `00 daily/YYYY-MM-DD.md` — today's schedule + a **"From the inbox" Gmail digest** (via `gws`, read-only, last 2 days; auto-skipped if `gws` is absent) + a **live Tasks query** of focus actions + a priorities anchor. Idempotent, retries on network gaps, writes a fallback stub if the API is unreachable. |
 | **Morning scheduler** | `com.example.daily-plan.plist` | A launchd job that runs `daily-plan.sh` at 08:00 daily. |
-| **End-of-day summary** | `daily-summary.sh` | Starts with an **upstream framework check** (if the vault has the fetch-only `upstream` remote — see `Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md`): unadopted kit commits get written to an `Upstream kit updates (pending).md` inbox note + a macOS notification, queuing a commit-by-commit adoption interview for your next session. Then runs the deterministic `SYSTEM/bin/lint.sh` for the mechanical lint **and** `SYSTEM/bin/lint-delta.sh` as the scheduled alarm (delta, not total), then headless `claude -p` to (1) add the **judgment-layer lint** (stale items, resolved questions, action hygiene) and (2) **append a "What we did today" recap** to the day's note — local inputs only, no network needed for content. Finishes with a **nightly git snapshot** (commit + best-effort push) so the KB always has a rollback point. Idempotent: re-runs replace the block, never duplicate. |
+| **End-of-day summary** | `daily-summary.sh` | Starts with an **upstream framework check** (if the vault has the fetch-only `upstream` remote — see `Skills/DO/Pull Framework Updates from CNTXT1.md`): unadopted kit commits get written to an `Upstream kit updates (pending).md` inbox note + a macOS notification, queuing a commit-by-commit adoption interview for your next session. Then runs the deterministic `SYSTEM/bin/lint.sh` for the mechanical lint **and** `SYSTEM/bin/lint-delta.sh` as the scheduled alarm (delta, not total), then headless `claude -p` to (1) add the **judgment-layer lint** (stale items, resolved questions, action hygiene) and (2) **append a "What we did today" recap** to the day's note — local inputs only, no network needed for content. Finishes with a **nightly git snapshot** (commit + best-effort push) so the KB always has a rollback point. Idempotent: re-runs replace the block, never duplicate. |
 | **Close-ritual reminder** | `close-ritual-stop-hook.sh` | A **Stop hook** accelerant for [[Close a Session]], registered in `.claude/settings.json`. Reminds at most once per session, and only when the vault working tree is dirty. Never blocks. The ritual itself is carried by the skill + the 6pm backstop — removing this hook costs latency, never correctness. |
 | **Porting-candidate nudge** | `catch-porting-candidates.sh` | A **PostToolUse + Stop** hook that flags generic framework / team-relevant edits that may belong downstream. No-op until `CNTXT1_CLONE` / `TEAMS_REPO` are set in the script. |
 | **Evening scheduler** | `com.example.daily-summary.plist` | A launchd job that runs `daily-summary.sh` at 18:00 daily (companion to the 8am job). |
 
-The result: every morning a fresh `daily/` note appears, every evening the KB is
+The result: every morning a fresh `00 daily/` note appears, every evening the KB is
 linted and the day is recapped, and every session in the vault starts already
 knowing your map, your inbox, and your day.
 
-> `daily/` is a **structural folder, not the inbox** — its notes are ephemeral
-> working notes; never triage them into `Knowledge/raw/`. The daily note **queries** your
+> `00 daily/` is a **structural folder, not the inbox** — its notes are ephemeral
+> working notes; never triage them into `raw/`. The daily note **queries** your
 > `#action` tasks (it never copies them), so nothing is duplicated into
-> `Actions.md`. Add `daily/` to the exclusions if you later add it to your vault.
+> `Actions.md`. Add `00 daily/` to the exclusions if you later add it to your vault.
 
 ---
 

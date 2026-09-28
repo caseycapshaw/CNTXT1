@@ -1,0 +1,10 @@
+{
+  "_doc": "Obsidian file-explorer sort prefixes for content folders. Single source for scripts. Living prose in SYSTEM/SCHEMA.md / AGENTS.md / lint.sh structural= must match these exact names (spaces included).",
+  "daily": "00 daily",
+  "horizons": "01 Horizons",
+  "horizon_goals": "01 Horizons/Goals",
+  "areas": "02 Areas",
+  "projects": "03 Projects",
+  "people": "04 People",
+  "concepts": "05 concepts"
+}

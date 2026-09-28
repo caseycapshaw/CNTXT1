@@ -21,7 +21,7 @@ metadata:
 # Skill — Optimize the knowledge base
 
 > **When:** monthly, whenever the KB feels slow/bloated, or when {{NAME}} asks for a step-back on Claude+KB performance/organization · **Frequency:** monthly / ad-hoc · **Tools:** `bash`, `ssh` to the other machine, `SYSTEM/bin/lint.sh`, `SYSTEM/bin/build-link-map.sh`, `SYSTEM/bin/cap_check.py`
-> **Outcome:** a dated gauge table (the "before"), a ranked set of cuts each traceable to a gauge, and — if the cuts are more than an evening — an initiative. Distinct from [[Run the KB health check]] (correctness) and [[Audit the KB System]] (architecture); this is **performance and organization**, measured.
+> **Outcome:** a dated gauge table (the "before"), a ranked set of cuts each traceable to a gauge, and — if the cuts are more than an evening — a project. Distinct from [[Run the KB health check]] (correctness) and [[Audit the KB System]] (architecture); this is **performance and organization**, measured.
 
 ## The lens
 
@@ -36,7 +36,7 @@ Treat Claude+KB as an **operating system for information work**. The filesystem
 | Memory paging | Now & next vs. Milestones/Trail in the same file | bytes per section of the biggest notes |
 | Process scheduler | open `#action` lines | count · age · per-home · machine-made share |
 | Syslog | `SYSTEM/log.md` | size, lines/month |
-| Garbage collection | `Knowledge/raw/` captures never compiled | orphan count (zero inbound links) |
+| Garbage collection | `raw/` captures never compiled | orphan count (zero inbound links) |
 | Telemetry | none unless built | is any of this measured automatically? |
 
 **Measure before changing.** Every cut in step 5 must point at a row in the
@@ -66,9 +66,9 @@ table from steps 1–4.
 
 3. **Paging — where the bytes live inside the big notes.**
    ```bash
-   find "Knowledge/Initiatives" "Knowledge/Concepts" -maxdepth 2 -name "*.md" -exec wc -c {} + | sort -rn | head -8
-   awk '/^## /{if(h)printf "%7d  %s\n",n,h;h=$0;n=0;next}{n+=length($0)+1}END{printf "%7d  %s\n",n,h}' "Knowledge/Initiatives/<biggest>.md" | sort -rn | head
-   grep -h '^updated:' Knowledge/Concepts/*.md | awk '{print substr($2,1,7)}' | sort | uniq -c   # concept freshness by month
+   find "03 Projects" "05 concepts" -maxdepth 2 -name "*.md" -exec wc -c {} + | sort -rn | head -8
+   awk '/^## /{if(h)printf "%7d  %s\n",n,h;h=$0;n=0;next}{n+=length($0)+1}END{printf "%7d  %s\n",n,h}' "03 Projects/<biggest>.md" | sort -rn | head
+   grep -h '^updated:' 05 concepts/*.md | awk '{print substr($2,1,7)}' | sort | uniq -c   # concept freshness by month
    ```
    A `## Now & next` or `## Milestones` measured in tens of KB is history
    living in a hot file. Check `SYSTEM/bin/cap_check.py` covers it; if not,
@@ -79,7 +79,7 @@ table from steps 1–4.
    grep -rcE '^\s*- \[ \] .*#action' --include='*.md' . | grep -v ':0$' | sort -t: -k2 -rn | head -12   # open actions by home
    grep -rhoE '^\s*- \[ \] .*#action' --include='*.md' . | wc -l                                        # total
    grep -oE '^- [0-9]{4}-[0-9]{2}' SYSTEM/log.md | sort | uniq -c                                            # log lines / month
-   for r in Knowledge/raw/20*.md; do b=$(basename "$r" .md); grep -rqlF "raw/$b" --include='*.md' --exclude-dir=raw --exclude-dir=SYSTEM . || echo "$b"; done | wc -l   # orphan raw
+   for r in raw/20*.md; do b=$(basename "$r" .md); grep -rqlF "raw/$b" --include='*.md' --exclude-dir=raw --exclude-dir=SYSTEM . || echo "$b"; done | wc -l   # orphan raw
    ( time bash SYSTEM/bin/lint.sh >/dev/null ) 2>&1 | grep real
    ```
    Look for **action inflation from automation** (one machine-fed note
@@ -87,16 +87,16 @@ table from steps 1–4.
    dilute the human next-action signal and want their own tag/queue.
 
 5. **Write the gauge table, then rank the cuts by leverage.** Save the
-   numbers as a dated `Knowledge/raw/YYYY-MM-DD-kb-performance-assessment.md` (or append to
-   the existing initiative's Baseline table). Rank: per-session costs (boot)
+   numbers as a dated `raw/YYYY-MM-DD-kb-performance-assessment.md` (or append to
+   the existing project's Baseline table). Rank: per-session costs (boot)
    beat per-open costs (note bloat) beat per-month costs (log, GC). Give
    credit for what is already good — the gauges that are fine are part of
    the picture.
 
-6. **Cut only what a number justifies — or open an initiative.** One-evening
+6. **Cut only what a number justifies — or open a project.** One-evening
    fixes (tighten the Quick map, rotate the log, add a lint WARN) go now;
    anything structural (new hook, new generated section, cap extension)
-   becomes `#action`s in a dedicated initiative note. Regenerate
+   becomes `#action`s in a dedicated project note. Regenerate
    `SYSTEM/bin/build-link-map.sh`; `SYSTEM/bin/lint.sh` must be green.
 
 7. **Judgment pass lint can't do:** resolved open questions, actions that
@@ -118,9 +118,9 @@ table from steps 1–4.
 - **Efficiency ≠ correctness** — a green health check doesn't mean the KB is lean; that's why this job is separate.
 
 ## Done when
-- [ ] Gauge table captured (boot cost, hook parity, biggest sections, actions, log, orphan raw, lint time) and saved dated in `Knowledge/raw/`.
+- [ ] Gauge table captured (boot cost, hook parity, biggest sections, actions, log, orphan raw, lint time) and saved dated in `raw/`.
 - [ ] Cuts ranked by leverage; each points at a gauge.
-- [ ] One-evening cuts applied; structural ones filed as `#action`s in an initiative note.
+- [ ] One-evening cuts applied; structural ones filed as `#action`s in a project note.
 - [ ] `SYSTEM/link-map.md` regenerated; `SYSTEM/bin/lint.sh` green.
 - [ ] `SYSTEM/log.md` entry with the delta vs. the last run.
 

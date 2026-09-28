@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # close-ritual-stop-hook.sh — Claude Code Stop-hook ACCELERANT for the close
-# ritual (Knowledge/Skills/DO/Close a Session.md). Tier-3 per the portability
-# rule (Knowledge/Skills/RULE/Keep Machinery Vendor-Portable.md): it only
+# ritual (Skills/DO/Close a Session.md). Tier-3 per the portability
+# rule (Skills/RULE/Keep Machinery Vendor-Portable.md): it only
 # *reminds* — the ritual itself is carried by the skill + the 6pm
 # daily-summary backstop, so removing this hook costs latency, never
 # correctness.

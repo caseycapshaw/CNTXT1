@@ -1,7 +1,7 @@
 # {{NAME}}'s Knowledge Base — Project Hub
 
 A **memory-first** knowledge base for {{DOMAIN}}. Durable facts compiled into
-`Knowledge/Concepts/` (relationships inline via `[[wikilinks]]`), sources in `Knowledge/raw/`, mapped by
+`05 concepts/` (relationships inline via `[[wikilinks]]`), sources in `raw/`, mapped by
 `index.md`. Built on the Karpathy "knowledge-base-as-compiler" method.
 
 > ### 📌 Start here
@@ -25,7 +25,8 @@ This KB is **two tools working together**:
 1. **Install both tools** — [Claude Code](https://claude.com/claude-code) (the agent) and [Obsidian](https://obsidian.md) (free).
 2. **Get the repo — two modes:**
    - **Clone mode (simplest):** `git clone` this design repo and use it directly. Your
-     personal content lives in `Knowledge/` (plus `daily/` and `attachments/`), which
+     personal content lives in the numbered content folders (`00 daily/` … `05 concepts/`,
+     plus `raw/`, `attachments/`), which
      git **ignores by default** — nothing personal can be committed by accident, and
      `git pull` brings framework updates any time without conflicts.
    - **Instance-repo mode (own history):** copy the folder into your own private repo
@@ -40,10 +41,33 @@ Full walkthrough — including the no-agent manual path and what you'll have whe
 
 ---
 
+## Layout (numbered GTD folders)
+
+The vault uses a numbered [GTD](https://gettingthingsdone.com)-shaped layout so the
+Obsidian file explorer sorts it by altitude — one folder per level of focus,
+chained by frontmatter up-links (`area:` / `serves:` / `horizon:`):
+
+| Folder | What lives there |
+| :-- | :-- |
+| `00 daily/` | Day notes (not compiled truth) |
+| `01 Horizons/` | Goals (H3) · vision (H4) · purpose & principles (H5) |
+| `02 Areas/` | Ongoing responsibilities, reviewed on a cadence (H2) — physical things in `Assets/` |
+| `03 Projects/` | Finite workstreams with an endpoint (H1) — done ones move to `archive/` |
+| `04 People/` | One note per person or vendor (`type: org`) |
+| `05 concepts/` | Compiled, evergreen knowledge |
+| `raw/` | Append-only source captures |
+
+Plus `Skills/` + `Agents/` (generated mirrors of the canonical `.claude/` skills and
+roles), `attachments/`, `excalidraw/`, and `SYSTEM/` (schema, scripts, ledgers).
+Folder names live in one place, `SYSTEM/bin/kb-folders.json`. Coming from the older
+`Knowledge/` layout? See [`MIGRATING.md`](MIGRATING.md).
+
+---
+
 ## Capture → inbox
 
 The **vault root is the inbox**. Drop new notes/files anywhere at the root; they
-get triaged into `Knowledge/raw/` and compiled into `Knowledge/Concepts/`. The only permanent root
+get triaged into `raw/` and compiled into `05 concepts/`. The only permanent root
 residents are `README.md`, `index.md`, `Actions.md`, `CLAUDE.md`, and `AGENTS.md` — **if you
 see anything else loose at the root, it's waiting to be filed** (ask Claude to
 "file the inbox" or "run the knowledge health check"). Full method in
@@ -53,7 +77,7 @@ see anything else loose at the root, it's waiting to be filed** (ask Claude to
 
 | Doc | Use it for |
 | :-- | :-- |
-| [AGENTS.md](SYSTEM/SCHEMA.md) · [index.md](index.md) | The knowledge base, structured with the Karpathy compiler method. Read AGENTS.md (how it works) then index.md (the map). Concepts in `Knowledge/Concepts/`, sources in `Knowledge/raw/`. |
+| [AGENTS.md](SYSTEM/SCHEMA.md) · [index.md](index.md) | The knowledge base, structured with the Karpathy compiler method. Read AGENTS.md (how it works) then index.md (the map). Concepts in `05 concepts/`, sources in `raw/`. |
 | [Actions.md](Actions.md) | The single live to-do view — every open `#action` across the KB (needs the Obsidian **Tasks** plugin). |
 
 ---
@@ -64,8 +88,8 @@ see anything else loose at the root, it's waiting to be filed** (ask Claude to
 
 | Path | What |
 | :-- | :-- |
-| `skills/` | Canonical runbooks. Visible `Knowledge/Skills/` notes are generated mirrors — edit here, never the mirror. |
-| `agents/` | Named roles (`research`, `compile`, `lint`, `initiative-worker`). |
+| `skills/` | Canonical runbooks. Visible `Skills/` notes are generated mirrors — edit here, never the mirror. |
+| `agents/` | Named roles (`research`, `compile`, `lint`, `project-worker`). Visible `Agents/*.md` notes are generated mirrors. |
 | `commands/` | Project slash commands (e.g. `spawn`). |
 | `settings.json` | **Project hooks** (committed, shared with the repo). |
 | `settings.local.json` | Local permissions / personal hooks — gitignored, not shared. |
@@ -120,16 +144,16 @@ git remote set-url --push upstream DISABLED   # git physically cannot push
 
 Then adopt any kit improvement with `git fetch upstream` +
 `git cherry-pick <sha>`. Files that stay byte-identical across instances
-(`SYSTEM/SCHEMA.md`, `SYSTEM/bin/*`, most `Knowledge/Skills/`, templates) apply cleanly;
+(`SYSTEM/SCHEMA.md`, `SYSTEM/bin/*`, most `Skills/`, templates) apply cleanly;
 files your instance has populated (`index.md`, `AGENTS.md`, the concept
 indexes) occasionally need a small manual merge. Step-by-step skill:
-[`Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md`](Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md).
+[`Skills/DO/Pull Framework Updates from CNTXT1.md`](Skills/DO/Pull%20Framework%20Updates%20from%20CNTXT1.md).
 
 **Instance → kit (dangerous — stays manual).** Personal content never leaves
 your vault, so this direction is a deliberate, hand-operated path:
 re-template to `{{placeholders}}`, run the identifier grep gate, and go
 through this repo's CI (privacy gate + review). Skill:
-[`Knowledge/Skills/DO/Sync an Improvement to CNTXT1.md`](Knowledge/Skills/DO/Sync an Improvement to CNTXT1.md).
+[`Skills/DO/Sync an Improvement to CNTXT1.md`](Skills/DO/Sync%20an%20Improvement%20to%20CNTXT1.md).
 
 **Rule of thumb: author upstream-first.** When you're about to build
 something generic — a lint check, a runbook, a template improvement — build

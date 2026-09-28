@@ -28,7 +28,7 @@ Steps:
 2. Read `SYSTEM/SCHEMA.md`'s "Health checks" section for the **judgment**
    checks the script can't run itself: stale facts, resolved open questions
    still listed as open, `#action` items that are actually done but not
-   checked off, a `Knowledge/Initiatives/` note whose `updated:` is stale
+   checked off, a `03 Projects/` note whose `updated:` is stale
    relative to its actions. Do a pass over the notes you were pointed at (or,
    if none were named, over recently-touched files — check `SYSTEM/log.md`'s
    tail for what changed recently) and note anything that looks stale or
