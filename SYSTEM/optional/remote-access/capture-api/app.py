@@ -253,7 +253,7 @@ def contained(root, path):
     path_r = path.resolve()
     if path_r != root_r and root_r not in path_r.parents:
         raise ValueError(f"refusing path outside {root_r}")
-    return path_r
+    return path  # unresolved: callers compute paths relative to the (possibly symlinked) vault
 
 
 def make_title(data):
