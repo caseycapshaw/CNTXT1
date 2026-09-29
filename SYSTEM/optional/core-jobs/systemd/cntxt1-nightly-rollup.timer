@@ -1,0 +1,10 @@
+[Unit]
+Description=cntxt1: nightly-rollup timer (19:00 {{TZ}})
+
+[Timer]
+OnCalendar=*-*-* 19:00:00 {{TZ}}
+Persistent=true
+RandomizedDelaySec=60
+
+[Install]
+WantedBy=timers.target

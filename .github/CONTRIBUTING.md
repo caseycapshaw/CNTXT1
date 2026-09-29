@@ -5,7 +5,7 @@ base. That split is the whole design, so one rule dominates every review:
 
 > **This repo ships a framework — never content.** Nothing personal or
 > instance-specific lands here: no real names, people notes, raw captures,
-> daily notes, initiatives, logs, addresses, emails, IPs, or filled-in
+> daily notes, projects, logs, addresses, emails, IPs, or filled-in
 > `{{placeholders}}`. The rulebook is `SYSTEM/SCHEMA.md` § *Privacy & content
 > separation*.
 
@@ -14,8 +14,8 @@ base. That split is the whole design, so one rule dominates every review:
 Generic improvements to the method or its machinery:
 
 - Schema clarifications in `SYSTEM/SCHEMA.md`
-- New or sharper `Knowledge/Skills/` skills (with `owner: {{NAME}}`, indexed in
-  `Knowledge/Concepts/skills.md`)
+- New or sharper `Skills/` skills (with `owner: {{NAME}}`, indexed in
+  `05 concepts/skills.md`)
 - `SYSTEM/bin/` tooling fixes (`lint.sh`, `build-link-map.sh`,
   `kb-mcp-server.py`)
 - Template and setup-flow improvements (`setup.md`, the TEMPLATE files)
@@ -25,7 +25,7 @@ Generic improvements to the method or its machinery:
 
 1. **If your change was born in your own vault, re-template it** — swap your
    real values back to `{{placeholders}}`. The skill you already have for
-   this is `Knowledge/Skills/DO/Sync an Improvement to CNTXT1.md`; run your own grep gate
+   this is `Skills/DO/Sync an Improvement to CNTXT1.md`; run your own grep gate
    before pushing anything public.
 2. Run the checks CI will run:
    ```
@@ -48,7 +48,7 @@ Every PR runs two layers:
 
 - **`PR gate`** (deterministic, blocking): instance-content folders hold only
   their shipped templates/examples, placeholders stay intact, no PII or
-  credential patterns, skills indexed in `Knowledge/Concepts/skills.md` **and**
+  credential patterns, skills indexed in `05 concepts/skills.md` **and**
   in their `<TYPE> Index.md`, link map + generated directory/skills indexes
   byte-identical to a fresh regen, frontmatter valid against the
   `SYSTEM/schemas/` Pydantic models, KB lint green.
@@ -66,13 +66,18 @@ By submitting a pull request you agree that your contribution is licensed
 under the [MIT License](../LICENSE), the same as the rest of the project
 (the standard "inbound = outbound" rule).
 
-## Adding framework files under `Knowledge/` (or `daily/`, `attachments/`)
+## Adding framework files under the numbered content folders
 
-Those paths are **user territory** — `.gitignore` ignores everything new there so
-people using the repo directly can never commit personal content by accident. The
-shipped skeleton (templates, indexes, generated `Knowledge/Skills`/`Knowledge/Agents`
-mirrors) predates the rule and stays tracked. If your contribution adds a NEW
-framework file under those paths, stage it explicitly with `git add -f <path>`.
+`00 daily/`, `01 Horizons/`, `02 Areas/`, `03 Projects/`, `04 People/`,
+`05 concepts/`, `raw/`, `attachments/`, `excalidraw/` (and the generated `Skills/` /
+`Agents/` mirrors) are **user territory** — `.gitignore` ignores every user note
+there so people using the repo directly can never commit personal content by
+accident; negation patterns keep the shipped scaffolding (templates, generated
+indexes, `.gitkeep` placeholders, example/stub notes) tracked. If your contribution
+adds a NEW framework file those patterns would ignore (a new shipped concept, a new
+skill/agent mirror), add a matching `!` negation where it is a template/scaffold, or
+stage it with `git add -f <path>`. The whole-tree gate `.github/scripts/pr-gate.sh`
+(`check_only`) is the enforcement: keep its allowed-file lists in step.
 Skill/agent content changes go in the canonical `.claude/skills/` / `.claude/agents/`
 files — the visible mirrors are generated (`uv run python
 SYSTEM/bin/build_claude_mirrors.py`); CI reds if they drift.

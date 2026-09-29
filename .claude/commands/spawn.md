@@ -4,7 +4,7 @@ argument-hint: <role> <task>
 ---
 
 Parse `$ARGUMENTS` as `<role> <task…>`. Read the role definition
-`.claude/agents/<role>.md` (visible mirror: `Knowledge/Agents/<role>.md`), then
+`.claude/agents/<role>.md` (visible mirror: `Agents/<role>.md`), then
 follow the canonical runbook
 `.claude/skills/spawn-subagent-panes-in-a-cmux-workspace/SKILL.md` to launch and
 drive a worker for the task, using the role fragment as its system-prompt append

@@ -5,31 +5,34 @@ automation required. This folder adds the *optional* machinery that makes the ba
 feel alive day to day. Adopt it once the basic habit has stuck; skip it entirely
 and the KB still works.
 
-Everything here is **macOS + Claude Code** specific (launchd, the SessionStart
-hook). On Linux/Windows the ideas port but the glue (launchd) does not. Calendar
-access uses the `gws` CLI (Google Calendar) rather than any local app, so it
-ports to Linux/Windows as-is provided `gws` is installed there too.
+Project **hooks** (SessionStart, Stop) are registered in `.claude/settings.json`
+and run in Claude Code and Grok Build when you work in this vault. The
+**launchd** jobs are macOS-specific; on Linux/Windows the ideas port but that
+glue does not. Calendar access uses the `gws` CLI (Google Calendar) rather than
+any local app, so it ports to Linux/Windows as-is provided `gws` is installed
+there too.
 
 ## What's in the box
 
 | Piece | File | What it does |
 | :-- | :-- | :-- |
-| **Session loader** | `sessionstart-hook.sh` | A Claude Code **SessionStart hook** that inlines your `index.md` map, the live inbox state, today's calendar, and a pointer to today's plan note — every time you open Claude Code in the vault. Auto-skips inside `~/dev` and any folder with its own `CLAUDE.md`. |
+| **Session loader** | `sessionstart-hook.sh` | A **SessionStart hook** (registered in `.claude/settings.json`) that emits the generated **boot bundle** (`SYSTEM/bin/build_boot_bundle.sh`: host + scheduled jobs, your `index.md` Quick map, the live inbox, open `#priority` actions, today's calendar, a pointer to today's plan note, the log tail) — every time a session starts in this vault. Falls back to a simpler inline loader if the bundle script is missing. As a user-global copy it still auto-skips `~/dev` (unless the vault *is* that tree) and any *other* folder with its own `CLAUDE.md`. |
 | **Calendar cache** | `calendar-fetch.sh` | Pulls today's events from Google Calendar (via [`gws`](https://github.com/googleworkspace/cli), the primary calendar only) into a cache file. The hook only *reads* the cache, so startup stays instant. |
-| **Daily plan generator** | `daily-plan.sh` | Runs headless `claude -p` to write `daily/YYYY-MM-DD.md` — today's schedule + a **"From the inbox" Gmail digest** (via `gws`, read-only, last 2 days; auto-skipped if `gws` is absent) + a **live Tasks query** of focus actions + a priorities anchor. Idempotent, retries on network gaps, writes a fallback stub if the API is unreachable. |
+| **Daily plan generator** | `daily-plan.sh` | Runs headless `claude -p` to write `00 daily/YYYY-MM-DD.md` — today's schedule + a **"From the inbox" Gmail digest** (via `gws`, read-only, last 2 days; auto-skipped if `gws` is absent) + a **live Tasks query** of focus actions + a priorities anchor. Idempotent, retries on network gaps, writes a fallback stub if the API is unreachable. |
 | **Morning scheduler** | `com.example.daily-plan.plist` | A launchd job that runs `daily-plan.sh` at 08:00 daily. |
-| **End-of-day summary** | `daily-summary.sh` | Starts with an **upstream framework check** (if the vault has the fetch-only `upstream` remote — see `Knowledge/Skills/DO/Pull Framework Updates from CNTXT1.md`): unadopted kit commits get written to an `Upstream kit updates (pending).md` inbox note + a macOS notification, queuing a commit-by-commit adoption interview for your next session. Then runs the deterministic `SYSTEM/bin/lint.sh` for the mechanical lint **and** `SYSTEM/bin/lint-delta.sh` as the scheduled alarm (delta, not total), then headless `claude -p` to (1) add the **judgment-layer lint** (stale items, resolved questions, action hygiene) and (2) **append a "What we did today" recap** to the day's note — local inputs only, no network needed for content. Finishes with a **nightly git snapshot** (commit + best-effort push) so the KB always has a rollback point. Idempotent: re-runs replace the block, never duplicate. |
-| **Close-ritual reminder** | `close-ritual-stop-hook.sh` | A Claude Code **Stop hook** accelerant for [[Close a Session]]. Reminds at most once per session, and only when the vault working tree is dirty. Never blocks. The ritual itself is carried by the skill + the 6pm backstop — removing this hook costs latency, never correctness. |
+| **End-of-day summary** | `daily-summary.sh` | Starts with an **upstream framework check** (if the vault has the fetch-only `upstream` remote — see `Skills/DO/Pull Framework Updates from CNTXT1.md`): unadopted kit commits get written to an `Upstream kit updates (pending).md` inbox note + a macOS notification, queuing a commit-by-commit adoption interview for your next session. Then runs the deterministic `SYSTEM/bin/lint.sh` for the mechanical lint **and** `SYSTEM/bin/lint-delta.sh` as the scheduled alarm (delta, not total), then headless `claude -p` to (1) add the **judgment-layer lint** (stale items, resolved questions, action hygiene) and (2) **append a "What we did today" recap** to the day's note — local inputs only, no network needed for content. Finishes with a **nightly git snapshot** (commit + best-effort push) so the KB always has a rollback point. Idempotent: re-runs replace the block, never duplicate. |
+| **Close-ritual reminder** | `close-ritual-stop-hook.sh` | A **Stop hook** accelerant for [[Close a Session]], registered in `.claude/settings.json`. Reminds at most once per session, and only when the vault working tree is dirty. Never blocks. The ritual itself is carried by the skill + the 6pm backstop — removing this hook costs latency, never correctness. |
+| **Porting-candidate nudge** | `catch-porting-candidates.sh` | A **PostToolUse + Stop** hook that flags generic framework / team-relevant edits that may belong downstream. No-op until `CNTXT1_CLONE` / `TEAMS_REPO` are set in the script. |
 | **Evening scheduler** | `com.example.daily-summary.plist` | A launchd job that runs `daily-summary.sh` at 18:00 daily (companion to the 8am job). |
 
-The result: every morning a fresh `daily/` note appears, every evening the KB is
-linted and the day is recapped, and every Claude Code session in the vault starts
-already knowing your map, your inbox, and your day.
+The result: every morning a fresh `00 daily/` note appears, every evening the KB is
+linted and the day is recapped, and every session in the vault starts already
+knowing your map, your inbox, and your day.
 
-> `daily/` is a **structural folder, not the inbox** — its notes are ephemeral
-> working notes; never triage them into `Knowledge/raw/`. The daily note **queries** your
+> `00 daily/` is a **structural folder, not the inbox** — its notes are ephemeral
+> working notes; never triage them into `raw/`. The daily note **queries** your
 > `#action` tasks (it never copies them), so nothing is duplicated into
-> `Actions.md`. Add `daily/` to the exclusions if you later add it to your vault.
+> `Actions.md`. Add `00 daily/` to the exclusions if you later add it to your vault.
 
 ---
 
@@ -41,51 +44,53 @@ already knowing your map, your inbox, and your day.
 
 ---
 
-## Install (≈10 min)
+## Project hooks (already wired)
+
+The vault's `.claude/settings.json` already registers:
+
+- **SessionStart** → `sessionstart-hook.sh`
+- **Stop** → `close-ritual-stop-hook.sh` (accelerant only; [[Close a Session]] + the 6pm backstop carry the ritual without it)
+- **PostToolUse** + **Stop** → `catch-porting-candidates.sh` (no-op until you set `CNTXT1_CLONE` / `TEAMS_REPO` in that script)
+
+No copy step. On first session, **trust the folder** when prompted (Grok: `/hooks-trust`). Confirm with `/hooks`. Usage overview: root `README.md` § Agent machinery.
+
+The SessionStart script needs `jq`. Its host block lists scheduled jobs whose launchd label starts with `KB_LAUNCHD_PREFIX` (default `com.example.` — match your plists' `Label` prefix) or systemd timers starting with `KB_TIMER_PREFIX` (default `kb-`), and only reads `~/.ssh/config` for the Host names you list in `KB_PEERS`; set these in your shell profile or the hook `command` if you want them (the bundle documents each). It resolves the vault from `$CLAUDE_PROJECT_DIR` (project hook) or its location under `SYSTEM/optional/automation/`.
+
+## User-global SessionStart (optional)
+
+Only if you want the loader when you are *not* in this repo (e.g. from `$HOME`):
+
+```sh
+mkdir -p ~/.claude/hooks ~/.claude/cache
+cp SYSTEM/optional/automation/sessionstart-hook.sh ~/.claude/hooks/knowledge-context.sh
+chmod +x ~/.claude/hooks/knowledge-context.sh
+```
+
+Open the copy and set `CONFIG_VAULT` to this vault's absolute path. Then add a SessionStart hook in `~/.claude/settings.json` whose `command` is `~/.claude/hooks/knowledge-context.sh`. Do **not** also keep the project registration if that would double-inject — pick one scope.
+
+## Install the scheduled jobs (≈10 min)
 
 > Replace `{{VAULT}}` with your KB's absolute path (e.g. `/Users/you/my-kb`) and
 > `{{NAME}}` with your name everywhere below. Each script also has a **CONFIG block
 > at the top** — edit it before first run.
 
-1. **Copy the scripts into your Claude hooks dir:**
+1. **Copy the calendar + daily-plan scripts into your Claude hooks dir** (launchd jobs, not project hooks):
    ```sh
    mkdir -p ~/.claude/hooks ~/.claude/cache
-   cp SYSTEM/optional/automation/sessionstart-hook.sh ~/.claude/hooks/knowledge-context.sh
    cp SYSTEM/optional/automation/calendar-fetch.sh    ~/.claude/hooks/
    cp SYSTEM/optional/automation/daily-plan.sh        ~/.claude/hooks/
    chmod +x ~/.claude/hooks/*.sh
    ```
    Then open each and set the CONFIG block (`VAULT`, `NAME`).
 
-2. **Register the SessionStart hook** in `~/.claude/settings.json`:
-   ```json
-   {
-     "hooks": {
-       "SessionStart": [
-         { "hooks": [ { "type": "command", "command": "~/.claude/hooks/knowledge-context.sh" } ] }
-       ]
-     }
-   }
-   ```
-   (Or just ask Claude Code: *"use the update-config skill to register knowledge-context.sh as a SessionStart hook."*)
-
-   Optional — register the **close-ritual Stop hook** (accelerant only; the
-   [[Close a Session]] skill + 6pm backstop carry the ritual without it):
-   ```sh
-   chmod +x SYSTEM/optional/automation/close-ritual-stop-hook.sh
-   ```
-   Then add a Stop hook in `~/.claude/settings.json` (or the vault's
-   `.claude/settings.json`) whose `command` is the script's absolute path.
-   It reminds at most once per session, and only when the working tree is dirty.
-
-3. **Copy the daily-summary script:**
+2. **Copy the daily-summary script:**
    ```sh
    cp SYSTEM/optional/automation/daily-summary.sh ~/.claude/hooks/
    chmod +x ~/.claude/hooks/daily-summary.sh
    ```
    Open it and set the CONFIG block (`VAULT`, `NAME`) — same values as `daily-plan.sh`.
 
-4. **Schedule both daily jobs:**
+3. **Schedule both daily jobs:**
    ```sh
    cp SYSTEM/optional/automation/com.example.daily-plan.plist    ~/Library/LaunchAgents/
    cp SYSTEM/optional/automation/com.example.daily-summary.plist ~/Library/LaunchAgents/

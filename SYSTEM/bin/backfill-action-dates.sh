@@ -14,7 +14,10 @@
 #
 # Dry-run by default; pass --apply to actually edit files.
 set -uo pipefail
-cd "$(dirname "$0")/../.."   # vault root
+_BIN="$(cd "$(dirname "$0")" && pwd)"
+cd "$_BIN/../.."   # vault root
+# shellcheck source=kb-folders.sh
+. "$_BIN/kb-folders.sh"
 
 apply=0
 case "${1:-}" in
@@ -34,7 +37,7 @@ while IFS=: read -r file line text; do
   [ -n "$created" ] || { printf '  skip (no git history): %s:%s\n' "$file" "$line"; continue; }
   printf '%s\t%s\t%s\t%s\n' "$file" "$line" "$created" "$text" >> "$plan"
   echo "$created" >> "$dates"
-done < <(grep -rnE '^[[:space:]]*- \[ \] .*#action' --include='*.md' Knowledge index.md 2>/dev/null \
+done < <(grep -rnE '^[[:space:]]*- \[ \] .*#action' --include='*.md' "$KB_CONCEPTS" "$KB_PROJECTS" "$KB_AREAS" "$KB_HORIZONS" "$KB_PEOPLE" Skills Agents index.md 2>/dev/null \
            | grep -v 'TEMPLATE' \
            | sed -E 's/^([^:]+):([0-9]+):[[:space:]]*- \[ \][[:space:]]*/\1:\2:/')
 

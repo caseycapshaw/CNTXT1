@@ -1,0 +1,6 @@
+# Units the installer enables --now for this add-on. One per line; comments and
+# blank lines ignored. Timers only — the matching .service is Type=oneshot and
+# is started by its timer, never directly. Delete a line to opt out of a job.
+cntxt1-git-checkpoint.timer
+cntxt1-nightly-rollup.timer
+cntxt1-backup.timer

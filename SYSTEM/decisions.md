@@ -8,7 +8,7 @@ two grains — don't merge them.
 **The three disciplines:**
 
 1. **Index, not record.** One entry = date + short title + one–two sentences +
-   a pointer to the fuller record (the initiative/concept/raw note that holds
+   a pointer to the fuller record (the project/concept/raw note that holds
    the reasoning). Never write rationale here that the record lacks; on
    conflict, the record wins.
 2. **Explicit trigger.** A line lands only on {{NAME}}'s explicit ruling-verb —

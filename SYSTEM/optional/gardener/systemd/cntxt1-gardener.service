@@ -1,0 +1,20 @@
+[Unit]
+Description=cntxt1: gardener (unattended KB maintenance in an isolated worktree)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User={{USER}}
+EnvironmentFile=/etc/cntxt1/core.env
+# `claude` and `uv` usually live under the user's home, not the default unit PATH.
+Environment=PATH={{HOME}}/.local/bin:{{HOME}}/.npm-global/bin:/usr/local/bin:/usr/bin:/bin
+LoadCredential=claude-oauth-token
+Nice=5
+MemoryMax=1G
+TimeoutStartSec=2460
+# SHIPPED IN PROPOSE MODE: results land on a gardener/proposal-<date> branch for
+# you to review. After a couple of clean weeks, change to `--mode apply` (it
+# merges back into the live vault, behind the same guardrails).
+# jobwrap's non-blocking flock is the debounce: a path-triggered start that lands
+# while another run is in flight just logs "already running" and exits 0.
+ExecStart={{OPTIONAL_DIR}}/core-jobs/bin/jobwrap gardener --timeout 2400 -- {{OPTIONAL_DIR}}/gardener/run.sh --mode propose

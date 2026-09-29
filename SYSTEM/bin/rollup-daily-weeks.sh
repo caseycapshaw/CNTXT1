@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 # rollup-daily-weeks.sh — archive past daily notes into weekly folders.
-# daily/YYYY-MM-DD.md older than the current week moves into a folder named
-# for its week's Monday: daily/YYYY-MM-DD/ (e.g. 2026-07-13/ holds Jul 13-19).
+# 00 daily/YYYY-MM-DD.md older than the current week moves into a folder named
+# for its week's Monday: 00 daily/YYYY-MM-DD/ (e.g. 2026-07-13/ holds Jul 13-19).
 # Current-week notes stay loose so the day-to-day workflow
 # (daily-plan/daily-summary appends, Obsidian quick-open) is untouched.
 # Obsidian wikilinks resolve by filename, so moving files breaks nothing.
 # Idempotent + deterministic — safe to run nightly (e.g. from a snapshot job).
 set -euo pipefail
-VAULT="${VAULT:-$(cd "$(dirname "$0")/../.." && pwd)}"   # SYSTEM/bin -> vault root
-DAILY="$VAULT/daily"
+_BIN="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=kb-folders.sh
+. "$_BIN/kb-folders.sh"
+VAULT="${VAULT:-$(cd "$_BIN/../.." && pwd)}"   # SYSTEM/bin -> vault root
+DAILY="$VAULT/$KB_DAILY"
 [ -d "$DAILY" ] || exit 0
 
 # Monday of a given YYYY-MM-DD (BSD date on macOS, GNU fallback)

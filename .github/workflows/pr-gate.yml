@@ -22,7 +22,18 @@ jobs:
         uses: astral-sh/setup-uv@v5
 
       - name: KB lint (mechanical health)
-        run: ./SYSTEM/bin/lint.sh
+        run: LINT_STRICT=1 ./SYSTEM/bin/lint.sh
+
+      - name: Optional add-on tests (core-jobs, gardener, remote-access, cloud-core)
+        run: |
+          python3 -m unittest discover -s SYSTEM/optional/core-jobs/bin/tests
+          (cd SYSTEM/optional/core-jobs/lib && python3 -m unittest discover -s tests -p 'test_*.py')
+          bash SYSTEM/optional/core-jobs/lib/tests/test-env.sh
+          (cd SYSTEM/optional/gardener && python3 -m unittest discover -s tests -p 'test_*.py')
+          bash SYSTEM/optional/cloud-core/tests/test-vm-bootstrap.sh
+          # remote-access needs `cryptography` (Cloudflare Access RS256 JWT verification)
+          (cd SYSTEM/optional/remote-access/capture-api && uv run --no-project --with cryptography python -m unittest discover -s tests -p 'test_*.py')
+          (cd SYSTEM/optional/remote-access/mcp-remote && uv run --no-project --with cryptography python -m unittest discover -s tests -p 'test_*.py')
 
       - name: Privacy & consistency gate
         env:

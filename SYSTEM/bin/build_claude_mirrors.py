@@ -5,10 +5,10 @@ Truth direction (adopted 2026-08-27): `.claude/skills/<slug>/SKILL.md` and
 frontmatter (name/description, auto-discovered by Claude Code, Grok Build, and
 other SKILL.md-standard agents) with the org-schema keys under `metadata:`.
 This generator rewrites the visible mirrors at their historical paths —
-`Knowledge/Skills/<TYPE>/<Title>.md` and `Knowledge/Agents/<role>.md` — so
+`Skills/<TYPE>/<Title>.md` and `Agents/<role>.md` — so
 wikilinks, the graph, per-TYPE indexes, and the link map keep working.
 
-Contract (Knowledge/Skills/RULE/Maintain Generated Sections.md + Keep Machinery
+Contract (Skills/RULE/Maintain Generated Sections.md + Keep Machinery
 Vendor-Portable.md):
 - Whole-file generated: mirrors carry `author_type: script` + a banner line.
   Never hand-edit a mirror — edit the canonical file and re-run.
@@ -25,7 +25,7 @@ Vendor-Portable.md):
   error (a deleted canonical leaves its mirror flagged, never silently kept).
 
 Usage: uv run python SYSTEM/bin/build_claude_mirrors.py [--check]
-  --check: verify mirrors match canonical (lint mirror check); exit 1 on
+  --check: verify mirrors match canonical (lint check 13); exit 1 on
   drift, write nothing.
 """
 
@@ -39,7 +39,6 @@ from pathlib import Path
 import yaml
 
 VAULT = Path(__file__).resolve().parent.parent.parent
-Knowledge = VAULT / "Knowledge"   # kit layout; a live instance may flatten these to the root
 MANIFEST = VAULT / "SYSTEM" / ".cache" / "claude-mirror-hashes.json"
 TYPES = {"do": "DO", "check": "CHECK", "format": "FORMAT", "rule": "RULE"}
 STAMP_RE = re.compile(r"Generated: \d{4}-\d{2}-\d{2}")
@@ -113,7 +112,7 @@ def build_expected():
             f"`SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, "
             f"never this mirror. Generated: {today}_"
         )
-        rel = f"Knowledge/Skills/{TYPES[typ]}/{title}.md"
+        rel = f"Skills/{TYPES[typ]}/{title}.md"
         expected[rel] = f"---\n{mirror_fm}\nauthor_type: script\n---\n\n{banner}\n\n{body}"
 
     agents_root = VAULT / ".claude" / "agents"
@@ -143,7 +142,7 @@ def build_expected():
                 f"`SYSTEM/bin/build_claude_mirrors.py` — edit the canonical file, "
                 f"never this mirror. Generated: {today}_"
             )
-            rel = f"Knowledge/Agents/{role}.md"
+            rel = f"Agents/{role}.md"
             expected[rel] = (
                 f"---\n{meta_raw}\n{lifted}author_type: script\n---\n\n{banner}\n\n{body}"
             )
@@ -153,14 +152,14 @@ def build_expected():
 def visible_notes():
     """All visible notes the generator owns (mirror candidates), for orphan checks."""
     found = set()
-    for d in (Knowledge / "Skills").iterdir():
+    for d in (VAULT / "Skills").iterdir():
         if not d.is_dir():
             continue
         for f in d.glob("*.md"):
             if f.name.endswith(" TEMPLATE.md") or f.name == f"{d.name} Index.md":
                 continue
             found.add(f.relative_to(VAULT).as_posix())
-    for f in (Knowledge / "Agents").glob("*.md"):
+    for f in (VAULT / "Agents").glob("*.md"):
         if f.name.endswith(" TEMPLATE.md") or f.name == "index.md":
             continue
         found.add(f.relative_to(VAULT).as_posix())

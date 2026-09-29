@@ -9,10 +9,12 @@ metadata:
   frequency: ad-hoc
   tools: ["Read", "Write", "Edit", "git", "grep"]
   owner: "{{NAME}}"
+  version: "1.1"
   status: active
   tags: [do, kb-meta]
   aliases: ["Sync an improvement to CNTXT1", "Sync a KB improvement to the shared repo", "Contribute to CNTXT1", "sync-an-improvement-to-cntxt1"]
   summary: Lands a generic schema/tooling/template improvement from this private KB into the public CNTXT1 starter kit's own repo, fully re-templated with zero personal content.
+  updated: 2026-09-28
 ---
 
 
@@ -38,7 +40,7 @@ vault — ever.
 
 Whenever a change made in *this* private vault is generic enough to help
 anyone running the CNTXT1 method — a schema tweak in `SYSTEM/SCHEMA.md`, a
-new/improved `Knowledge/Skills/` skill, a `SYSTEM/bin/` script fix, a template change.
+new/improved `Skills/` skill, a `SYSTEM/bin/` script fix, a template change.
 
 > **Prefer upstream-first.** If the improvement *isn't already implemented
 > in your vault*, don't build it privately and then run this runbook —
@@ -57,34 +59,48 @@ remote of this vault.
 
 1. **Classify the changed file(s):**
    - **Copy verbatim** (no personal content ever lives here): `setup.md`,
-     `SYSTEM/SCHEMA.md`, `SYSTEM/bin/*` scripts, `Knowledge/Concepts/karpathy-method.md`,
-     `Knowledge/Skills/Skill TEMPLATE.md`, `Knowledge/People/People TEMPLATE.md`,
-     `Knowledge/Initiatives/Initiative TEMPLATE.md`, `SYSTEM/optional/automation/*`
+     `SYSTEM/SCHEMA.md`, `SYSTEM/bin/*` scripts, `05 concepts/karpathy-method.md`,
+     `Skills/Skill TEMPLATE.md`, `04 People/People TEMPLATE.md`,
+     `03 Projects/Project TEMPLATE.md`, `SYSTEM/optional/automation/*`
      (already parameterized with `{{VAULT}}` / `{{NAME}}`).
-   - **Copy after checking frontmatter:** other `Knowledge/Skills/<TYPE>/*.md`
+   - **Copy after checking frontmatter:** other `Skills/<TYPE>/*.md`
      skills — the `owner:` field must read `{{NAME}}`, not a real name, in
      the public copy; strip any personal examples from the body.
    - **Copy only the skeleton, re-templated** — never the live rows/content:
-     `CLAUDE.md`, `index.md`, `README.md`, `Knowledge/Concepts/contacts.md`,
-     `Knowledge/Concepts/skills.md`. Diff for what changed *structurally* (a new
+     `CLAUDE.md`, `index.md`, `README.md`, `05 concepts/contacts.md`,
+     `05 concepts/skills.md`. Diff for what changed *structurally* (a new
      convention, a new section) and hand-apply just that structural change to
      the kit's own templated version — don't paste this vault's populated
      version over it.
-   - **Never copy:** anything in `Knowledge/People/` (except the template), personal
-     concepts and initiatives, `Knowledge/raw/`, `daily/`, `Actions.md`, `SYSTEM/log.md`,
+   - **Never copy:** anything in `04 People/` (except the template), personal
+     concepts and projects, `raw/`, `daily/`, `Actions.md`, `SYSTEM/log.md`,
      `SYSTEM/Journal.md`, `SYSTEM/link-map.md`, `.claude/`, `.obsidian/`. These
      are personal by definition or specific to this instance.
 2. **Apply the change** in the CNTXT1 working tree — write/edit the file
    there directly (don't `cp` blindly; re-templating is part of this step).
-3. **Grep gate** — from the CNTXT1 folder, search for your personal
-   identifiers before committing:
+3. **Leak gate** — from the CNTXT1 folder, scan the *staged diff* against your
+   personal identifiers before every commit:
    ```
-   grep -rniE "{{PERSONAL_IDENTIFIERS}}" . --exclude-dir=.git --exclude=LICENSE
+   git diff --cached -U0 | rg -P -i -f ~/.config/cntxt1/personal-identifiers.txt
    ```
-   `{{PERSONAL_IDENTIFIERS}}` is your own `|`-separated list — full name,
-   family members, employer, email domains, home IPs, street/project names —
-   filled in during setup and **extended whenever a new personal specific
-   shows up in this vault**. Any hit is a leak — fix it before proceeding.
+   The identifier list lives in a **private, user-local file** —
+   `~/.config/cntxt1/personal-identifiers.txt`, one PCRE pattern per line,
+   **never committed anywhere** (this repo carries only the placeholder
+   `{{PERSONAL_IDENTIFIERS}}` standing for it). Build it once, from the values
+   filled in during setup, and **extend it whenever a new personal specific
+   shows up in your vault**. Example shape (illustrative — use your own):
+   ```
+   \b{{FULL_NAME}}\b
+   \b{{FAMILY_MEMBER_FIRST_NAME}}\b
+   {{EMPLOYER}}
+   {{DOMAIN}}
+   \b10\.0\.0\.\d+\b
+   {{STREET_OR_PROJECT_NAME}}
+   ```
+   Allowed hits are only what is legitimately public (the kit's own repo URL,
+   the LICENSE copyright line, the README/SCHEMA author credit). Any other
+   hit is a leak — fix it before committing. Never print the list's contents
+   into a repo, an issue, or a transcript.
 4. **Commit inside the CNTXT1 working tree** (its own repo, its own history),
    push to your fork/copy, and — if the improvement is generic enough for
    everyone — open a PR upstream to
@@ -92,10 +108,11 @@ remote of this vault.
 
 ## Gotchas / rules
 
+- **Third-party API calls are not publication** — only posting to a public site or committing/pushing to a public/shared repo is the hard line.
 - **Never `git remote add` the public repo to this private vault**, and never
   push a branch of this vault anywhere public — the two must stay two
   independent working trees on purpose.
-- The grep-gate identifier list is not exhaustive by construction — treat it
+- The identifier list is not exhaustive by construction — treat it
   as a backstop, not a substitute for actually **reading the full diff**
   before committing publicly.
 - When in doubt whether something is generic or personal, it's personal — it
@@ -104,7 +121,7 @@ remote of this vault.
 ## Done when
 
 - [ ] The change is applied in the CNTXT1 working tree, re-templated (no real values, only `{{placeholders}}` where this vault has real content)
-- [ ] The grep gate passes clean **and** the full diff has been read
+- [ ] The leak gate returns only allowed hits **and** the full diff has been read
 - [ ] Committed and pushed in CNTXT1's own repo (PR'd upstream if broadly useful)
 
 ## Related

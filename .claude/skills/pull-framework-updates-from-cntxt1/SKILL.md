@@ -9,10 +9,12 @@ metadata:
   frequency: ad-hoc
   tools: ["git"]
   owner: "{{NAME}}"
+  version: "1.1"
   status: active
   tags: [do, kb-meta]
   aliases: ["Pull framework updates from CNTXT1", "Pull framework updates", "Pull from upstream CNTXT1", "pull-framework-updates-from-cntxt1"]
   summary: Pulls a generic schema/script/runbook/template improvement from the public CNTXT1 starter kit into this vault via git, leaving personal content untouched.
+  updated: 2026-09-28
 ---
 
 
@@ -43,6 +45,14 @@ git remote add upstream https://github.com/caseycapshaw/CNTXT1.git
 git remote set-url --push upstream DISABLED
 ```
 
+> **Shortcuts:** `SYSTEM/bin/sync-from-upstream.sh` previews (and, with
+> `--apply`, stages into the working tree — never commits) the path-stable
+> framework files. `SYSTEM/bin/sync-from-upstream.sh --reconcile` drains the
+> pending-updates queue: commits *you* authored from this vault (matched by
+> `git config user.email`, or by patch-id against your own history) are
+> already reflected here, so they are marked applied and only genuinely
+> foreign commits stay listed.
+
 ## Steps
 
 1. **Fetch and review** what's new upstream:
@@ -58,9 +68,9 @@ git remote set-url --push upstream DISABLED
    git cherry-pick <sha>
    ```
    Files byte-identical across the repos (`SYSTEM/SCHEMA.md`, `SYSTEM/bin/*`,
-   most `Knowledge/Skills/`, templates) apply cleanly. Conflicts concentrate in the
+   most `Skills/`, templates) apply cleanly. Conflicts concentrate in the
    **populated-vs-skeleton files** (`CLAUDE.md`, `index.md`,
-   `Knowledge/Concepts/contacts.md`, `Knowledge/Concepts/skills.md`, `README.md`): resolve by
+   `05 concepts/contacts.md`, `05 concepts/skills.md`, `README.md`): resolve by
    keeping your vault's personal content and hand-applying only the
    *structural* change the kit commit made. `--strategy-option=ours` is
    usually wrong here — read the conflict.

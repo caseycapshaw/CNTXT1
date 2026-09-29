@@ -1,17 +1,17 @@
 ---
 name: research
-description: 'Use when delegating external research for a named question — gathers, digests, returns findings (writes only Knowledge/raw/ captures). CMUX pane worker or Task subagent.'
+description: 'Use when delegating external research for a named question — gathers, digests, returns findings (writes only raw/ captures). CMUX pane worker or Task subagent.'
 tools: Read, Grep, Glob, WebSearch, WebFetch, Write
 model: haiku
 metadata:
   kind: worker
   name: research
   description: "Investigate one bounded question/topic for a lead agent, returning cited findings without wandering or writing to the vault unasked"
-  version: "1.0"
+  version: "1.1"
   color: cyan
   status: active
   tags: [agent, kb-meta, research]
-  updated: 2026-08-20
+  updated: 2026-09-28
 ---
 
 
@@ -27,7 +27,7 @@ Rules:
   way.
 - Don't write conclusions into the vault yourself unless the lead explicitly
   asked you to. Default to returning your findings as your final message —
-  the lead folds them into the right vault note (concept, initiative, raw
+  the lead folds them into the right vault note (concept, project, raw
   capture). If asked to write directly, follow the vault's own conventions
   (read `SYSTEM/SCHEMA.md` first) rather than inventing a new format.
 - Cite sources/paths for anything you assert as fact.
@@ -40,4 +40,5 @@ short slug for what you researched. Nothing after that line.
 
 ## Revision history
 
+- **v1.1 — 2026-09-28.** Numbered GTD layout paths.
 - **v1.0 — 2026-08-20.** Stamped as a versioned contract (quoted `version:`, `updated:`). Supersede, never revert.

@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# backup — restic backup of the vault + core config to any S3-compatible
+# object store (AWS S3, Cloudflare R2, Backblaze B2's S3 API, MinIO, ...).
+# Runs daily (cntxt1-backup.timer). `restic forget --prune` runs weekly
+# (Sunday), `restic check` (subset) runs monthly (1st) — both gated below so
+# the daily run stays fast and cheap.
+#
+# Required env (from /etc/cntxt1/core.env):
+#   VAULT              vault checkout to back up
+#   RESTIC_REPOSITORY  e.g. s3:https://<s3-endpoint>/<bucket>[/prefix]
+# Optional env:
+#   BACKUP_EXTRA_PATHS space-separated extra paths to include (e.g. a config dir)
+# Required credentials (systemd LoadCredential, read via $CREDENTIALS_DIRECTORY):
+#   restic-password    the repository encryption passphrase (KEEP A COPY
+#                      OFF THIS HOST — without it the backups are unreadable)
+#   backup-key-id      S3-compatible access key id      (neutral names: the
+#   backup-secret-key  S3-compatible secret access key   provider is irrelevant)
+set -euo pipefail
+
+VAULT="${VAULT:?VAULT must be set (see /etc/cntxt1/core.env)}"
+
+: "${RESTIC_REPOSITORY:?RESTIC_REPOSITORY must be set (see /etc/cntxt1/core.env)}"
+: "${CREDENTIALS_DIRECTORY:?must be run under systemd with LoadCredential= (restic-password, backup-key-id, backup-secret-key)}"
+
+export RESTIC_REPOSITORY
+export RESTIC_PASSWORD_FILE="$CREDENTIALS_DIRECTORY/restic-password"
+export AWS_ACCESS_KEY_ID
+AWS_ACCESS_KEY_ID="$(cat "$CREDENTIALS_DIRECTORY/backup-key-id")"
+export AWS_SECRET_ACCESS_KEY
+AWS_SECRET_ACCESS_KEY="$(cat "$CREDENTIALS_DIRECTORY/backup-secret-key")"
+
+echo "backup: repository check / init (idempotent)…"
+if ! restic snapshots --latest 1 >/dev/null 2>&1; then
+  echo "backup: repository not initialized (or unreachable) — running restic init."
+  restic init
+fi
+
+echo "backup: backing up vault + core config…"
+# shellcheck disable=SC2086  # BACKUP_EXTRA_PATHS is an intentionally word-split list
+restic backup \
+  "$VAULT" \
+  /etc/cntxt1 \
+  ${BACKUP_EXTRA_PATHS:-} \
+  --exclude="$VAULT/.obsidian/workspace*" \
+  --tag daily
+
+# Weekly prune: Sunday only (day-of-week 7 in GNU date's %u, 0 in BSD's %w).
+dow="$(date +%u)"
+if [ "$dow" = "7" ]; then
+  echo "backup: Sunday — pruning old snapshots (keep-daily 14, keep-weekly 8, keep-monthly 12)…"
+  restic forget --keep-daily 14 --keep-weekly 8 --keep-monthly 12 --prune
+fi
+
+# Monthly integrity check: 1st of the month only, subset (--read-data-subset
+# keeps the check cheap; a full --read-data pass is a manual/occasional task).
+dom="$(date +%d)"
+if [ "$dom" = "01" ]; then
+  echo "backup: 1st of the month — checking a data subset…"
+  restic check --read-data-subset=5%
+fi
+
+echo "backup: done."

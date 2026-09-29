@@ -1,36 +1,57 @@
 #!/usr/bin/env bash
-# SessionStart hook — load your knowledge base into context at the start of every
-# Claude Code session, EXCEPT inside code projects: the ~/dev tree, or any directory
-# that has its own CLAUDE.md (a self-contained repo with its own context).
+# SessionStart hook — load your knowledge base into context at session start.
 #
-# Beyond a static pointer, this inlines the live vault map (index.md), a computed
-# inbox listing, today's calendar (from the cache), and a pointer to today's plan
-# note — so the map + inbox + day are in context at startup without relying on the
-# model remembering to read them.
+# Default install: registered as a PROJECT hook in `.claude/settings.json`
+# (this repo). Claude Code and Grok run it when a session starts in this vault.
+# Optional user-global copy (~/.claude/hooks/knowledge-context.sh + user
+# settings.json) is only for wanting the loader *outside* this repo.
+# See this folder's README.md and the root README.md.
 #
-# Install as ~/.claude/hooks/knowledge-context.sh and register under SessionStart in
-# ~/.claude/settings.json. See this folder's README.md.
+# Preferred path: emit the generated **boot bundle** (SYSTEM/bin/build_boot_bundle.sh
+# — host + jobs, vault pointer, today's plan + calendar, the index Quick-map
+# skeleton, inbox, open #priority actions, log tail; SYSTEM/SCHEMA.md § Boot bundle)
+# so the map + inbox + day are in context at startup without relying on the model
+# remembering to read them. If the bundle script is missing or fails, fall back to
+# the older inline loader below (map + inbox + calendar + plan pointer) — never regress
+# to nothing.
 #
 # Fail-safe: on any unexpected error, emit nothing rather than erroring the session.
 
-# ===== CONFIG — edit this =====
-VAULT="$HOME/my-kb"          # absolute path to your KB
-# ==============================
+# ===== CONFIG — only used if this file is copied to ~/.claude/hooks/ =====
+CONFIG_VAULT="$HOME/my-kb"
+# ========================================================================
+
+if [ -n "${CLAUDE_PROJECT_DIR:-}" ] && [ -d "$CLAUDE_PROJECT_DIR/SYSTEM" ]; then
+  VAULT="$CLAUDE_PROJECT_DIR"
+else
+  script_dir="$(cd "$(dirname "$0")" && pwd)"
+  maybe="$(cd "$script_dir/../../.." && pwd 2>/dev/null)" || maybe=""
+  if [ -n "$maybe" ] && [ -d "$maybe/SYSTEM" ] && [ -f "$maybe/index.md" ]; then
+    VAULT="$maybe"
+  else
+    VAULT="$CONFIG_VAULT"
+  fi
+fi
 
 payload="$(cat 2>/dev/null)"
 cwd="$(printf '%s' "$payload" | jq -r '.cwd // empty' 2>/dev/null)"
 [ -z "$cwd" ] && cwd="$PWD"
 
-# 1) Never inject inside the dev tree.
+# 1) Never inject inside the dev tree — unless the vault *is* that tree
+#    (project-level install of a KB that lives under ~/dev).
 case "$cwd" in
-  "$HOME"/dev | "$HOME"/dev/*) exit 0 ;;
+  "$HOME"/dev | "$HOME"/dev/*)
+    case "$cwd" in
+      "$VAULT" | "$VAULT"/*) ;;
+      *) exit 0 ;;
+    esac
+    ;;
 esac
 
 # 2) Never inject if the working tree is a self-contained project (own CLAUDE.md),
-#    walking from cwd up to $HOME. (Your KB's own CLAUDE.md is handled by Claude
-#    Code directly; this guard is for OTHER projects — so keep the vault out of
-#    ~/dev, or this hook will also skip it. If your KB lives somewhere with its own
-#    CLAUDE.md and you still want the inlining, remove this block.)
+#    walking from cwd up to $HOME. The vault's own CLAUDE.md is allowed (dir ==
+#    VAULT). This guard is for OTHER projects, and only matters for a user-global
+#    copy of this hook.
 dir="$cwd"
 while [ -n "$dir" ] && [ "$dir" != "/" ]; do
   [ -f "$dir/CLAUDE.md" ] && [ "$dir" != "$VAULT" ] && exit 0
@@ -41,12 +62,27 @@ done
 # 3) Bail quietly if the vault isn't present.
 [ -d "$VAULT" ] || exit 0
 
+# 4) Preferred: the generated boot bundle (single-sourced in SYSTEM/bin/, so this hook
+#    and any other surface — another agent's loader, a manual run — stay identical).
+#    Env knobs (KB_LAUNCHD_PREFIX, KB_TIMER_PREFIX, KB_PEERS) are documented in the script.
+bundle_script="$VAULT/SYSTEM/bin/build_boot_bundle.sh"
+if [ -x "$bundle_script" ]; then
+  bundle_ctx="$(VAULT="$VAULT" "$bundle_script" 2>/dev/null)"
+  if [ -n "$bundle_ctx" ]; then
+    jq -n --arg ctx "$bundle_ctx" \
+      '{hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $ctx}}'
+    exit 0
+  fi
+fi
+
+# --- Fallback inline loader (bundle script absent or empty) ---
+
 read -r -d '' pointer <<EOF
 A personal knowledge base (Karpathy "knowledge-base-as-compiler" method) lives at $VAULT — your durable project memory.
 
-For any non-code / knowledge task, BEFORE answering: read $VAULT/SYSTEM/SCHEMA.md (how the base works). The map (index.md) and the live inbox state are inlined below — use them as your starting point. Keep the base current per AGENTS.md — capture new material to Knowledge/raw/, compile durable facts into Knowledge/Concepts/, update index.md, append SYSTEM/log.md, use Obsidian [[wikilinks]] for backlinks.
+For any non-code / knowledge task, BEFORE answering: read $VAULT/SYSTEM/SCHEMA.md (how the base works). The map (index.md) and the live inbox state are inlined below — use them as your starting point. Keep the base current per AGENTS.md — capture new material to raw/, compile durable facts into 05 concepts/, update index.md, append SYSTEM/log.md, use Obsidian [[wikilinks]] for backlinks.
 
-The vault ROOT is the inbox: new notes/files land at the root, and anything there other than the pinned anchors (README.md, index.md, Actions.md, CLAUDE.md) is an un-triaged item — offer to file it into Knowledge/raw/ and compile.
+The vault ROOT is the inbox: new notes/files land at the root, and anything there other than the pinned anchors (README.md, index.md, Actions.md, CLAUDE.md, AGENTS.md) is an un-triaged item — offer to file it into raw/ and compile.
 
 Read and write $VAULT using absolute paths regardless of the current working directory.
 EOF
@@ -62,9 +98,9 @@ inbox_items=""
 while IFS= read -r entry; do
   name="$(basename "$entry")"
   case "$name" in
-    README.md|index.md|Actions.md|CLAUDE.md) continue ;;   # pinned anchors
-    Knowledge|SYSTEM|daily|attachments|docs|Writing) continue ;;  # structural folders — mirror of lint.sh check 1 `structural` (the single source of truth)
-    setup.md|LICENSE) continue ;;                           # starter-kit artifacts (lint `template_extras`)
+    README.md|index.md|Actions.md|CLAUDE.md|AGENTS.md) continue ;;   # pinned anchors
+    "00 daily"|"01 Horizons"|"02 Areas"|"03 Projects"|"04 People"|"05 concepts"|SYSTEM|Skills|Agents|raw|attachments|docs|excalidraw) continue ;;  # structural folders — mirror of lint.sh check 1 `structural` (the single source of truth)
+    setup.md|LICENSE|MIGRATING.md|CHANGELOG.md) continue ;;                           # starter-kit artifacts (lint `template_extras`)
     pyproject.toml|uv.lock) continue ;;                     # Python tooling (lint `tooling`)
     .*) continue ;;                                         # hidden (.obsidian, .DS_Store)
   esac
@@ -78,7 +114,7 @@ while IFS= read -r entry; do
 done < <(find "$VAULT" -maxdepth 1 -mindepth 1 2>/dev/null | sort)
 
 if [ -n "$inbox_items" ]; then
-  inbox="INBOX — un-triaged items at the vault root (offer to file into Knowledge/raw/ and compile):
+  inbox="INBOX — un-triaged items at the vault root (offer to file into raw/ and compile):
 ${inbox_items}"
 else
   inbox="INBOX — empty (root holds only the anchors + structural folders). Nothing to triage."
@@ -103,11 +139,11 @@ fi
 
 # --- Pointer to today's auto-generated daily plan note, if it exists. ---
 plan_block=""
-plan_note="$VAULT/daily/$today.md"
+plan_note="$VAULT/00 daily/$today.md"
 if [ -f "$plan_note" ]; then
   if grep -q "daily-plan: STUB" "$plan_note" 2>/dev/null; then
     plan_block="
-Today's plan note ($plan_note) is a STUB — the 8am job reached the calendar but the API was unreachable, so open #actions + priorities aren't filled in. Offer to regenerate: ~/.claude/hooks/daily-plan.sh --force"
+Today's plan note ($plan_note) is a STUB — the 8am job reached the calendar but the API was unreachable, so open #actions + priorities aren't filled in. Offer to regenerate: $VAULT/SYSTEM/optional/automation/daily-plan.sh --force"
   else
     plan_block="
 Today's plan note: $plan_note — the day's schedule, open #actions, and priorities. Read it first."

@@ -49,18 +49,19 @@ jobs:
             1. PRIVACY (blocking): any content that looks personal or
                instance-specific rather than framework-generic — real names,
                family/household details, employers, addresses, emails, IPs,
-               device/host names, populated Knowledge/People/Knowledge/raw/daily/Initiatives
-               content, an owner: field with a real name, placeholders
+               device/host names, populated content under 00 daily/ 01 Horizons/ 02 Areas/
+               03 Projects/ 04 People/ raw/ attachments/, an owner: field with a real name, placeholders
                ({{NAME}}, {{PERSONAL_IDENTIFIERS}}, etc.) replaced with real
                values, or personal specifics leaking through examples. The
                deterministic gate catches known patterns; you catch what
                patterns miss. When in doubt, it's personal — flag it.
 
             2. SCHEMA CONSISTENCY: changes must conform to SYSTEM/SCHEMA.md —
-               new Skills at Knowledge/Skills/<TYPE>/ (DO|CHECK|FORMAT|RULE) with
+               new Skills at Skills/<TYPE>/ (DO|CHECK|FORMAT|RULE) with
                matching type: frontmatter and owner: {{NAME}}, indexed in
-               Knowledge/Concepts/skills.md;
-               concepts carry frontmatter (type/updated/status/tags); the
+               05 concepts/skills.md;
+               concepts carry frontmatter (type/description/updated/status/tags);
+               projects carry an area: up-link, areas a review cadence; the
                link map regenerated when link targets change; index.md stays
                a pure map (no change history); root gains no new permanent
                files; wikilinks resolve; dates are YYYY-MM-DD.

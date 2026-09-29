@@ -9,11 +9,12 @@ metadata:
   frequency: ad-hoc
   tools: ["<!-- generated --> marker", "per-domain generator scripts", "launchd/cron"]
   owner: "{{NAME}}"
+  version: "1.0"
   status: active
   tags: [rule, kb-meta]
   aliases: [Maintain Generated Sections, maintain-generated-sections, generated-sections]
   summary: The standing convention for machine-maintained file sections — config above a marker, generated content below, fail loud, never hand-edit below the line.
-  updated: 2026-08-14
+  updated: 2026-09-28
 ---
 
 

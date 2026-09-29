@@ -9,10 +9,12 @@ metadata:
   frequency: weekly manual / daily automated
   tools: ["Grep", "Glob", "Read"]
   owner: "{{NAME}}"
+  version: "1.1"
   status: active
   tags: [check, kb-meta]
   aliases: ["Run the KB health check", "run-the-kb-health-check"]
   summary: Produces a green/issues verdict on KB mechanical health (broken links, stale actions, inbox pile-up).
+  updated: 2026-09-28
 ---
 
 
@@ -27,14 +29,18 @@ metadata:
 - Any time you suspect the KB has drifted (broken links, stale actions, inbox pile-up).
 
 ## Steps
-1. **Mechanical half — run `SYSTEM/bin/lint.sh`.** Do NOT hand-re-derive its
+1. **Regenerate first — `SYSTEM/bin/regen-all.sh`.** Most red is a stale
+   generated view (mirrors, indexes, link map, caps), not a decision; regen
+   clears it mechanically. Under plain `lint.sh` those checks print **WARN**,
+   not FAIL; `LINT_STRICT=1` FAILs them again (the post-regen gate).
+2. **Mechanical half — run `SYSTEM/bin/lint.sh`.** Do NOT hand-re-derive its
    checks; the script is the single source of truth for what "mechanically
    sound" means (inbox clean incl. registered exceptions, wikilinks + aliases
    resolve, index complete, frontmatter present + Pydantic-valid,
    descriptions present, no stray non-`.md` files, Quick map within the
    SessionStart injection budget). Exit 0 = mechanical green; on failure the
    script names each offender.
-2. **Judgment half — the checks a script can't run:**
+3. **Judgment half — the checks a script can't run:**
    - **Stale facts:** any always-loaded claim (index one-liners, `CLAUDE.md`)
      contradicted by a fresher note? (Deep version: [[Audit State Freshness]].)
    - **Resolved open questions:** any note's Open questions actually answered
@@ -42,13 +48,13 @@ metadata:
    - **Actions real:** spot-check open `#action`s — genuinely still open?
      Completed ones checked, not deleted? (`SYSTEM/bin/aging-actions.sh`
      lists the old ones.)
-   - **Initiatives current:** `SYSTEM/bin/stale-initiatives.sh` — any active
+   - **Projects current:** `SYSTEM/bin/stale-projects.sh` — any active
      note weeks-stale, or done-in-substance but not archived?
-   - **Raw provenance (spot-check):** a concept with zero `[[Knowledge/raw/…]]`
+   - **Raw provenance (spot-check):** a concept with zero `[[raw/…]]`
      cites is a soft warning, not a hard failure.
    - **Generated sections alive:** stamps within cadence AND the generating
      jobs' logs clean — a fresh stamp can hide a failing generator.
-3. **Report.** State: `green — <one clause>` or `issues — <sub-bullet per real
+4. **Report.** State: `green — <one clause>` or `issues — <sub-bullet per real
    problem>`. Log a one-line entry in `SYSTEM/log.md`.
 
 ## Gotchas / rules
@@ -56,13 +62,13 @@ metadata:
   stale the moment the script evolves. Reference the script; let it carry the
   details.
 - `daily/` notes are ephemeral working notes; judgment checks skip them.
-- A missing `Knowledge/raw/` citation is a soft warning, not a hard failure.
+- A missing `raw/` citation is a soft warning, not a hard failure.
 - If a *judgment* finding recurs, consider promoting it to a mechanical
   `lint.sh` check — that's the [[Audit the KB System]] feedback rule.
 
 ## Done when
 - [ ] `lint.sh` run and its verdict recorded.
-- [ ] Judgment layer done: stale facts, open questions, actions, initiatives,
+- [ ] Judgment layer done: stale facts, open questions, actions, projects,
       generated-section logs.
 - [ ] Verdict reported: `green` or `issues — <list>`.
 - [ ] One-line entry appended to `SYSTEM/log.md` with the verdict.

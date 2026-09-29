@@ -1,0 +1,5 @@
+# Internet-facing services are NOT enabled automatically. Finish the Cloudflare
+# setup in ../README.md, fill in core.env, create the venvs and credentials, then
+# uncomment the ones you want and re-run core-jobs/install.sh (or `systemctl enable --now`).
+# cntxt1-capture.service
+# cntxt1-mcp.service

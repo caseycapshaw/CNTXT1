@@ -9,43 +9,72 @@ compiler method — see **[[SCHEMA]]**.
 
 ## Quick map (skeleton — full detail below)
 A compact index so the whole structure is graspable at a glance — and so it fits the
-session-start injection budget (the optional SessionStart hook inlines `head -c 8000`
-of this file; keep the skeleton inside that). Group your concepts here as the base
-grows; rich descriptions follow in the sections below.
+session-start injection budget (the boot bundle / SessionStart hook inlines everything
+up to the next H2; keep it inside 8000 bytes). One-liners are stable `description:`
+essence, not live status — that lives in each note + the generated Projects section below.
 
-- **Initiatives (live):** _(none yet — goal-directed workstreams land here)_
-- **Method:** [[karpathy-method]] · [[open-knowledge-format]] · [[SCHEMA]]
-- **Indexes:** [[contacts]] → `Knowledge/People/` · [[skills]] → `Knowledge/Skills/`
+- **Projects (live):** _(none yet — finite, goal-directed workstreams land here)_
+- **Areas:** _(none yet — ongoing responsibilities land here)_
+- **Horizons:** [[goals]] (H3) · [[vision]] (H4) · [[purpose-principles]] (H5)
+- **Method:** [[karpathy-method]] · [[gtd]] · [[open-knowledge-format]] · [[SCHEMA]]
+- **Thinking:** [[first-principles-thinking]] (DARE; `/dare`)
+- **Indexes:** [[contacts]] → `04 People/` · [[skills]] → `Skills/`
 - _(add your concept groups here: role, product, ops, … one line each)_
 - **Live to-dos:** [[Actions]] · **History:** [[log]] · [[decisions]]
 
-## Initiatives (goal-directed workstreams — one note each in `Knowledge/Initiatives/`)
-Bigger outcomes spanning multiple actions over time. Built from [`Initiative TEMPLATE.md`](Knowledge/Initiatives/Initiative%20TEMPLATE.md), run via [[Run an initiative]]; `Knowledge/Initiatives/` is a **structural folder, not an inbox item**. Actions stay inline in each note and aggregate to [[Actions]].
+## Horizons (H3–H5 — `01 Horizons/`)
+Orientation above the areas: [[goals]] (1–2 year outcomes, one note each in `01 Horizons/Goals/`, built from [`Goal TEMPLATE.md`](01%20Horizons/Goals/Goal%20TEMPLATE.md)) · [[vision]] (3–5 years) · [[purpose-principles]] (the why). Chained to areas and projects by frontmatter up-links only — the downward views are generated. Method: [[gtd]].
 
-**Live:** _(none yet)_
+## Projects (goal-directed workstreams — one note each in `03 Projects/`)
+Finite outcomes with a genuine endpoint (the endpoint test), spanning multiple actions over time. Built from [`Project TEMPLATE.md`](03%20Projects/Project%20TEMPLATE.md), run via [[Run a Project]]; `03 Projects/` is a **structural folder, not an inbox item**. Actions stay inline in each note and aggregate to [[Actions]].
 
-**Done:** _(closed initiatives stay listed here as records)_
+<!-- projects:auto:start -->
+_Generated 2026-09-28 by `SYSTEM/bin/build_index_projects.py` from each note's frontmatter + first paragraph of Now & next — do not hand-edit between the markers. Live/done ordered by `updated:`._
+
+**Pending** (opened but not yet actively worked — waiting on a trigger):
+- _none_
+
+**Live:**
+- _none_
+
+**Done** (archived in `03 Projects/archive/`):
+- _none_
+<!-- projects:auto:end -->
+
+## Areas (ongoing responsibilities — one note each in `02 Areas/`)
+Standing responsibilities maintained to a standard, never "done" — each carries a `## Standard` and a review cadence ([[Review an Area]]). Built from [`Area TEMPLATE.md`](02%20Areas/Area%20TEMPLATE.md); physical things live in `02 Areas/Assets/`.
+
+<!-- areas:auto:start -->
+_Generated 2026-09-28 by `SYSTEM/bin/build_index_lists.py` from each note's `description:` frontmatter — do not hand-edit between the markers. To change an entry, edit that area note's `description:` and regenerate (SYSTEM/bin/regen-all.sh)._
+
+<!-- areas:auto:end -->
 
 ## Concepts (compiled, queryable truth)
-- **[[karpathy-method]]** — the architecture this KB is built on: an LLM-maintained "wiki" (raw→compile→index→lint, no RAG at personal scale). Why it works, the scale sweet spot, and the hallucination-propagation risk. The operating rules live in [[SCHEMA]].
-- **[[open-knowledge-format]]** — Google's OKF v0.1: the open interchange standard for Karpathy-style LLM wikis, how a CNTXT1 vault maps to it (a superset), and how to adopt it at the boundaries (bundle ingest/export) without refactoring internals.
-- **[[contacts]]** — the **People index**: usage-context map + grouped tables over the [`Knowledge/People/`](People) folder. Per-person detail lives in each person's own note; this is the *who-for-what* map.
-- **[[skills]]** — the **skill index**: grouped tables over the [`Knowledge/Skills/`](Knowledge/Skills) folder. Each recurring "job to be done" is one runbook note filed by type (`DO`/`CHECK`/`FORMAT`/`RULE`); this is the *how-do-I-X* map.
+<!-- concepts:auto:start -->
+_Generated 2026-09-28 by `SYSTEM/bin/build_index_lists.py` from each note's `description:` frontmatter — do not hand-edit between the markers. To change an entry, edit that concept note's `description:` and regenerate (SYSTEM/bin/regen-all.sh)._
 
-_New concepts get added here, one line each, as you compile them._
+- **[[contacts]]** — The People index — the who-for-what map and grouped tables over the 04 People/ folder.
+- **[[first-principles-thinking]]** — First-principles thinking and the DARE framework (Decompose, Audit, Recombine, Experiment) — reasoning from essentials instead of inherited assumptions, with AIM-structured prompts that force an AI off the conventional-wisdom average.
+- **[[gtd]]** — David Allen's Getting Things Done — the five-step workflow, the six Horizons of Focus, and the project-vs-area distinction built into this KB's 03 Projects / 02 Areas / 01 Horizons stack.
+- **[[karpathy-method]]** — The LLM-maintained wiki architecture this KB is built on — raw→compile→index→lint, replacing RAG at personal scale.
+- **[[open-knowledge-format]]** — Google's OKF v0.1 — the open interchange standard for Karpathy-style LLM wikis, how a CNTXT1 vault maps to it, and how to adopt it at the boundaries.
+- **[[skills]]** — The skills index — the how-do-I-X map and grouped tables over the Skills/ folder.
+<!-- concepts:auto:end -->
 
-## People (one note per person — `Knowledge/People/`)
-A note per named person under [`Knowledge/People/`](People) — the **single source of truth** for per-person detail. Built from [`People TEMPLATE.md`](Knowledge/People/People%20TEMPLATE.md). Filed as `Full Name.md`, wikilinked `[[Full Name]]` (nicknames resolve via `aliases:` frontmatter). `Knowledge/People/` is a **structural folder, not an inbox item**.
+_New concepts appear here automatically from their `description:` frontmatter — edit the note, then regenerate._
+
+## People (one note per person or vendor — `04 People/`)
+A note per named person or business under [`04 People/`](04%20People) — the **single source of truth** for per-person detail. Built from [`People TEMPLATE.md`](04%20People/People%20TEMPLATE.md). Filed as `Full Name.md`, wikilinked `[[Full Name]]` (nicknames resolve via `aliases:` frontmatter). Indexed by [[contacts]]. `04 People/` is a **structural folder, not an inbox item**.
 
 _Add person notes here as you build the network._
 
-## Skills (one agent-invocable runbook per recurring task — `Knowledge/Skills/`)
-Agent-executable runbooks for recurring "jobs to be done", filed as [`Knowledge/Skills/<TYPE>/<Imperative Title>.md`](Knowledge/Skills) where `TYPE` is one of `DO` (performs a recurring task), `CHECK` (verifies/audits something), `FORMAT` (produces/structures an artifact), or `RULE` (a standing convention/policy) — the **single source of truth for the *steps*** of a repeatable task. Built from [`Skill TEMPLATE.md`](Knowledge/Skills/Skill%20TEMPLATE.md). `Knowledge/Skills/` is a **structural folder, not an inbox item**.
+## Skills (one agent-invocable runbook per recurring task — `Skills/`)
+Agent-executable runbooks for recurring "jobs to be done": canonical at `.claude/skills/<slug>/SKILL.md` (the **single source of truth for the *steps***, auto-discovered by Claude Code and Grok Build), mirrored by `SYSTEM/bin/build_claude_mirrors.py` into [`Skills/<TYPE>/`](Skills) (`DO` = performs a task · `CHECK` = verifies/audits · `FORMAT` = produces an artifact · `RULE` = standing convention) for Obsidian reading and wikilinks. Built from [`Skill TEMPLATE.md`](Skills/Skill%20TEMPLATE.md). `Skills/` is a **structural folder, not an inbox item**.
 
-Twelve starter skills ship with the kit (KB-meta): [[Add a person to the KB]] · [[Capture a meeting or conversation into the KB]] · [[Run an initiative]] · [[Run the KB health check]] · [[Optimize the knowledge base]] · and more — see [[skills]].
+Starter skills ship with the kit (KB-meta): [[File a New Note]] · [[Run a Project]] · [[Review an Area]] · [[Add a person to the KB]] · [[Capture a meeting or conversation into the KB]] · [[Run the KB health check]] · [[Optimize the knowledge base]] · and more — see [[skills]].
 
 ## Raw (source of truth — append-only)
-- `Knowledge/raw/2026-01-01-example-capture.md` — **example** showing the dated-capture format (provenance header, a fact, a `[[wikilink]]`, an `#action`). Delete once you have real captures.
+- [[raw/2026-01-01-example-capture]] — **example** showing the dated-capture format (provenance header, a fact, a `[[wikilink]]`, an `#action`). Delete once you have real captures.
 
 ## Log
 - `SYSTEM/log.md` — chronological record of knowledge updates.
@@ -58,5 +87,3 @@ Twelve starter skills ship with the kit (KB-meta): [[Add a person to the KB]] ·
 
 _This index is a **pure map** — keep change history in `SYSTEM/log.md`, never here.
 If the Quick map ever outgrows the injection budget, tighten it; don't let it spill._
-
-_Last updated: {{DATE}} (initial scaffold)._

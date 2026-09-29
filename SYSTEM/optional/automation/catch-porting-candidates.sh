@@ -4,12 +4,8 @@
 # generic framework files → your public CNTXT1 clone; team-relevant content
 # → a shared Teams repo (if you keep one).
 #
-# Wire it in .claude/settings.json (both events point at this same script):
-#   "hooks": {
-#     "PostToolUse": [{"matcher": "Edit|Write|MultiEdit",
-#                      "hooks": [{"type": "command", "command": "SYSTEM/optional/automation/catch-porting-candidates.sh"}]}],
-#     "Stop":        [{"hooks": [{"type": "command", "command": "SYSTEM/optional/automation/catch-porting-candidates.sh"}]}]
-#   }
+# Already wired in `.claude/settings.json` (PostToolUse + Stop). Both events
+# point at this same script.
 #
 # No-op until configured: leave either variable blank to silence that half.
 set -uo pipefail
@@ -20,10 +16,10 @@ TEAMS_REPO=""     # name/path of your shared Teams repo, e.g. "CNTXT-Teams-<Team
 # ===========================================================
 
 # Generic framework files — instance-agnostic, belongs in CNTXT1.
-CNTXT1_PATTERNS='^SYSTEM/schemas/models\.py$|^SYSTEM/bin/.*\.(sh|py)$|^SYSTEM/AGENTS\.md$|^Knowledge/.*TEMPLATE\.md$|^Knowledge/Skills/Skills Index\.md$|^Knowledge/Skills/[A-Za-z]+/[A-Za-z]+ Index\.md$'
+CNTXT1_PATTERNS='^SYSTEM/schemas/models\.py$|^SYSTEM/bin/.*\.(sh|py)$|^SYSTEM/AGENTS\.md$|^(0[1-5] [A-Za-z ]+/.*|Skills|Agents)/?.*TEMPLATE\.md$|^Skills/Skills Index\.md$|^Skills/[A-Za-z]+/[A-Za-z]+ Index\.md$'
 
 # Team-relevant (not personal) content — belongs in a Teams repo, if you have one.
-TEAMS_PATTERNS='^Knowledge/Agents/.*\.md$|^Knowledge/Skills/.*/.*\.md$|^Knowledge/Initiatives/.*\.md$|^Knowledge/Concepts/.*\.md$'
+TEAMS_PATTERNS='^Agents/.*\.md$|^Skills/.*/.*\.md$|^03 Projects/.*\.md$|^05 concepts/.*\.md$'
 
 # Fully unconfigured → pure no-op.
 [ -z "$CNTXT1_CLONE" ] && [ -z "$TEAMS_REPO" ] && exit 0

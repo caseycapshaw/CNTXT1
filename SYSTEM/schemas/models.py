@@ -7,14 +7,15 @@ the shared schema (AgentFrontmatter).
 from typing import Literal, Optional
 from pydantic import BaseModel, Field, field_validator
 from SYSTEM.schemas.base_models import (
-    CheckFrontmatter, ConceptFrontmatter, DoFrontmatter, FormatFrontmatter,
-    InitiativeFrontmatter, PersonFrontmatter, RuleFrontmatter,
+    AreaFrontmatter, CheckFrontmatter, ConceptFrontmatter, DoFrontmatter,
+    FormatFrontmatter, GoalFrontmatter, HorizonFrontmatter, OrgFrontmatter,
+    PersonFrontmatter, ProjectFrontmatter, RuleFrontmatter,
     _validate_iso_date,
 )
 
 
 class AgentFrontmatter(BaseModel):
-    """Frontmatter schema for Knowledge/Agents/*.md — real Claude Code subagent
+    """Frontmatter schema for Agents/*.md — real Claude Code subagent
     definitions, symlinked into ~/.claude/agents/ for direct use, and also
     launchable as CMUX pane-worker system prompts (--append-system-prompt).
 
@@ -42,11 +43,15 @@ class AgentFrontmatter(BaseModel):
 
 __all__ = [
     "AgentFrontmatter",
+    "AreaFrontmatter",
     "CheckFrontmatter",
     "ConceptFrontmatter",
     "DoFrontmatter",
     "FormatFrontmatter",
-    "InitiativeFrontmatter",
+    "GoalFrontmatter",
+    "HorizonFrontmatter",
+    "OrgFrontmatter",
     "PersonFrontmatter",
+    "ProjectFrontmatter",
     "RuleFrontmatter",
 ]
