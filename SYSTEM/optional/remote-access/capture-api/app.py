@@ -232,8 +232,28 @@ def audit(route, client, status, note=None):
 SLUG_RE = re.compile(r"[^a-z0-9]+")
 
 
+SLUG_MAX = 60
+EXT_RE = re.compile(r"^\.[a-z0-9]{1,5}$")
+
+
 def slugify(text):
-    return SLUG_RE.sub("-", (text or "").lower()).strip("-") or "capture"
+    slug = SLUG_RE.sub("-", (text or "").lower()).strip("-")[:SLUG_MAX].strip("-")
+    return slug or "capture"
+
+
+def safe_ext(ext):
+    """Only a short alphanumeric extension may come from client input."""
+    ext = (ext or "").lower()
+    return ext if EXT_RE.match(ext) else ".bin"
+
+
+def contained(root, path):
+    """Resolve `path` and refuse anything that escapes `root` (path-injection guard)."""
+    root_r = root.resolve()
+    path_r = path.resolve()
+    if path_r != root_r and root_r not in path_r.parents:
+        raise ValueError(f"refusing path outside {root_r}")
+    return path_r
 
 
 def make_title(data):
@@ -250,12 +270,12 @@ def make_title(data):
 
 
 def dest_path(vault, date_str, slug):
-    base = vault / "raw"
+    base = contained(vault, vault / "raw")
     base.mkdir(parents=True, exist_ok=True)
-    dest = base / f"{date_str}-{slug}.md"
+    dest = contained(base, base / f"{date_str}-{slug}.md")
     n = 2
     while dest.exists():
-        dest = base / f"{date_str}-{slug}-{n}.md"
+        dest = contained(base, base / f"{date_str}-{slug}-{n}.md")
         n += 1
     return dest
 
@@ -409,15 +429,16 @@ class Handler(BaseHTTPRequestHandler):
 
         image_rel = None
         if image_bytes:
-            ext = IMAGE_EXT_BY_CONTENT_TYPE.get(image_ct) or (
+            ext = safe_ext(IMAGE_EXT_BY_CONTENT_TYPE.get(image_ct) or (
                 Path(image_name).suffix if image_name else ""
-            ) or mimetypes.guess_extension(image_ct or "") or ".bin"
-            attach_dir = vault / "attachments" / final_slug
+            ) or mimetypes.guess_extension(image_ct or "") or ".bin")
+            attach_root = contained(vault, vault / "attachments")
+            attach_dir = contained(attach_root, attach_root / final_slug)
             attach_dir.mkdir(parents=True, exist_ok=True)
-            img_path = attach_dir / f"{final_slug}{ext}"
+            img_path = contained(attach_dir, attach_dir / f"{final_slug}{ext}")
             n = 2
             while img_path.exists():
-                img_path = attach_dir / f"{final_slug}-{n}{ext}"
+                img_path = contained(attach_dir, attach_dir / f"{final_slug}-{n}{ext}")
                 n += 1
             img_path.write_bytes(image_bytes)
             image_rel = str(img_path.relative_to(vault))
