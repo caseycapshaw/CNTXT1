@@ -1,7 +1,8 @@
 # Deterministic privacy & consistency gate — runs on EVERY PR, fork-safe.
-# No secrets required; PERSONAL_IDENTIFIERS (a repo secret holding the
-# maintainer's |-separated grep pattern) adds an extra sweep on same-repo
-# PRs and is simply skipped on forks, where GitHub withholds secrets.
+# No secrets required. The identifier-sweep job re-runs the gate with
+# PERSONAL_IDENTIFIERS (the maintainer's |-separated grep pattern), held on the
+# `maintainer-secrets` environment so it only runs after maintainer approval —
+# a collaborator's branch can't exfiltrate it. Skipped on forks.
 name: PR gate (privacy + consistency)
 
 on:
@@ -36,6 +37,17 @@ jobs:
           (cd SYSTEM/optional/remote-access/mcp-remote && uv run --no-project --with cryptography python -m unittest discover -s tests -p 'test_*.py')
 
       - name: Privacy & consistency gate
+        run: ./.github/scripts/pr-gate.sh
+
+  identifier-sweep:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    environment: maintainer-secrets
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Privacy gate with the maintainer identifier sweep
         env:
           PERSONAL_IDENTIFIERS: ${{ secrets.PERSONAL_IDENTIFIERS }}
         run: ./.github/scripts/pr-gate.sh

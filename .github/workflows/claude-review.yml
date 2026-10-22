@@ -2,9 +2,11 @@
 # mechanical violations; this catches what needs judgment: content that is
 # personal/instance-specific rather than framework-generic, and schema drift.
 #
-# Auth: needs the CLAUDE_CODE_OAUTH_TOKEN repo secret — generate with
+# Auth: needs the CLAUDE_CODE_OAUTH_TOKEN secret on the `maintainer-secrets`
+# environment (required reviewer = the maintainer, so a collaborator's branch
+# can't run a modified workflow with it) — generate with
 #   claude setup-token   (bills to your Claude subscription)
-# then: gh secret set CLAUDE_CODE_OAUTH_TOKEN
+# then: gh secret set CLAUDE_CODE_OAUTH_TOKEN --env maintainer-secrets
 # (An ANTHROPIC_API_KEY from console.anthropic.com works too — swap the
 # auth input below to anthropic_api_key.)
 #
@@ -23,6 +25,7 @@ jobs:
   claude-review:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    environment: maintainer-secrets
     permissions:
       contents: read
       pull-requests: write
