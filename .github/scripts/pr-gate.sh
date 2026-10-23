@@ -6,7 +6,7 @@
 # if the tree violates one, the repo is wrong no matter which PR did it.
 #
 # Fork-safe: needs no secrets. If PERSONAL_IDENTIFIERS is set in the
-# environment (a |-separated grep -E pattern, provided via a repo secret on
+# environment (a |-separated grep -P (PCRE) pattern, provided via a repo secret on
 # same-repo runs), an extra maintainer-specific sweep runs — filenames only,
 # so nothing sensitive lands in public CI logs.
 #
@@ -109,8 +109,19 @@ pii_scan "credential/token"  '(sk-ant-[A-Za-z0-9_-]{8,}|ghp_[A-Za-z0-9]{20,}|git
 
 # ---- 4. Maintainer-specific identifier sweep (optional, secret-fed) --------
 if [ -n "${PERSONAL_IDENTIFIERS:-}" ]; then
-  id_hits=$(grep -rilE "$PERSONAL_IDENTIFIERS" . \
+  # Known-public text is blanked out before matching (mirrors the "allowed
+  # hits" of the sync skill's grep gate): the repo's own slug (owner/name in
+  # upstream URLs — GITHUB_REPOSITORY is set by Actions) and the kit's
+  # placeholder home paths (/Users/you, /home/NAME, ...).
+  own="${GITHUB_REPOSITORY:-}"
+  id_hits=$(grep -rilP "$PERSONAL_IDENTIFIERS" . \
     --exclude-dir=.git --exclude-dir=.github --exclude-dir=.venv --exclude=uv.lock --exclude=LICENSE 2>/dev/null || true)
+  if [ -n "$id_hits" ]; then
+    id_hits=$(printf '%s\n' "$id_hits" | while IFS= read -r f; do
+      sed -E "${own:+s#${own}##Ig; }s#/(Users|home)/(you|NAME|USER|<[^>]*>)([/\`'\") ]|\$)#/\3#g" "$f" \
+        | grep -qiP "$PERSONAL_IDENTIFIERS" && printf '%s\n' "$f"
+    done)
+  fi
   if [ -n "$id_hits" ]; then
     bad "maintainer identifier sweep matched (filenames only):$(printf ' %s' $id_hits)"
   else
