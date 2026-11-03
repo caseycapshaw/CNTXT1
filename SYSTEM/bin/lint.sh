@@ -12,7 +12,8 @@
 # serves lists, (15/15a/15b/15c) generated index Projects + Concepts/Areas +
 # contacts directory + per-folder directory indexes, (16) orphan-raw WARN,
 # (17) link-map no duplicate keys / no [[aliases:]], (18) Quick map skeleton
-# has no ISO dates or status words. Exit 0 = pass, 1 = problems.
+# has no ISO dates or status words, (19) no file-sync conflict copies.
+# Exit 0 = pass, 1 = problems.
 #
 # Generated-view checks (13, 14, 15/15a/15b/15c) and word caps (11) are
 # WARN, not FAIL, by default — a stale generated view or an over-cap section
@@ -385,6 +386,20 @@ if [ -z "$qm_fail" ]; then
   ok "index Quick map skeleton has no volatile status (ISO dates / overdue / awaiting / ADOPTED)"
 else
   bad "index Quick map skeleton looks like a status log ($qm_fail) — one-liners must be stable description: essence; status lives in each note + the generated Projects section"
+fi
+
+# ---- 19. No file-sync conflict copies (hard FAIL) ---------------------------
+# Pairs with the one-log-writer rule (SCHEMA § One log writer): a
+# `*.sync-conflict-*` file (Syncthing's naming) means two hosts wrote one file
+# in a sync window and one copy lost; its unique lines stay missing until
+# someone merges them by hand. Syncthing's own .stversions history is excluded.
+# A single-machine vault never has one, so this passes trivially there.
+conflicts="$(find . \( -path ./.git -o -path ./.stversions -o -path ./.trash \) -prune -o -type f -name '*.sync-conflict-*' -print 2>/dev/null | sed 's|^\./||' | sort)"
+if [ -z "$conflicts" ]; then
+  ok "no file-sync conflict copies"
+else
+  bad "file-sync conflict copies — merge any unique lines into the original, then remove the copy:"
+  printf '%s\n' "$conflicts" | while IFS= read -r c; do note "$c"; done
 fi
 
 echo

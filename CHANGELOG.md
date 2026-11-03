@@ -3,6 +3,22 @@
 Notable framework changes to the CNTXT1 starter kit. Newest first. (Your instance's
 own history lives in its `SYSTEM/log.md`.)
 
+## 2026-11-03 — one log writer
+
+For vaults replicated across machines by a file-sync tool: concurrent appends to
+`SYSTEM/log.md` from two hosts become conflict copies that silently drop lines.
+
+- **`SYSTEM/bin/log-line`** — the one way to log. Appends to `SYSTEM/log.md` on the
+  writer host named in the new optional `SYSTEM/writer-host.conf` (`host=`); anywhere
+  else to a per-host sidecar `SYSTEM/log.d/<YYYY-MM>.<host>.md`. No conf = single-machine
+  vault, unchanged behaviour (every host writes `log.md`).
+- **`SYSTEM/bin/fold_log.py`** — writer host only: folds sidecar lines into `log.md`
+  (content-matched, idempotent, never edits a sidecar, retires archived past-month
+  sidecars). Call it from your writer host's commit job.
+- **Lint check 19** — FAILs on any `*.sync-conflict-*` copy in the vault.
+- Tests in `SYSTEM/bin/tests/test_log_line.py`, now run in the PR gate. SCHEMA § One log
+  writer; compile step 4 and the AGENTS log convention point at `log-line`.
+
 ## 2026-09-28 — optional cloud-core add-ons
 
 New opt-in tree under `SYSTEM/optional/` (index: `SYSTEM/optional/README.md`); nothing
