@@ -25,6 +25,9 @@ jobs:
       - name: KB lint (mechanical health)
         run: LINT_STRICT=1 ./SYSTEM/bin/lint.sh
 
+      - name: Core tooling tests (SYSTEM/bin)
+        run: python3 -m unittest discover -s SYSTEM/bin/tests -p 'test_*.py'
+
       - name: Optional add-on tests (core-jobs, gardener, remote-access, cloud-core)
         run: |
           python3 -m unittest discover -s SYSTEM/optional/core-jobs/bin/tests

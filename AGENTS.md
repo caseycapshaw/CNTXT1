@@ -104,7 +104,7 @@ Law: `SYSTEM/SCHEMA.md` § Conventions. Operating subset:
 - **Index is a pure map:** `index.md` opens with a **Quick map** skeleton (one stable line per concept/project/area) that fits the session-start injection budget. Change history lives in `SYSTEM/log.md`, **never** in `index.md`.
 - **Human text in mixed notes:** wrap in `> [!human]` — machines integrate around it, never edit the quoted text.
 - **Secret hygiene:** never print credential/config stores (`.env`, `~/.config/*` secrets, password-manager values) — inspect by key name or length only; a leak into session output means rotate.
-- **Three ledgers:** `SYSTEM/log.md` (what changed — append after every meaningful update) · `SYSTEM/decisions.md` (what {{NAME}} ruled — only on their explicit word) · `SYSTEM/skill-impact.md` (how skills evolved).
+- **Three ledgers:** `SYSTEM/log.md` (what changed — one line per meaningful update via `SYSTEM/bin/log-line "<text>"`; on a multi-machine vault, off the writer host it goes through a per-host sidecar the writer folds in — never append to `log.md` directly there) · `SYSTEM/decisions.md` (what {{NAME}} ruled — only on their explicit word) · `SYSTEM/skill-impact.md` (how skills evolved).
 - **Dates:** always `YYYY-MM-DD`.
 - **Search:** prefer `rg` (ripgrep) over `grep`; note `rg` skips hidden dirs — add `--hidden` when the target might be in `.claude/`.
 
@@ -148,7 +148,7 @@ personal — it stays here.
 
 New note → root inbox → `raw/YYYY-MM-DD-topic.md` → route to its home per
 *Where a new fact goes* (compile durable facts into `05 concepts/`) → update
-`index.md` → append `SYSTEM/log.md`. Relationships live inline: `[[wikilinks]]` +
+`index.md` → log via `SYSTEM/bin/log-line`. Relationships live inline: `[[wikilinks]]` +
 Related sections; substantial ones become concepts.
 
 ---

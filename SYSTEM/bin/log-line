@@ -1,0 +1,85 @@
+#!/usr/bin/env python3
+"""log-line — append one entry to the KB log, the one-writer way (SCHEMA § One log writer).
+
+    SYSTEM/bin/log-line "<text>"        # "- YYYY-MM-DD — " is added unless the text already starts with it
+
+On the writer host (SYSTEM/writer-host.conf `host=`) it appends to SYSTEM/log.md. Anywhere else it
+appends to this host's own sidecar, SYSTEM/log.d/<YYYY-MM>.<host>.md, which no other host writes; the
+writer host's commit job folds new sidecar lines into log.md (fold_log.py). No writer-host.conf = a
+single-machine vault: every host is the writer and appends to log.md directly. Why: a file-sync tool
+(Syncthing and kin) can't merge, so two hosts appending to log.md in one sync window produce a conflict
+copy, and one host's lines go missing until someone merges them by hand.
+
+Stdlib only, Python 3.9+. LOG_LINE_HOST overrides the host name (tests).
+"""
+import datetime as dt
+import os
+import re
+import socket
+import sys
+from pathlib import Path
+
+VAULT = Path(__file__).resolve().parent.parent.parent
+PREFIX = re.compile(r"^- \d{4}-\d{2}-\d{2} ")
+
+
+def writer_host(vault):
+    try:
+        for line in (Path(vault) / "SYSTEM/writer-host.conf").read_text(encoding="utf-8").splitlines():
+            if line.strip().startswith("host="):
+                return line.split("=", 1)[1].strip()
+    except OSError:
+        pass
+    return None  # no conf = single-machine vault: every host is the writer
+
+
+def this_host():
+    return os.environ.get("LOG_LINE_HOST") or socket.gethostname().split(".")[0]
+
+
+def _append(path, line):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with open(path, "rb") as f:
+            f.seek(0, 2)
+            needs_nl = False
+            if f.tell() > 0:
+                f.seek(-1, 2)
+                needs_nl = f.read(1) != b"\n"
+    except OSError:
+        needs_nl = False
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(("\n" if needs_nl else "") + line + "\n")
+
+
+def write(vault, text, host=None, today=None):
+    text = " ".join((text or "").split())
+    if not text:
+        raise ValueError("empty log line")
+    today = today or dt.date.today()
+    line = text if PREFIX.match(text) else "- %s — %s" % (today.isoformat(), text)
+    host = host or this_host()
+    w = writer_host(vault)
+    if w is None or host == w:
+        path = Path(vault) / "SYSTEM/log.md"
+    else:
+        path = Path(vault) / "SYSTEM/log.d" / ("%s.%s.md" % (today.strftime("%Y-%m"), host))
+    _append(path, line)
+    return path
+
+
+def main(argv):
+    if len(argv) < 2 or argv[1] in ("-h", "--help"):
+        print(__doc__, file=sys.stderr)
+        return 2
+    try:
+        path = write(VAULT, " ".join(argv[1:]))
+    except ValueError as e:
+        print("log-line: %s" % e, file=sys.stderr)
+        return 2
+    print("log-line: appended to %s" % path.relative_to(VAULT))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
