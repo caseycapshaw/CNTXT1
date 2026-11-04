@@ -102,7 +102,10 @@ fi
 # ---------------------------------------------------------------------------
 # Today's KB log entries are the spine of "what we did". Ignore the automation's
 # own lines (daily plan / daily summary) so the summary never narrates itself.
-today_log="$(grep -E "^- $today" "$vault/SYSTEM/log.md" 2>/dev/null \
+# Reads log.md plus any per-host sidecars not yet folded in (SYSTEM/log.d/,
+# SCHEMA § One log writer); a line already folded appears once (awk dedupe).
+today_log="$(cat "$vault/SYSTEM/log.md" "$vault"/SYSTEM/log.d/*.md 2>/dev/null \
+  | grep -E "^- $today" | awk '!seen[$0]++' \
   | grep -viE 'auto-generated daily plan|daily plan STUB|6pm auto:' )"
 [ -z "$today_log" ] && today_log="(no KB log entries dated $today)"
 
@@ -231,10 +234,21 @@ for n in $(seq 1 "$attempts"); do
   [ "$n" -lt "$attempts" ] && { echo "retrying in ${delay}s…"; sleep "$delay"; }
 done
 
+# Log through SYSTEM/bin/log-line (SCHEMA § One log writer): on a multi-machine
+# vault, off the writer host the line goes to this host's sidecar, never log.md.
+# Falls back to a direct append for vaults older than log-line.
+kb_log() {
+  if [ -x "$vault/SYSTEM/bin/log-line" ]; then
+    "$vault/SYSTEM/bin/log-line" "$1" >/dev/null
+  else
+    printf '%s\n' "$1" >> "$vault/SYSTEM/log.md"
+  fi
+}
+
 if [ -z "$block" ]; then
   echo "Generation failed after $attempts attempts — leaving $note untouched."
-  printf -- '- %s — 6pm auto: daily summary SKIPPED (API unreachable / no block after %s attempts); note left intact.\n' \
-    "$today" "$attempts" >> "$vault/SYSTEM/log.md"
+  kb_log "$(printf -- '- %s — 6pm auto: daily summary SKIPPED (API unreachable / no block after %s attempts); note left intact.' \
+    "$today" "$attempts")"
   exit 0
 fi
 
@@ -264,8 +278,8 @@ case "$(printf '%s' "$verdict" | tr 'A-Z' 'a-z')" in
   *green*) : ;;
   ""|issues*|*issue*) verdict="issues — see 00 daily/$today.md" ;;
 esac
-printf -- '- %s — 6pm auto: "What we did today" summary written to `00 daily/%s.md`; KB lint: %s\n' \
-  "$today" "$today" "$verdict" >> "$vault/SYSTEM/log.md"
+kb_log "$(printf -- '- %s — 6pm auto: "What we did today" summary written to `00 daily/%s.md`; KB lint: %s' \
+  "$today" "$today" "$verdict")"
 echo "Spliced summary into $note. Lint: $verdict"
 
 # ---------------------------------------------------------------------------
@@ -275,6 +289,8 @@ echo "Spliced summary into $note. Lint: $verdict"
 #    (No-ops harmlessly if the vault isn't a git repo or has no remote.)
 # ---------------------------------------------------------------------------
 if git -C "$vault" rev-parse --git-dir >/dev/null 2>&1; then
+  # Fold other hosts' log sidecars first (fold_log.py refuses off the writer host).
+  [ -x "$vault/SYSTEM/bin/fold_log.py" ] && { "$vault/SYSTEM/bin/fold_log.py" || true; }
   if [ -n "$(git -C "$vault" status --porcelain)" ]; then
     git -C "$vault" add -A
     git -C "$vault" commit -m "Daily snapshot $today" -m "Automated end-of-day commit by daily-summary.sh." \

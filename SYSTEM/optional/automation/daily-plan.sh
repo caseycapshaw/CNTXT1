@@ -7,7 +7,7 @@
 #   3. Idempotency: if today's note already exists, do nothing (no clobber).
 #   4. Run headless `claude -p` to write <VAULT>/00 daily/<DATE>.md from the calendar
 #      + a live #action query + current priorities.
-#   5. Append a one-line entry to SYSTEM/log.md (or write a retry stub on failure).
+#   5. Log one line via SYSTEM/bin/log-line (or write a retry stub on failure).
 #
 # All output is captured by the launchd plist into ~/.claude/cache/daily-plan.log.
 
@@ -158,9 +158,19 @@ for n in $(seq 1 "$attempts"); do
 done
 
 # 5) Log the run (only if the note was actually written); else write a retry stub.
+# Log through SYSTEM/bin/log-line (SCHEMA § One log writer): on a multi-machine
+# vault, off the writer host the line goes to this host's sidecar, never log.md.
+# Falls back to a direct append for vaults older than log-line.
+kb_log() {
+  if [ -x "$VAULT/SYSTEM/bin/log-line" ]; then
+    "$VAULT/SYSTEM/bin/log-line" "$1" >/dev/null
+  else
+    printf '%s\n' "$1" >> "$VAULT/SYSTEM/log.md"
+  fi
+}
 if [ -f "$note" ]; then
-  printf -- '- %s — auto-generated daily plan note `00 daily/%s.md` (launchd 8am).\n' \
-    "$today" "$today" >> "$VAULT/SYSTEM/log.md"
+  kb_log "$(printf -- '- %s — auto-generated daily plan note `00 daily/%s.md` (launchd 8am).' \
+    "$today" "$today")"
   echo "Wrote $note and logged it."
 else
   cat > "$note" <<STUB
@@ -196,7 +206,7 @@ _Pending — retry above to populate (open #actions render live above)._
 
 <!-- daily-plan: STUB (generation failed after $attempts attempts; retry with --force) -->
 STUB
-  printf -- '- %s — daily plan STUB written (API unreachable after %s attempts); awaiting retry.\n' \
-    "$today" "$attempts" >> "$VAULT/SYSTEM/log.md"
+  kb_log "$(printf -- '- %s — daily plan STUB written (API unreachable after %s attempts); awaiting retry.' \
+    "$today" "$attempts")"
   echo "Wrote fallback STUB with retry instructions: $note"
 fi
