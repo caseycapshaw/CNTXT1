@@ -20,6 +20,13 @@ fi
 
 cd "$VAULT"
 
+# One log writer (SYSTEM/SCHEMA.md): fold other hosts' log sidecars into
+# SYSTEM/log.md before committing. fold_log.py refuses (exit 2) off the writer
+# host and never fails on it; neither must stop the checkpoint.
+if [ -x SYSTEM/bin/fold_log.py ]; then
+  SYSTEM/bin/fold_log.py || echo "git-checkpoint: fold_log.py skipped (not the writer host?)."
+fi
+
 if [ -n "$(git status --porcelain)" ]; then
   ts="$(date '+%Y-%m-%d %H:%M:%S')"
   git add -A

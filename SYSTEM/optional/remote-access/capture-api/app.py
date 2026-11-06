@@ -33,6 +33,8 @@ import json
 import mimetypes
 import os
 import re
+import subprocess
+import sys
 import time
 import uuid
 from datetime import datetime, timezone
@@ -295,15 +297,22 @@ def build_body(date_str, title, data, image_rel=None):
 
 
 def append_kb_log(vault, date_str, rel_path, source):
-    log_path = vault / "SYSTEM" / "log.md"
     line = (
         f"- {date_str} — Captured `{rel_path}` via capture-api ({source}); "
-        f"awaiting compile in Claude Code. #auto\n"
+        f"awaiting compile in Claude Code. #auto"
     )
+    # One log writer (SYSTEM/SCHEMA.md): go through the vault's own log-line, which
+    # appends to log.md on the writer host and to this host's sidecar elsewhere.
+    # Vaults older than log-line get the direct append.
+    log_line = vault / "SYSTEM" / "bin" / "log-line"
     try:
-        with log_path.open("a", encoding="utf-8") as f:
-            f.write(line)
-    except OSError:
+        if log_line.is_file():
+            subprocess.run([sys.executable, str(log_line), line], check=True,
+                           capture_output=True, timeout=15)
+            return
+        with (vault / "SYSTEM" / "log.md").open("a", encoding="utf-8") as f:
+            f.write(line + "\n")
+    except (OSError, subprocess.SubprocessError):
         pass  # KB log is best-effort; the raw note write already succeeded
 
 

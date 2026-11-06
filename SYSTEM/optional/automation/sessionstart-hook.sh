@@ -80,7 +80,7 @@ fi
 read -r -d '' pointer <<EOF
 A personal knowledge base (Karpathy "knowledge-base-as-compiler" method) lives at $VAULT — your durable project memory.
 
-For any non-code / knowledge task, BEFORE answering: read $VAULT/SYSTEM/SCHEMA.md (how the base works). The map (index.md) and the live inbox state are inlined below — use them as your starting point. Keep the base current per AGENTS.md — capture new material to raw/, compile durable facts into 05 concepts/, update index.md, append SYSTEM/log.md, use Obsidian [[wikilinks]] for backlinks.
+For any non-code / knowledge task, BEFORE answering: read $VAULT/SYSTEM/SCHEMA.md (how the base works). The map (index.md) and the live inbox state are inlined below — use them as your starting point. Keep the base current per AGENTS.md — capture new material to raw/, compile durable facts into 05 concepts/, update index.md, log via SYSTEM/bin/log-line, use Obsidian [[wikilinks]] for backlinks.
 
 The vault ROOT is the inbox: new notes/files land at the root, and anything there other than the pinned anchors (README.md, index.md, Actions.md, CLAUDE.md, AGENTS.md) is an un-triaged item — offer to file it into raw/ and compile.
 

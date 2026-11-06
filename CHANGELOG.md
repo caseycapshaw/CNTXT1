@@ -3,6 +3,15 @@
 Notable framework changes to the CNTXT1 starter kit. Newest first. (Your instance's
 own history lives in its `SYSTEM/log.md`.)
 
+## 2026-11-04 — one log writer, applied to the kit's own jobs
+
+- `core-jobs/bin/nightly-rollup`, `automation/daily-plan.sh`, `automation/daily-summary.sh`
+  and `remote-access/capture-api` now log through `SYSTEM/bin/log-line` (direct append
+  only for vaults older than it). capture-api has a test for the sidecar path.
+- `core-jobs/bin/git-checkpoint` and `daily-summary.sh` run `fold_log.py` before they
+  commit; off the writer host it refuses and the commit goes ahead.
+- `daily-summary.sh` reads today's lines from `log.md` plus unfolded sidecars.
+
 ## 2026-11-03 — one log writer
 
 For vaults replicated across machines by a file-sync tool: concurrent appends to

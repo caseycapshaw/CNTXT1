@@ -123,6 +123,29 @@ class TestCaptureWrite(unittest.TestCase):
             self.assertIn("capture-api", log_text)
             self.assertIn("#auto", log_text)
 
+    def test_kb_log_goes_through_log_line_to_this_hosts_sidecar(self):
+        # One log writer: with log-line in the vault and another host as writer,
+        # the capture line lands in this host's sidecar, never log.md.
+        import shutil
+        kit_log_line = Path(__file__).resolve().parents[4] / "bin" / "log-line"
+        with VaultFixture() as vault:
+            (vault / "SYSTEM" / "bin").mkdir()
+            shutil.copy(kit_log_line, vault / "SYSTEM" / "bin" / "log-line")
+            (vault / "SYSTEM" / "writer-host.conf").write_text("host=some-other-writer\n", encoding="utf-8")
+            old = os.environ.get("LOG_LINE_HOST")
+            os.environ["LOG_LINE_HOST"] = "capture-box"
+            try:
+                app.append_kb_log(vault, "2026-09-28", "raw/x.md", "manual")
+            finally:
+                if old is None:
+                    os.environ.pop("LOG_LINE_HOST", None)
+                else:
+                    os.environ["LOG_LINE_HOST"] = old
+            self.assertEqual((vault / "SYSTEM" / "log.md").read_text(encoding="utf-8"), "# log\n")
+            sidecars = list((vault / "SYSTEM" / "log.d").glob("*.capture-box.md"))
+            self.assertEqual(len(sidecars), 1)
+            self.assertIn("Captured `raw/x.md` via capture-api (manual)", sidecars[0].read_text(encoding="utf-8"))
+
     def test_never_overwrites(self):
         with VaultFixture() as vault:
             date_str = "2026-09-28"

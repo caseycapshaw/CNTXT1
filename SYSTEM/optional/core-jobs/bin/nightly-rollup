@@ -76,6 +76,16 @@ else
   echo "daily rollup: SYSTEM/bin/rollup-daily-weeks.sh not found or not executable — skipped."
 fi
 
-echo "- $today — nightly-rollup ran (upstream check + daily-weeks rollup) on the cloud core #auto" >> "$VAULT/SYSTEM/log.md"
+# Log through SYSTEM/bin/log-line (SCHEMA § One log writer): on a multi-machine
+# vault, off the writer host the line goes to this host's sidecar, never log.md.
+# Falls back to a direct append for vaults older than log-line.
+kb_log() {
+  if [ -x "$VAULT/SYSTEM/bin/log-line" ]; then
+    "$VAULT/SYSTEM/bin/log-line" "$1" >/dev/null
+  else
+    printf '%s\n' "$1" >> "$VAULT/SYSTEM/log.md"
+  fi
+}
+kb_log "- $today — nightly-rollup ran (upstream check + daily-weeks rollup) on the cloud core #auto"
 
 exit 0
