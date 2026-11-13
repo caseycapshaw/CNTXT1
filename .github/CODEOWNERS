@@ -5,3 +5,5 @@
 # review) keeps that to the owner. GitHub reads it from the base branch, so a
 # pull request cannot remove its own reviewer.
 /.github/ @caseycapshaw
+# .gitattributes can hide content from grep (e.g. working-tree-encoding).
+/.gitattributes @caseycapshaw
