@@ -120,7 +120,7 @@ rest. A maintainer of a copy that runs the identifier sweep applies both
   pull request before merging with **0** required approvals, **code-owner
   review required**, and stale approvals dismissed on a new push. Pull
   requests that touch nothing under `.github/` merge on a green `gate`;
-  changes under `.github/` need the code owner. The owner merges their own
+  changes under `.github/` (or to `/.gitattributes`) need the code owner. The owner merges their own
   `.github/` changes, and Dependabot's, with the admin bypass after reading
   the diff, pinned to the commit that was read:
   `gh pr merge <n> --admin --match-head-commit <reviewed SHA>`. Anyone with

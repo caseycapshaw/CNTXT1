@@ -10,7 +10,8 @@
 #
 # This script runs with the secret in its environment, so it uses only
 # sh, grep, sed and coreutils and executes no code from outside .github/
-# (a CODEOWNERS rule guards .github/; nothing guards the rest of the tree).
+# (a CODEOWNERS rule guards .github/ and /.gitattributes; nothing guards the rest
+# of the tree).
 # Keep it that way: never call SYSTEM/ scripts or a package runner from here.
 # pr-gate.sh calls this script for local runs; this script calls nothing.
 # identifier-sweep-selftest.sh exercises it with synthetic patterns on every PR.
@@ -48,7 +49,10 @@ trap 'rm -rf "$tmp"' EXIT
 # any depth, which would make a nested .github/ or LICENSE a hiding place.
 set --
 for p in ./* ./.[!.]* ./..?*; do
-  [ -e "$p" ] || [ -L "$p" ] || continue
+  # Top-level symlinks are skipped: grep follows a symlink named on its command
+  # line (unlike those it meets under -r), so a link out of the tree would be read.
+  [ -L "$p" ] && continue
+  [ -e "$p" ] || continue
   case "$p" in ./.git|./.github|./.venv|./LICENSE|./uv.lock) continue ;; esac
   set -- "$@" "$p"
 done
