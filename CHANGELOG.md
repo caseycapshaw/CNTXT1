@@ -3,6 +3,20 @@
 Notable framework changes to the CNTXT1 starter kit. Newest first. (Your instance's
 own history lives in its `SYSTEM/log.md`.)
 
+## 2026-11-13 — secret-bearing CI on main only
+
+- The maintainer identifier sweep moves out of the PR gate into its own workflow,
+  `.github/workflows/identifier-sweep.yml`, which runs `.github/scripts/identifier-sweep.sh`
+  (grep/sed only) on push to `main` and on dispatch, never on a pull request. An unset,
+  empty or invalid pattern now fails instead of passing. `pr-gate.sh` calls the same
+  script for local runs.
+- The Claude review workflow is removed. Its prompt is now the *Review checklist* in
+  `.github/CONTRIBUTING.md`; the sync skill has a fresh subagent apply it to the staged
+  diff before anything is pushed.
+- New `.github/CODEOWNERS` (`/.github/`); Dependabot version updates go monthly.
+- The repo settings this assumes (environment limited to `main`, code-owner review on
+  `main`) are in `.github/CONTRIBUTING.md` § For maintainers.
+
 ## 2026-11-04 — one log writer, applied to the kit's own jobs
 
 - `core-jobs/bin/nightly-rollup`, `automation/daily-plan.sh`, `automation/daily-summary.sh`

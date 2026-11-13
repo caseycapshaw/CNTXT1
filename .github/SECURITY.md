@@ -20,7 +20,9 @@ no separately maintained release branches.
 - Anything that could leak vault content beyond the machine or the private remote
   you chose: path traversal, unsafe file writes, auth bypass in the
   `remote-access/` add-ons, secrets ending up in logs or commits.
-- The privacy gate (`.github/scripts/pr-gate.sh`) failing to catch personal content.
+- The privacy gate (`.github/scripts/pr-gate.sh`) or the identifier sweep
+  (`.github/scripts/identifier-sweep.sh`) failing to catch personal content, or a
+  way for a pull request to reach the sweep's secret.
 
 ## Out of scope
 
