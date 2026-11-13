@@ -41,24 +41,86 @@ Generic improvements to the method or its machinery:
    ```
 4. New/changed frontmatter must validate against the Pydantic schemas in
    `SYSTEM/schemas/` (`uv run python SYSTEM/bin/validate_frontmatter.py`).
+5. Review the staged diff against the *Review checklist* below (or have an
+   agent with no other context do it) and fix anything short of PASS.
 
 ## What CI enforces
 
-Every PR runs two layers:
-
-- **`PR gate`** (deterministic, blocking): instance-content folders hold only
-  their shipped templates/examples, placeholders stay intact, no PII or
-  credential patterns, skills indexed in `05 concepts/skills.md` **and**
-  in their `<TYPE> Index.md`, link map + generated directory/skills indexes
+- **`PR gate`** (deterministic, blocking, runs on every PR and every push to
+  `main`; its job `gate` is the required check): instance-content folders hold
+  only their shipped templates/examples, placeholders stay intact, no PII or
+  credential patterns, skills indexed in `05 concepts/skills.md` **and** in
+  their `<TYPE> Index.md`, link map + generated directory/skills indexes
   byte-identical to a fresh regen, frontmatter valid against the
-  `SYSTEM/schemas/` Pydantic models, KB lint green.
-- **`Claude review`** (judgment layer): an automated reviewer checks that the
-  change is framework-generic rather than personal, conforms to the schema in
-  `SYSTEM/SCHEMA.md`, and keeps the docs coherent. It runs automatically on
-  same-repo PRs; for fork PRs a maintainer triggers it after a first look.
+  `SYSTEM/schemas/` Pydantic models, KB lint green. It holds no secrets.
+- **`Identifier sweep`** (maintainer only, after merge): on every push to
+  `main` the maintainer's private identifier list is grepped against the
+  tree by `.github/scripts/identifier-sweep.sh`. It never runs on a pull
+  request, and reports file names only.
+
+Judgment is not in CI: every change is reviewed against the checklist below
+before it is pushed (see *Review checklist*).
 
 A privacy finding always blocks. If you're unsure whether something counts as
 personal — it does; keep it in your vault and send the generic version here.
+
+## Review checklist
+
+Apply this to the staged diff before anything is pushed, as a reviewing agent
+or a person. The kit's sync runbook (`Skills/DO/Sync an Improvement to
+CNTXT1.md`) has a fresh subagent run it and waits on the verdict; a
+maintainer reviews someone else's pull request the same way.
+
+CNTXT1 is a **public** template for private personal knowledge bases. It ships
+a framework (schema, templates, runbooks, scripts) and must contain **zero**
+personal or instance-specific content. Read `SYSTEM/SCHEMA.md` § *Privacy &
+content separation* first. Then check the diff for, in priority order:
+
+1. **Privacy (blocking):** any content that looks personal or
+   instance-specific rather than framework-generic — real names,
+   family/household details, employers, addresses, emails, IPs, device/host
+   names, populated content under `00 daily/`, `01 Horizons/`, `02 Areas/`,
+   `03 Projects/`, `04 People/`, `raw/`, `attachments/`, an `owner:` field
+   with a real name, placeholders (`{{NAME}}`, `{{PERSONAL_IDENTIFIERS}}`,
+   etc.) replaced with real values, or personal specifics leaking through
+   examples. The deterministic gate catches known patterns; the review
+   catches what patterns miss. When in doubt, it's personal: flag it.
+2. **Schema consistency:** the change conforms to `SYSTEM/SCHEMA.md`. Skills
+   are edited in canonical `.claude/skills/<slug>/SKILL.md` with
+   `owner: {{NAME}}`, their `Skills/<TYPE>/` mirror regenerated and indexed
+   in `05 concepts/skills.md`; concepts carry frontmatter
+   (type/description/updated/status/tags); projects carry an `area:` up-link,
+   areas a review cadence; the link map is regenerated when link targets
+   change; `index.md` stays a pure map (no change history); the root gains no
+   new permanent files; wikilinks resolve; dates are `YYYY-MM-DD`.
+3. **Doc coherence:** `setup.md`, `README.md`, `CLAUDE.md` and `AGENTS.md`
+   still tell the same story (counts, paths, folder tables, phase
+   instructions).
+
+Return a verdict that starts with `VERDICT: PASS`, `VERDICT: PRIVACY BLOCK` or
+`VERDICT: ISSUES`, then the findings, each anchored to a file and line. For a
+privacy finding quote the smallest identifying snippet possible; do not
+amplify personal data. Be concise and actionable. Nothing is pushed until the
+verdict is PASS.
+
+## For maintainers: the repo settings this CI assumes
+
+The workflows are only half of the protection; two GitHub settings carry the
+rest. A maintainer of a copy that runs the identifier sweep applies both
+(and puts their own handle in `.github/CODEOWNERS` and their own slug in
+`.github/workflows/identifier-sweep.yml`):
+
+- **Environment `maintainer-secrets`** holds the secret `PERSONAL_IDENTIFIERS`
+  (your private list joined with `|`). Deployment branches: selected, one
+  rule, `main`. No required reviewer: the branch rule is the lock, so a
+  pull-request run or a dispatch from another branch never gets the secret.
+- **Branch protection on `main`:** require the `gate` status check; require a
+  pull request before merging with **0** required approvals, **code-owner
+  review required**, and stale approvals dismissed on a new push. Pull
+  requests that touch nothing under `.github/` merge on a green `gate`;
+  changes under `.github/` need the code owner. The owner merges their own
+  `.github/` changes, and Dependabot's, with the admin bypass after reading
+  the diff.
 
 ## License of contributions
 
