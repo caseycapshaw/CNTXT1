@@ -102,3 +102,5 @@ gone. Existing users: see [`MIGRATING.md`](MIGRATING.md) and the helper
 
 Earlier 2026-09-28 changes (rules, skills, layout-independent scripts) are listed in
 `SYSTEM/log.md`.
+
+<!-- probe: closed unmerged -->
