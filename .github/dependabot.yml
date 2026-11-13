@@ -10,3 +10,4 @@ updates:
     groups:
       actions:
         patterns: ['*']
+# Checked after the 2026-11 CI change: Dependabot pull requests touch .github/, so they need the code owner.
