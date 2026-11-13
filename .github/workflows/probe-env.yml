@@ -1,0 +1,18 @@
+# Probe for #19. A pull-request branch names the secret-holding environment.
+# Expected - the environment's main-only branch rule refuses the job before any
+# step runs. Prints only whether a value arrived, never the value.
+name: Probe (environment from a PR branch)
+on:
+  pull_request:
+permissions: {}
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    environment: maintainer-secrets
+    continue-on-error: true
+    steps:
+      - name: Did a secret arrive
+        env:
+          S: ${{ secrets.PERSONAL_IDENTIFIERS }}
+        run: |
+          if [ -n "$S" ]; then echo "PROBE - a secret value ARRIVED"; else echo "PROBE - no secret value"; fi
