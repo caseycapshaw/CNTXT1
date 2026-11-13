@@ -7,14 +7,14 @@ metadata:
   domain: kb-meta
   trigger: a generic improvement is ready to share publicly
   frequency: ad-hoc
-  tools: ["Read", "Write", "Edit", "git", "grep"]
+  tools: ["Read", "Write", "Edit", "git", "grep", "Agent"]
   owner: "{{NAME}}"
-  version: "1.1"
+  version: "1.2"
   status: active
   tags: [do, kb-meta]
   aliases: ["Sync an improvement to CNTXT1", "Sync a KB improvement to the shared repo", "Contribute to CNTXT1", "sync-an-improvement-to-cntxt1"]
   summary: Lands a generic schema/tooling/template improvement from this private KB into the public CNTXT1 starter kit's own repo, fully re-templated with zero personal content.
-  updated: 2026-09-28
+  updated: 2026-11-13
 ---
 
 
@@ -22,7 +22,7 @@ metadata:
 
 > **When:** a change to schema/tooling/templates in this private vault is
 > worth sharing with the public **CNTXT1** starter kit ·
-> **Frequency:** ad-hoc · **Tools:** git, Read/Write/Edit, grep
+> **Frequency:** ad-hoc · **Tools:** git, Read/Write/Edit, grep, a subagent
 > **Outcome:** the improvement lands in a CNTXT1 working tree fully
 > re-templated, with zero personal content — committed *there*, never in this
 > vault's history — then pushed to your public copy and/or PR'd upstream to
@@ -101,7 +101,14 @@ remote of this vault.
    the LICENSE copyright line, the README/SCHEMA author credit). Any other
    hit is a leak — fix it before committing. Never print the list's contents
    into a repo, an issue, or a transcript.
-4. **Commit inside the CNTXT1 working tree** (its own repo, its own history),
+4. **Review gate** — before anything is pushed, start a **fresh subagent**
+   (none of this session's context) in the CNTXT1 folder and have it review
+   the staged diff (`git diff --cached`) against the *Review checklist* in
+   the kit's `.github/CONTRIBUTING.md`. It returns `VERDICT: PASS`,
+   `VERDICT: PRIVACY BLOCK` or `VERDICT: ISSUES`. **The push waits on PASS:**
+   fix any finding, re-stage, re-run the leak gate and a new review. CI does
+   no judgment review, so this step is the only one.
+5. **Commit inside the CNTXT1 working tree** (its own repo, its own history),
    push to your fork/copy, and — if the improvement is generic enough for
    everyone — open a PR upstream to
    [caseycapshaw/CNTXT1](https://github.com/caseycapshaw/CNTXT1).
@@ -122,6 +129,7 @@ remote of this vault.
 
 - [ ] The change is applied in the CNTXT1 working tree, re-templated (no real values, only `{{placeholders}}` where this vault has real content)
 - [ ] The leak gate returns only allowed hits **and** the full diff has been read
+- [ ] A fresh subagent reviewed the staged diff against `.github/CONTRIBUTING.md` § Review checklist and returned `VERDICT: PASS`
 - [ ] Committed and pushed in CNTXT1's own repo (PR'd upstream if broadly useful)
 
 ## Related

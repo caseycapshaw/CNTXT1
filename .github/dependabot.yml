@@ -1,9 +1,12 @@
+# Version updates monthly (grouped into one PR). Security updates for a
+# vulnerable action (Dependabot security updates, a repo setting) are
+# separate from this schedule and still arrive at once.
 version: 2
 updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
     groups:
       actions:
         patterns: ['*']

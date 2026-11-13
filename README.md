@@ -151,8 +151,10 @@ indexes) occasionally need a small manual merge. Step-by-step skill:
 
 **Instance → kit (dangerous — stays manual).** Personal content never leaves
 your vault, so this direction is a deliberate, hand-operated path:
-re-template to `{{placeholders}}`, run the identifier grep gate, and go
-through this repo's CI (privacy gate + review). Skill:
+re-template to `{{placeholders}}`, run the identifier grep gate, have a
+fresh agent review the diff against the checklist in
+[`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md) before you push, then go
+through this repo's CI (privacy gate). Skill:
 [`Skills/DO/Sync an Improvement to CNTXT1.md`](Skills/DO/Sync%20an%20Improvement%20to%20CNTXT1.md).
 
 **Rule of thumb: author upstream-first.** When you're about to build
