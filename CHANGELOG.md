@@ -7,15 +7,19 @@ own history lives in its `SYSTEM/log.md`.)
 
 - The maintainer identifier sweep moves out of the PR gate into its own workflow,
   `.github/workflows/identifier-sweep.yml`, which runs `.github/scripts/identifier-sweep.sh`
-  (grep/sed only) on push to `main` and on dispatch, never on a pull request. An unset,
-  empty or invalid pattern now fails instead of passing. `pr-gate.sh` calls the same
-  script for local runs.
+  (grep/sed only) on push to `main` and on dispatch, never on a pull request. It fails
+  closed (unset, empty or invalid pattern, no grep with `-P`, or a grep error), skips
+  only the root's `.git`, `.github`, `.venv`, `LICENSE` and `uv.lock`, and in Actions
+  prints only the number of matching files. `pr-gate.sh` calls the same script for
+  local runs (GNU `grep`, or `ggrep` on macOS).
+- The `gate` job self-tests the sweep with synthetic patterns on every pull request
+  (`.github/scripts/identifier-sweep-selftest.sh`).
 - The Claude review workflow is removed. Its prompt is now the *Review checklist* in
   `.github/CONTRIBUTING.md`; the sync skill has a fresh subagent apply it to the staged
   diff before anything is pushed.
-- New `.github/CODEOWNERS` (`/.github/`); Dependabot version updates go monthly.
+- New `.github/CODEOWNERS` (`/.github/`, `/.gitattributes`); Dependabot version updates go monthly.
 - The repo settings this assumes (environment limited to `main`, code-owner review on
-  `main`) are in `.github/CONTRIBUTING.md` § For maintainers.
+  `main`, pinned bypass merges) are in `.github/CONTRIBUTING.md` § For maintainers.
 
 ## 2026-11-04 — one log writer, applied to the kit's own jobs
 

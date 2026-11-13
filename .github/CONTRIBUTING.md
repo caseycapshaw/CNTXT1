@@ -56,7 +56,9 @@ Generic improvements to the method or its machinery:
 - **`Identifier sweep`** (maintainer only, after merge): on every push to
   `main` the maintainer's private identifier list is grepped against the
   tree by `.github/scripts/identifier-sweep.sh`. It never runs on a pull
-  request, and reports file names only.
+  request, and its public log shows only how many files matched (run it
+  locally to see which). The `gate` job self-tests the script with synthetic
+  patterns on every PR.
 
 Judgment is not in CI: every change is reviewed against the checklist below
 before it is pushed (see *Review checklist*).
@@ -120,7 +122,20 @@ rest. A maintainer of a copy that runs the identifier sweep applies both
   requests that touch nothing under `.github/` merge on a green `gate`;
   changes under `.github/` need the code owner. The owner merges their own
   `.github/` changes, and Dependabot's, with the admin bypass after reading
-  the diff.
+  the diff, pinned to the commit that was read:
+  `gh pr merge <n> --admin --match-head-commit <reviewed SHA>`. Anyone with
+  write access can push onto an open pull request branch after it was read.
+
+Three traps when setting this up or changing it later:
+
+- **Branch rule, not tag rule.** The environment's deployment rule must be of
+  type *branch* (`main`); branch and tag rules are separate lists.
+- **Old runs can be re-run.** Runs on the default branch can be re-run for 30
+  days with the workflow version they started with. If an older workflow used
+  an environment behind a required reviewer, don't just remove that reviewer:
+  use a fresh environment name, or delete those old runs first.
+- **Retire credentials at the source.** When CI stops using a token, revoke it
+  where it was issued, not only the GitHub secret.
 
 ## License of contributions
 
