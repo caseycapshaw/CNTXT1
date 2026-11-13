@@ -1,0 +1,45 @@
+# Maintainer identifier sweep — secret-fed, main only.
+#
+# Runs .github/scripts/identifier-sweep.sh with PERSONAL_IDENTIFIERS (the
+# maintainer's |-separated grep -P pattern) after every push to main, and on
+# manual dispatch. Never on a pull request: a PR run would execute branch code
+# next to the secret.
+#
+# Why a workflow of its own (not a job in pr-gate.yml): its only triggers are
+# push-to-main and dispatch, so there is no pull_request path to reason about,
+# and pr-gate.yml stays secret-free. Three locks keep the secret on main:
+#   1. the `maintainer-secrets` environment releases secrets to the `main`
+#      branch only (deployment-branch policy; set in repo settings);
+#   2. CODEOWNERS puts .github/ under the owner's review, so this file and the
+#      script cannot change on main without them;
+#   3. the job's `if` below skips a dispatch from any other branch outright,
+#      so a collaborator dispatching from their own branch gets a skipped job,
+#      not a rejected one (and an edited copy of this file on their branch
+#      still meets lock 1).
+# The script runs only grep/sed/coreutils and no code from outside .github/.
+name: Identifier sweep (main only)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  identifier-sweep:
+    # Forks skip (they hold no secret, and an empty pattern fails by design);
+    # a fork that wants the sweep sets its own slug here and in CODEOWNERS.
+    if: github.ref == 'refs/heads/main' && github.repository == 'caseycapshaw/CNTXT1'
+    runs-on: ubuntu-latest
+    environment: maintainer-secrets
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Maintainer identifier sweep (filenames only)
+        env:
+          PERSONAL_IDENTIFIERS: ${{ secrets.PERSONAL_IDENTIFIERS }}
+        run: ./.github/scripts/identifier-sweep.sh
