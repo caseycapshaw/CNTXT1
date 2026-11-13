@@ -1,0 +1,7 @@
+# Changes under .github/ (workflows, the gate and sweep scripts, this file,
+# Dependabot config) need the repo owner's review. The identifier-sweep
+# workflow runs with a secret on main, so whoever can change .github/ can
+# reach that secret; this rule (with branch protection requiring code-owner
+# review) keeps that to the owner. GitHub reads it from the base branch, so a
+# pull request cannot remove its own reviewer.
+/.github/ @caseycapshaw
